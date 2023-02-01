@@ -3,11 +3,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const testClick = () => {
-  console.log(document.cookie);
   axios
-    .get(`http://localhost:8080/api/v1/user/get`, {})
+    .get(`http://localhost:8080/api/v1/user/get`, {
+      headers: {
+        authorization: `Bearer ${document.cookie.split("=")[1]}`,
+      },
+    })
     .then((res: AxiosResponse) => {
-      res.data;
+      console.log(res.data);
     })
     .catch((err: AxiosError) => {
       console.log(err);

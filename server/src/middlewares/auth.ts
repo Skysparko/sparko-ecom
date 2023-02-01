@@ -4,6 +4,10 @@ import User from "../models/userModel";
 import dotenv from "dotenv";
 dotenv.config();
 
+interface JwtPayload {
+  id: string;
+}
+
 //logic to check if user is logged in
 export const isAuthorized = async (
   req: Request,
@@ -13,7 +17,6 @@ export const isAuthorized = async (
   try {
     const authHeader = req.headers.authorization;
 
-    console.log(authHeader);
     //checking if there is token available or not
     if (!authHeader) {
       return res.status(401).json({
@@ -29,22 +32,26 @@ export const isAuthorized = async (
         error: true,
       });
     }
+
     //decrypting token
-    const decodedToken = jwt.verify(token, process.env.SECRET!);
-    if (!decodedToken) {
+    const { id } = jwt.verify(token, process.env.SECRET!) as JwtPayload;
+    if (!id) {
       return res.status(401).json({
         message: "Invalid token",
         error: true,
       });
     }
+
     //getting user information from database
-    const user = await User.findById(decodedToken);
+    const user = await User.findById(id);
+
     if (!user) {
       return res.status(401).json({
         message: "Invalid token",
         error: true,
       });
     }
+
     //assigning user to request
     Object.assign(req, { user: user });
     next();
