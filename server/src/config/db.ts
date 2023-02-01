@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 dotenv.config();
 
-import mongoose from "mongoose";
-
+//setting options for mongoose server
 const dbOptions: Object = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -10,6 +10,7 @@ const dbOptions: Object = {
 
 mongoose.set("strictQuery", false);
 
+//checking the connection of mongoose server
 const connectDB = () => {
   mongoose
     .connect(process.env.MONGO_URI!, dbOptions)
