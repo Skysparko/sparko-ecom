@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 export default function Register() {
   return (
-    <div className="m-auto w-48 ">
-      <h1 className="mt-40 mb-8 text-center text-5xl font-medium">Register</h1>
-      <form method="post" className="m-auto flex w-48 flex-col gap-5">
+    <div className="m-auto flex h-[100vh] flex-col items-center justify-center">
+      <h1 className="mb-8 text-center text-5xl font-medium">Register</h1>
+      <form method="post" className=" flex w-48 flex-col gap-5">
         <input type="text" name="name" placeholder="Name" className="px-2" />
         <input type="email" name="email" placeholder="Email" className="px-2" />
         <input
@@ -17,7 +17,7 @@ export default function Register() {
 
         <button
           type="submit"
-          className="m-auto w-24 rounded border-2 border-black bg-blue-500 py-1 px-3 text-white"
+          className=" m-auto w-24 rounded border-2 border-black bg-blue-500 py-1 px-3 text-white"
         >
           Register
         </button>

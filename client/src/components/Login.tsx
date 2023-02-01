@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 export default function Login() {
   return (
-    <div className="m-auto w-48 ">
-      <h1 className="mt-40 mb-8 text-center text-5xl font-medium">Login</h1>
-      <form method="post" className="m-auto flex w-48 flex-col gap-5">
+    <div className="  flex h-[100vh] flex-col items-center justify-center">
+      <h1 className=" text-center text-5xl font-medium">Login</h1>
+      <form method="post" className="mt-8 mb-5 flex w-48 flex-col gap-5">
         <input type="email" name="email" placeholder="Email" className="px-2" />
         <input
           type="password"
@@ -21,12 +21,12 @@ export default function Login() {
           Login
         </button>
       </form>
-      <h3 className="mt-4  cursor-pointer text-right text-xs text-blue-700">
+      <h3 className=" cursor-pointer text-right text-xs text-blue-700">
         forgot password?
       </h3>
 
-      <h4 className="mt-8 text-sm">New Customer?</h4>
-      <Link to="/register" className="text-[0.85rem] text-blue-700">
+      <h4 className="mt-5 text-sm">New Customer?</h4>
+      <Link to="/register" className="  text-[0.85rem] text-blue-700">
         Register here
       </Link>
     </div>
