@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import Home from "../pages/Home";
 
 type Submit = {
   email: string;
@@ -23,7 +24,6 @@ const submit = (
     .then((res: AxiosResponse) => {
       if (res.status === 200) {
         alert("Login successful");
-        window.location.href = "/";
       }
     })
     .catch((error: AxiosError) => {

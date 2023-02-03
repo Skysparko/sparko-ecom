@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { instance } from "../utils/functions";
 
 type Submit = {
-  name: string;
+  username: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -11,7 +11,7 @@ type Submit = {
 
 const submit = (
   e: React.FormEvent<HTMLFormElement>,
-  { name, email, password, confirmPassword }: Submit
+  { username, email, password, confirmPassword }: Submit
 ) => {
   e.preventDefault();
 
@@ -19,26 +19,22 @@ const submit = (
     alert("Passwords do not match");
     return;
   }
-  console.log({ name, email, password, confirmPassword });
-  axios
-    .post("http://localhost:8080/api/v1/user/register", {
-      username: name,
-      email,
-      password,
-    })
-    .then((res: AxiosResponse) => {
+
+  instance
+    .post("user/register", { username, email, password })
+    .then((res) => {
       if (res.status === 201) {
         alert("Registration successful");
         window.location.href = "/login";
       }
     })
-    .catch((error: AxiosError) => {
-      console.log(error.response?.data);
+    .catch((err) => {
+      console.log(err.response?.data);
     });
 };
 
 export default function Register() {
-  const [name, setName] = React.useState("");
+  const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
@@ -48,15 +44,17 @@ export default function Register() {
       <form
         method="post"
         className=" flex w-48 flex-col gap-5"
-        onSubmit={(e) => submit(e, { name, email, password, confirmPassword })}
+        onSubmit={(e) =>
+          submit(e, { username, email, password, confirmPassword })
+        }
       >
         <input
           type="text"
-          name="name"
+          name="username"
           placeholder="Name"
           className="px-2"
           required
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
           pattern="^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"
           minLength={3}
         />

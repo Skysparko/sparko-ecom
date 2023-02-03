@@ -1,5 +1,5 @@
 import express from "express";
-import { login, register } from "../controllers/userControllers";
+import { login, logout, register } from "../controllers/userControllers";
 import { isAuthorized } from "../middlewares/auth";
 
 const router = express.Router();
@@ -13,6 +13,11 @@ router.post("/register", register);
 //@desc Login user
 //@access Public
 router.post("/login", login);
+
+//@route (GET /api/v1/user/logout)
+//@desc Logout user
+//@access Logined user
+router.get("/logout", isAuthorized, logout);
 
 router.get("/get", isAuthorized, (req, res) => {
   const user: Object = Object(req)["user"];

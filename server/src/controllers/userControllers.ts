@@ -15,11 +15,18 @@ dotenv.config();
 export const register = async (req: Request, res: Response) => {
   try {
     //getting values from the request
+
     const { username, email, password } = req.body;
 
     //checking whether user filled all the fields or not
-    if (!username || !email || !password) {
-      return res.status(400).send("Please fill all fields");
+    if (!username) {
+      return res.status(400).send("Please Enter your name");
+    }
+    if (!email) {
+      return res.status(400).send("Please Enter your email");
+    }
+    if (!password) {
+      return res.status(400).send("Please Enter your password");
     }
 
     //validating username(Name must be at least 3 character long and must not include numbers or special characters)
@@ -92,11 +99,23 @@ export const login = async (req: Request, res: Response) => {
     const bearerToken = jwt.sign({ id: user._id }, process.env.SECRET!, {
       expiresIn: "1h",
     });
-    res.cookie("t", bearerToken, {
+    res.cookie("bearerToken", bearerToken, {
       expires: new Date(Date.now() + 999999),
     });
     //returning the token in the response
     return res.status(200).send("Login successfully");
+  } catch (error) {
+    //returning the error message
+    console.log(error);
+    return res.status(500).send((error as Error).message);
+  }
+};
+
+//logic for logging out user
+export const logout = (req: Request, res: Response) => {
+  try {
+    res.clearCookie("bearerToken");
+    return res.status(200).send("Logout successfully");
   } catch (error) {
     //returning the error message
     console.log(error);

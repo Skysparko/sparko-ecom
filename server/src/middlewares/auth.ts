@@ -33,7 +33,7 @@ export const isAuthorized = async (
       });
     }
 
-    //decrypting token
+    // decrypting token
     const { id } = jwt.verify(token, process.env.SECRET!) as JwtPayload;
     if (!id) {
       return res.status(401).json({
