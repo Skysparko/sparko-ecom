@@ -8,10 +8,11 @@ import "./App.css";
 import Home from "./pages/Home";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Layout from "./components/Layout";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/">
+    <Route path="/" element={<Layout />}>
       <Route index element={<Home />} />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
