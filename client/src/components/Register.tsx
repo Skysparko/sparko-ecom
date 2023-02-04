@@ -39,7 +39,7 @@ export default function Register() {
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
   return (
-    <div className="m-auto flex h-[100vh] flex-col items-center justify-center">
+    <div className="m-auto flex  flex-col items-center justify-center">
       <h1 className="mb-8 text-center text-5xl font-medium">Register</h1>
       <form
         method="post"

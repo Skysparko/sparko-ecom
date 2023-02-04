@@ -5,8 +5,10 @@ import { MdOutlineKeyboardArrowRight, MdSearch } from "react-icons/md";
 import { RiShoppingCartFill } from "react-icons/ri";
 import "../App.css";
 import SideBar, { openSidebar } from "./SideBar";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const navigate = useNavigate();
   const [width, setWidth] = useState(
     window.innerWidth > 0 ? window.innerWidth : screen.width
   );
@@ -54,7 +56,7 @@ export default function Header() {
       </aside>
       <article
         id="header"
-        className="grid grid-cols-[1fr,2.5fr,1fr] border border-black py-2 text-2xl max-lg:text-xl  max-md:text-lg"
+        className="grid select-none grid-cols-[1fr,2.5fr,1fr] border border-black py-2 text-2xl  max-lg:text-xl max-md:text-lg"
       >
         {/* hamburger column and the name of the company */}
         <div className=" flex  items-center  gap-5  pl-5 text-3xl max-lg:text-2xl max-md:gap-2 max-md:pl-2 max-sm:text-[1.4rem]">
@@ -62,7 +64,9 @@ export default function Header() {
             <VscThreeBars />
           </button>
 
-          <h1 className="cursor-pointer">SStore</h1>
+          <h1 className="cursor-pointer" onClick={() => navigate("/")}>
+            SStore
+          </h1>
         </div>
 
         {/* Ui for search */}
@@ -76,7 +80,7 @@ export default function Header() {
             <select
               name="categories"
               id="categories_desktop"
-              className="rounded-l-md border border-black bg-white text-center outline-none"
+              className="cursor-pointer rounded-l-md border border-black bg-white text-center outline-none"
             >
               <option value="All">All</option>
               <option value="Clothing">Clothing</option>
@@ -103,8 +107,11 @@ export default function Header() {
         </div>
 
         {/* section containing login and cart  */}
-        <div className=" flex justify-end gap-10  pr-5 max-md:gap-5">
-          <span className="flex items-center">
+        <div className=" flex  justify-end  gap-10 pr-5 max-md:gap-5">
+          <span
+            className="flex cursor-pointer items-center"
+            onClick={() => navigate("/authentication")}
+          >
             <h3 className="">Login</h3>
 
             <MdOutlineKeyboardArrowRight size={15} />

@@ -35,7 +35,7 @@ export default function Login() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   return (
-    <div className="  flex h-[100vh] flex-col items-center justify-center">
+    <div className="  flex  flex-col items-center justify-center">
       <h1 className=" text-center text-5xl font-medium">Login</h1>
       <form
         method="post"
