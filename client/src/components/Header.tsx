@@ -56,7 +56,7 @@ export default function Header() {
       </aside>
       <article
         id="header"
-        className="grid select-none grid-cols-[1fr,2.5fr,1fr] border border-black py-2 text-2xl  max-lg:text-xl max-md:text-lg"
+        className="grid select-none grid-cols-[1fr,2.5fr,1fr] border border-black bg-sky-100 py-2  text-2xl max-lg:text-xl max-md:text-lg"
       >
         {/* hamburger column and the name of the company */}
         <div className=" flex  items-center  gap-5  pl-5 text-3xl max-lg:text-2xl max-md:gap-2 max-md:pl-2 max-sm:text-[1.4rem]">

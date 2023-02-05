@@ -25,5 +25,5 @@ import { instance } from "../utils/functions";
 // };
 
 export default function Home() {
-  return <div className="">Home</div>;
+  return <div className="h-[2000px]">Home</div>;
 }

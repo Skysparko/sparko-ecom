@@ -2,10 +2,11 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import SideBar from "./SideBar";
+import Footer from "./Footer";
 
 export default function Layout() {
   return (
-    <>
+    <div>
       <header>
         <Header />
       </header>
@@ -13,7 +14,9 @@ export default function Layout() {
       <main>
         <Outlet />
       </main>
-      <footer>footer</footer>
-    </>
+      <footer>
+        <Footer />
+      </footer>
+    </div>
   );
 }

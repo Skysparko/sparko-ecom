@@ -2,34 +2,48 @@ import React, { useEffect } from "react";
 import Register from "../components/Register";
 import Login from "../components/Login";
 import "../App.css";
+import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
 
 const toggleExpand = () => {
   //login elements
   const loginButton: HTMLInputElement | null =
     document.querySelector("#login_button")!;
-  const loginBox: HTMLInputElement | null =
-    document.querySelector("#login_box")!;
+  const loginBox: HTMLInputElement | null = document.querySelector("#login")!;
 
   //register elements
   const registerButton: HTMLInputElement | null =
     document.querySelector("#register_button")!;
-  const registerBox: HTMLElement | null =
-    document.getElementById("register_box")!;
+  const registerBox: HTMLElement | null = document.getElementById("register")!;
 
   if (loginButton?.checked) {
     loginBox.style.overflow = "auto";
-    loginBox.classList.remove("h-0");
+    loginBox.classList.add("h-auto");
+    loginBox.classList.remove("h-12");
+    loginBox.classList.remove("bg-gray-200");
+    loginBox.classList.add("bg-white");
   } else {
     loginBox.style.overflow = "hidden";
-    loginBox.classList.add("h-0");
+    loginBox.classList.remove("h-auto");
+    loginBox.classList.add("h-12");
+    loginBox.classList.add("bg-gray-200");
+    loginBox.classList.remove("bg-white");
   }
 
   if (registerButton?.checked) {
+    registerBox.classList.remove("bg-gray-200");
+    registerBox.classList.remove("h-12");
+    registerBox.classList.add("h-auto");
     registerBox.style.overflow = "auto";
-    registerBox.classList.remove("h-0");
+    registerBox.classList.add("bg-white");
   } else {
+    registerBox.classList.add("bg-gray-200");
+    registerBox.classList.add("h-12");
+    registerBox.classList.remove("h-auto");
     registerBox.style.overflow = "hidden";
-    registerBox.classList.add("h-0");
+
+    registerBox.classList.remove("bg-white");
+    registerBox.classList.add("bg-gray-200");
   }
 };
 
@@ -42,35 +56,73 @@ export default function Authentication() {
   }, []);
 
   return (
-    <article className="flex flex-col items-center justify-center border border-black ">
-      <section className="border border-black">
-        <div>
-          <input
-            type="radio"
-            name="authentication"
-            id="register_button"
-            onChange={toggleExpand}
-          />
-          <label htmlFor="register_button">Register</label>
-        </div>
-        <div className="h-0  overflow-hidden" id="register_box">
-          <Register />
-        </div>
-      </section>
-      <section className="border border-black">
-        <div>
-          <input
-            type="radio"
-            name="authentication"
-            id="login_button"
-            onChange={toggleExpand}
-          />
-          <label htmlFor="login_button">Login</label>
-        </div>
-        <div id="login_box">
-          <Login />
-        </div>
-      </section>
+    <article className="grid h-[100vh] grid-rows-[0.8fr,8fr,1.2fr]">
+      <header className="flex items-center border border-black bg-sky-900">
+        <Link to="/" className="p-4 text-3xl text-white">
+          SStore
+        </Link>
+      </header>
+      <main className="flex flex-col items-center justify-center  bg-blue-100">
+        <section
+          className="h-12 w-96 overflow-hidden rounded-t border border-black bg-gray-200 p-2 max-sm:w-72"
+          id="register"
+        >
+          <div className="grid  grid-cols-[0.1fr,1fr] items-center">
+            <input
+              type="radio"
+              name="authentication"
+              id="register_button"
+              className="cursor-pointer"
+              onChange={toggleExpand}
+            />
+            <label
+              htmlFor="register_button"
+              className="flex cursor-pointer items-center gap-2"
+            >
+              <h2 className="text-lg">Register</h2>
+              <h3 className="text-sm">New to SStore?</h3>
+            </label>
+          </div>
+          <div id="register_box">
+            <Register />
+          </div>
+        </section>
+        <section
+          className=" w-96 rounded-b border border-black  bg-white p-2 max-sm:w-72"
+          id="login"
+        >
+          <div className="grid grid-cols-[0.1fr,1fr] items-center">
+            <input
+              type="radio"
+              name="authentication"
+              className="cursor-pointer"
+              id="login_button"
+              onChange={toggleExpand}
+            />
+            <label
+              htmlFor="login_button"
+              className="flex cursor-pointer items-center gap-2"
+            >
+              <h2 className="text-lg">Login</h2>
+              <h3 className="text-sm">Already a customer?</h3>
+            </label>
+          </div>
+          <div id="login_box">
+            <Login />
+          </div>
+        </section>
+      </main>
+
+      <footer className="flex flex-col items-center justify-center gap-2 border border-black bg-sky-900 text-center text-sm text-white max-sm:text-xs">
+        <span>
+          <ul className="flex  gap-5 ">
+            <li>Condition of Use</li>
+            <li>Privacy Notice</li>
+            <li>Interest Based Ads</li>
+          </ul>
+        </span>
+        <span className="">&copy; Skysparko.pvt.lmt ,2023</span>
+      </footer>
     </article>
   );
 }

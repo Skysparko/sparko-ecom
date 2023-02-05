@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { instance } from "../utils/functions";
+import { BsInfoLg } from "react-icons/bs";
 
 type Submit = {
   username: string;
@@ -39,11 +40,10 @@ export default function Register() {
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
   return (
-    <div className="m-auto flex  flex-col items-center justify-center">
-      <h1 className="mb-8 text-center text-5xl font-medium">Register</h1>
+    <div className=" my-7 flex flex-col items-center justify-center  ">
       <form
         method="post"
-        className=" flex w-48 flex-col gap-5"
+        className=" flex w-72 flex-col gap-5 max-sm:w-56 max-sm:gap-3 "
         onSubmit={(e) =>
           submit(e, { username, email, password, confirmPassword })
         }
@@ -52,7 +52,7 @@ export default function Register() {
           type="text"
           name="username"
           placeholder="Name"
-          className="px-2"
+          className="rounded border-2 border-gray-600 p-2 px-2 outline-blue-600 max-sm:text-sm"
           required
           onChange={(e) => setUsername(e.target.value)}
           pattern="^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"
@@ -62,7 +62,7 @@ export default function Register() {
           type="email"
           name="email"
           placeholder="Email"
-          className="px-2"
+          className="rounded border-2 border-gray-600 p-2 px-2 outline-blue-600  max-sm:text-sm"
           required
           onChange={(e) => setEmail(e.target.value)}
           pattern="^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
@@ -71,7 +71,7 @@ export default function Register() {
           type="password"
           name="password"
           placeholder="Password"
-          className="px-2"
+          className="rounded border-2 border-gray-600 p-2 px-2 outline-blue-600  max-sm:text-sm "
           required
           onChange={(e) => setPassword(e.target.value)}
           minLength={8}
@@ -81,12 +81,19 @@ export default function Register() {
           type="password"
           name="confirmPassword"
           placeholder="Confirm Password"
-          className="px-2"
+          className="rounded border-2 border-gray-600 p-2 px-2 outline-blue-600  max-sm:text-sm"
           required
           onChange={(e) => setConfirmPassword(e.target.value)}
           minLength={8}
           pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
         />
+
+        <span className=" ">
+          <h2 className="grid grid-cols-[0.1fr,1fr]  text-[0.75rem]">
+            <BsInfoLg /> Password must be at least 8 characters long and contain
+            at least 1 uppercase, 1 lowercase, 1 number
+          </h2>
+        </span>
 
         <button
           type="submit"
@@ -95,11 +102,6 @@ export default function Register() {
           Register
         </button>
       </form>
-
-      <h4 className="mt-8 text-sm">Already a Customer?</h4>
-      <Link to="/login" className="text-[0.85rem] text-blue-700">
-        Login here
-      </Link>
     </div>
   );
 }

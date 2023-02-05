@@ -35,31 +35,48 @@ export default function Login() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   return (
-    <div className="  flex  flex-col items-center justify-center">
-      <h1 className=" text-center text-5xl font-medium">Login</h1>
+    <div className="  my-7 flex  flex-col items-center justify-center   ">
       <form
         method="post"
-        className="mt-8 mb-5 flex w-48 flex-col gap-5"
+        className=" flex w-72 flex-col gap-5  max-sm:w-56"
         onSubmit={(e) => submit(e, { email, password })}
       >
         <input
           type="email"
           name="email"
           placeholder="Email"
-          className="px-2"
+          className=" rounded border-2 border-gray-600 p-2 px-2 shadow-inner outline-blue-600"
           onChange={(e) => setEmail(e.target.value)}
           pattern="^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
+          required
         />
         <input
           type="password"
           name="password"
           placeholder="Password"
-          className="px-2"
+          className="rounded border-2 border-gray-600 p-2 px-2 outline-blue-600"
           required
           minLength={8}
           pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
           onChange={(e) => setPassword(e.target.value)}
         />
+        <span
+          className="flex items-center gap-12 max-sm:gap-8 max-sm:text-xs
+        "
+        >
+          <span className="flex items-center gap-2 max-sm:gap-1">
+            <input
+              type="checkbox"
+              name="remember"
+              id="remember"
+              className="text-sm"
+            />
+            <label htmlFor="remember">Remember me</label>
+          </span>
+          <h3 className=" cursor-pointer justify-self-end text-right text-sm text-blue-700 max-sm:text-xs">
+            forgot password?
+          </h3>
+        </span>
 
         <button
           type="submit"
@@ -68,14 +85,6 @@ export default function Login() {
           Login
         </button>
       </form>
-      <h3 className=" cursor-pointer text-right text-xs text-blue-700">
-        forgot password?
-      </h3>
-
-      <h4 className="mt-5 text-sm">New Customer?</h4>
-      <Link to="/register" className="  text-[0.85rem] text-blue-700">
-        Register here
-      </Link>
     </div>
   );
 }
