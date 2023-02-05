@@ -3,7 +3,6 @@ import Register from "../components/Register";
 import Login from "../components/Login";
 import "../App.css";
 import { Link } from "react-router-dom";
-import Footer from "../components/Footer";
 
 const toggleExpand = () => {
   //login elements
@@ -48,7 +47,7 @@ const toggleExpand = () => {
 };
 
 export default function Authentication() {
-  //on load
+  // on load
   useEffect(() => {
     const loginButton: HTMLInputElement | null =
       document.querySelector("#login_button")!;
@@ -64,10 +63,10 @@ export default function Authentication() {
       </header>
       <main className="flex flex-col items-center justify-center  bg-blue-100">
         <section
-          className="h-12 w-96 overflow-hidden rounded-t border border-black bg-gray-200 p-2 max-sm:w-72"
+          className="h-12 w-96 overflow-hidden rounded-t border border-black bg-gray-200 p-2 max-vs:w-[90%]"
           id="register"
         >
-          <div className="grid  grid-cols-[0.1fr,1fr] items-center">
+          <div className="grid  grid-cols-[0.1fr,1fr] items-center ">
             <input
               type="radio"
               name="authentication"
@@ -79,8 +78,8 @@ export default function Authentication() {
               htmlFor="register_button"
               className="flex cursor-pointer items-center gap-2"
             >
-              <h2 className="text-lg">Register</h2>
-              <h3 className="text-sm">New to SStore?</h3>
+              <h2 className="text-lg max-vs:text-base">Register</h2>
+              <h3 className="text-sm max-vs:text-xs">New to SStore?</h3>
             </label>
           </div>
           <div id="register_box">
@@ -88,7 +87,7 @@ export default function Authentication() {
           </div>
         </section>
         <section
-          className=" w-96 rounded-b border border-black  bg-white p-2 max-sm:w-72"
+          className=" w-96 rounded-b border border-black  bg-white p-2 max-vs:w-[90%]"
           id="login"
         >
           <div className="grid grid-cols-[0.1fr,1fr] items-center">
@@ -103,8 +102,8 @@ export default function Authentication() {
               htmlFor="login_button"
               className="flex cursor-pointer items-center gap-2"
             >
-              <h2 className="text-lg">Login</h2>
-              <h3 className="text-sm">Already a customer?</h3>
+              <h2 className="text-lg max-vs:text-base">Login</h2>
+              <h3 className="text-sm max-vs:text-xs">Already a customer?</h3>
             </label>
           </div>
           <div id="login_box">
@@ -113,9 +112,9 @@ export default function Authentication() {
         </section>
       </main>
 
-      <footer className="flex flex-col items-center justify-center gap-2 border border-black bg-sky-900 text-center text-sm text-white max-sm:text-xs">
+      <footer className="flex flex-col items-center justify-evenly  border border-black bg-sky-900 text-center text-sm text-white max-vs:text-xs">
         <span>
-          <ul className="flex  gap-5 ">
+          <ul className="flex gap-5">
             <li>Condition of Use</li>
             <li>Privacy Notice</li>
             <li>Interest Based Ads</li>

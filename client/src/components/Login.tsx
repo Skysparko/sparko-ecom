@@ -38,14 +38,15 @@ export default function Login() {
     <div className="  my-7 flex  flex-col items-center justify-center   ">
       <form
         method="post"
-        className=" flex w-72 flex-col gap-5  max-sm:w-56"
+        className=" flex w-72 flex-col gap-5  max-vs:w-[95%]"
         onSubmit={(e) => submit(e, { email, password })}
       >
         <input
           type="email"
           name="email"
           placeholder="Email"
-          className=" rounded border-2 border-gray-600 p-2 px-2 shadow-inner outline-blue-600"
+          className=" rounded border-2 border-gray-600 p-2 px-2 shadow-inner outline-blue-600
+          max-vs:text-sm max-vxs:text-xs"
           onChange={(e) => setEmail(e.target.value)}
           pattern="^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
           required
@@ -54,17 +55,18 @@ export default function Login() {
           type="password"
           name="password"
           placeholder="Password"
-          className="rounded border-2 border-gray-600 p-2 px-2 outline-blue-600"
+          className="rounded border-2 border-gray-600 p-2 px-2 outline-blue-600 max-vs:text-sm
+          max-vxs:text-xs"
           required
           minLength={8}
           pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
           onChange={(e) => setPassword(e.target.value)}
         />
         <span
-          className="flex items-center gap-12 max-sm:gap-8 max-sm:text-xs
-        "
+          className="flex items-center justify-between 
+         max-vs:text-xs"
         >
-          <span className="flex items-center gap-2 max-sm:gap-1">
+          <span className="flex items-center gap-1">
             <input
               type="checkbox"
               name="remember"
@@ -73,14 +75,14 @@ export default function Login() {
             />
             <label htmlFor="remember">Remember me</label>
           </span>
-          <h3 className=" cursor-pointer justify-self-end text-right text-sm text-blue-700 max-sm:text-xs">
+          <h3 className=" cursor-pointer justify-self-end text-right text-sm text-blue-700 max-vs:text-xs">
             forgot password?
           </h3>
         </span>
 
         <button
           type="submit"
-          className="m-auto w-20 rounded border-2 border-black bg-blue-500 py-1 px-3 text-white"
+          className=" rounded border-2 border-black bg-blue-500 py-1 text-white"
         >
           Login
         </button>
