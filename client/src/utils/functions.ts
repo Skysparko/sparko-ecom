@@ -19,14 +19,14 @@ export const instance = axios.create({
   timeout: 1000,
 });
 
-//This function is Use to toggle password Show and Hide it accepts two variable from useState hook
+//This function is Use to toggle password Show and Hide it accepts two variable from useState hook and string like this (#id) for password input id
 export const passwordViewToggler = (
   showPassword: boolean,
-  setShowPassword: React.Dispatch<React.SetStateAction<boolean>>
+  setShowPassword: React.Dispatch<React.SetStateAction<boolean>>,
+  id: string
 ) => {
   setShowPassword(!showPassword);
-  const password: HTMLInputElement | null =
-    document.querySelector("#password")!;
+  const password: HTMLInputElement | null = document.querySelector(id)!;
   if (password.type === "password") {
     password.type = "text";
   } else {

@@ -3,7 +3,9 @@ import { IoIosArrowUp } from "react-icons/io";
 
 export default function Footer(): JSX.Element {
   return (
+    // footer's main section
     <div className="border border-black  text-center text-sm text-white max-sm:text-xs ">
+      {/* This division contains a row when its clicked it scroll back to top */}
       <div
         className="flex cursor-pointer items-center justify-center gap-5 bg-sky-800 py-3 text-base hover:bg-sky-700 max-sm:gap-2 max-sm:text-sm"
         onClick={() =>
@@ -17,7 +19,9 @@ export default function Footer(): JSX.Element {
         Back to top
         <IoIosArrowUp />
       </div>
+      {/* This division contains a row with three cols containing links like this: social , About and help links */}
       <div className="flex w-full justify-evenly bg-sky-900 py-4 max-sm:gap-5">
+        {/* This col contains information about website and owner */}
         <span>
           <h1 className="text-base font-medium max-sm:text-sm">
             Get to Know us
@@ -28,6 +32,7 @@ export default function Footer(): JSX.Element {
             <li>SStore Stories</li>
           </ul>
         </span>
+        {/* This col contains social link  */}
         <span>
           <h1 className="text-base font-medium max-sm:text-sm">
             Connect with Us
@@ -38,6 +43,7 @@ export default function Footer(): JSX.Element {
             <li>Instagram</li>
           </ul>
         </span>
+        {/* This col contain help related links and information */}
         <span>
           <h1 className="text-base font-medium max-sm:text-sm">
             Let Us Help You
@@ -49,6 +55,8 @@ export default function Footer(): JSX.Element {
           </ul>
         </span>
       </div>
+      {/* This division contains two rows one have illegal documents and the other
+      one have copyright information */}
       <div className="bg-slate-700 py-2">
         <span>
           <ul className="flex  justify-center gap-5 py-2">

@@ -9,6 +9,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 export default function Header() {
   const navigate = useNavigate();
+  //logic for responsive design
   const [width, setWidth] = useState(
     window.innerWidth > 0 ? window.innerWidth : screen.width
   );
@@ -16,6 +17,7 @@ export default function Header() {
     window.addEventListener("resize", () => {
       setWidth(window.innerWidth > 0 ? window.innerWidth : screen.width);
     });
+    // Elements
     const header: HTMLElement | null = document.getElementById("header");
     const searchMobileForm: HTMLElement | null =
       document.getElementById("search_mobile_form");
@@ -24,7 +26,7 @@ export default function Header() {
     );
     const categories: HTMLElement | null =
       document.getElementById("categories_mobile");
-
+    //logic for responsive design
     if (width < 850) {
       header?.classList.remove("grid-cols-[1fr,2.5fr,1fr]");
       header?.classList.add("grid-cols-[1fr,1fr]");
@@ -40,11 +42,12 @@ export default function Header() {
   });
 
   return (
-    // Three grid containing name search and function
     <>
+      {/* Side bar */}
       <aside>
         <SideBar />
       </aside>
+      {/*  Three grid containing name search and function */}
       <article
         id="header"
         className="grid select-none grid-cols-[1fr,2.5fr,1fr] border border-black  bg-sky-600  py-2 text-2xl  max-lg:text-xl max-md:text-lg"
@@ -61,7 +64,7 @@ export default function Header() {
         </div>
 
         {
-          /* Ui for search */
+          /* Ui for search (devices having screens more then 850px)*/
           width > 850 ? (
             <div id="search_desktop">
               <form
@@ -69,6 +72,7 @@ export default function Header() {
                 method="get"
                 className="flex justify-center rounded-md border  border-black text-base focus-within:outline focus-within:outline-2 focus-within:outline-blue-300 "
               >
+                {/* categories */}
                 <select
                   name="categories"
                   id="categories_desktop"
@@ -79,6 +83,7 @@ export default function Header() {
                   <option value="Electronics">Electronics</option>
                   <option value="Furniture">Furniture</option>
                 </select>
+                {/* search bar */}
                 <input
                   type="search"
                   name="search"
@@ -88,6 +93,7 @@ export default function Header() {
                   aria-label="Search"
                   aria-describedby="search"
                 />
+                {/* search button */}
                 <button
                   type="submit"
                   id="submit_search_desktop"
@@ -104,6 +110,7 @@ export default function Header() {
 
         {/* section containing login and cart  */}
         <div className=" flex  justify-end  gap-10 pr-5 text-white max-md:gap-5">
+          {/* Login section */}
           <span
             className="flex cursor-pointer items-center"
             onClick={() => navigate("/authentication")}
@@ -119,6 +126,7 @@ export default function Header() {
 
             <FaUserAlt />
           </span>
+          {/* cart section */}
           <button className="text-3xl max-lg:text-2xl">
             <Link to="/cart">
               <RiShoppingCartFill />
@@ -126,14 +134,16 @@ export default function Header() {
           </button>
         </div>
       </article>
-      {/* search section for mobile devices  */}
+
+      {/* search section for devices having screens less than 850px  */}
       {width < 850 ? (
         <div id="search_mobile">
           <form
             id="search_mobile_form"
             method="get"
-            className="flex justify-center rounded-md border  border-black text-base focus-within:outline focus-within:outline-2 focus-within:outline-blue-300"
+            className="flex justify-center rounded-md border  border-black text-base focus-within:outline focus-within:outline-2 focus-within:outline-blue-300 max-sm:text-sm"
           >
+            {/* Categories */}
             <select
               name="categories"
               id="categories_mobile"
@@ -144,6 +154,8 @@ export default function Header() {
               <option value="Electronics">Electronics</option>
               <option value="Furniture">Furniture</option>
             </select>
+
+            {/* Search Bar */}
             <input
               type="search"
               name="search"
@@ -153,6 +165,7 @@ export default function Header() {
               aria-label="Search"
               aria-describedby="search"
             />
+            {/* Search button */}
             <button
               type="submit"
               id="submit_search_mobile"

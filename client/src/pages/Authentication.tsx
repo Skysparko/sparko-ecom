@@ -48,20 +48,25 @@ const toggleExpand = () => {
 
 export default function Authentication() {
   // on load
+
   useEffect(() => {
     const loginButton: HTMLInputElement | null =
       document.querySelector("#login_button")!;
     loginButton.checked = true;
-  }, []);
+  });
 
   return (
+    // This is the authentication page
     <article className="grid h-[100vh] grid-rows-[0.8fr,8fr,1.2fr]">
+      {/* header for the page */}
       <header className="flex items-center border border-black bg-sky-900">
         <Link to="/" className="p-4 text-3xl text-white">
           SStore
         </Link>
       </header>
+      {/* Main section containing register and login forms */}
       <main className="flex flex-col items-center justify-center  bg-blue-100">
+        {/* Register Section */}
         <section
           className="h-12 w-96 overflow-hidden rounded-t border border-black bg-gray-200 p-2 max-vs:w-[90%]"
           id="register"
@@ -82,10 +87,12 @@ export default function Authentication() {
               <h3 className="text-sm max-vs:text-xs">New to SStore?</h3>
             </label>
           </div>
+          {/* login box containing login form */}
           <div id="register_box">
             <Register />
           </div>
         </section>
+        {/* Login Section */}
         <section
           className=" w-96 rounded-b border border-black  bg-white p-2 max-vs:w-[90%]"
           id="login"
@@ -98,6 +105,7 @@ export default function Authentication() {
               id="login_button"
               onChange={toggleExpand}
             />
+
             <label
               htmlFor="login_button"
               className="flex cursor-pointer items-center gap-2"
@@ -106,13 +114,16 @@ export default function Authentication() {
               <h3 className="text-sm max-vs:text-xs">Already a customer?</h3>
             </label>
           </div>
+          {/* login box containing login form */}
           <div id="login_box">
             <Login />
           </div>
         </section>
       </main>
 
+      {/* Footer for authentication page */}
       <footer className="flex flex-col items-center justify-evenly  border border-black bg-sky-900 text-center text-sm text-white max-vs:text-xs">
+        {/* Illegal Stuff */}
         <span>
           <ul className="flex gap-5">
             <li>Condition of Use</li>
@@ -120,6 +131,7 @@ export default function Authentication() {
             <li>Interest Based Ads</li>
           </ul>
         </span>
+        {/* copyright section */}
         <span className="">&copy; Skysparko.pvt.lmt ,2023</span>
       </footer>
     </article>

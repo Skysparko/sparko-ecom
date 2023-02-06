@@ -39,12 +39,14 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   return (
+    // This have a form containing email and password input bar with a button for show password and checkbox for remember me and forgot password button
     <div className="  my-7 flex  flex-col items-center justify-center   ">
       <form
         method="post"
         className=" flex w-72 flex-col gap-5  max-vs:w-[95%]"
         onSubmit={(e) => submit(e, { email, password })}
       >
+        {/* Email Bar */}
         <input
           type="email"
           name="email"
@@ -55,12 +57,14 @@ export default function Login() {
           pattern="^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
           required
         />
+        {/* Password Bar */}
         <span className="flex">
+          {/* Password Input Bar */}
           <input
             type="password"
             name="password"
             placeholder="Password"
-            id="password"
+            id="login_password"
             className="w-72 rounded border-2 border-gray-600 p-2 px-2 pr-10 shadow-inner
           outline-blue-600 max-vs:w-[100%] max-vs:text-sm max-vxs:text-xs"
             required
@@ -68,30 +72,41 @@ export default function Login() {
             pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
             onChange={(e) => setPassword(e.target.value)}
           />
+          {/* Password View Toggle Button */}
           <span
             className="-ml-8 mt-3  cursor-pointer text-xl max-vs:mt-[0.7rem] max-vs:text-lg max-vxs:mt-[0.6rem] max-vxs:-ml-7 max-vxs:text-base"
             id="password_show_toggler"
           >
+            {/* Toggle password show or hide */}
             {showPassword ? (
               <BsEye
                 onClick={() =>
-                  passwordViewToggler(showPassword, setShowPassword)
+                  passwordViewToggler(
+                    showPassword,
+                    setShowPassword,
+                    "#login_password"
+                  )
                 }
               />
             ) : (
               <BsEyeSlash
                 onClick={() =>
-                  passwordViewToggler(showPassword, setShowPassword)
+                  passwordViewToggler(
+                    showPassword,
+                    setShowPassword,
+                    "#login_password"
+                  )
                 }
               />
             )}
           </span>
         </span>
-
+        {/* Remember me and Forgot your password  */}
         <span
           className="flex items-center justify-between 
          max-vs:text-xs"
         >
+          {/* Remember Section */}
           <span className="flex items-center gap-1">
             <input
               type="checkbox"
@@ -101,11 +116,12 @@ export default function Login() {
             />
             <label htmlFor="remember">Remember me</label>
           </span>
+          {/* Forgot Password Section */}
           <h3 className=" cursor-pointer justify-self-end text-right text-sm text-blue-700 max-vs:text-xs">
             forgot password?
           </h3>
         </span>
-
+        {/* Login Button (Form Submit) */}
         <button
           type="submit"
           className=" rounded border-2 border-black bg-blue-500 py-1 text-white"
