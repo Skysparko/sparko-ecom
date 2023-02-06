@@ -1,6 +1,5 @@
 import React from "react";
 import { IoIosArrowUp } from "react-icons/io";
-import { scrollToTop } from "../utils/functions";
 
 export default function Footer(): JSX.Element {
   return (

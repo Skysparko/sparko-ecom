@@ -1,7 +1,9 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import React from "react";
-import { Link, Navigate } from "react-router-dom";
-import Home from "../pages/Home";
+import { BsEyeSlash, BsEye } from "react-icons/bs";
+import "../App.css";
+import { useState } from "react";
+import { passwordViewToggler } from "../utils/functions";
 
 type Submit = {
   email: string;
@@ -32,8 +34,10 @@ const submit = (
 };
 
 export default function Login() {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   return (
     <div className="  my-7 flex  flex-col items-center justify-center   ">
       <form
@@ -51,17 +55,39 @@ export default function Login() {
           pattern="^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
           required
         />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="rounded border-2 border-gray-600 p-2 px-2 outline-blue-600 max-vs:text-sm
-          max-vxs:text-xs"
-          required
-          minLength={8}
-          pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <span className="flex">
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            id="password"
+            className="w-72 rounded border-2 border-gray-600 p-2 px-2 pr-10 shadow-inner
+          outline-blue-600 max-vs:w-[100%] max-vs:text-sm max-vxs:text-xs"
+            required
+            minLength={8}
+            pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <span
+            className="-ml-8 mt-3  cursor-pointer text-xl max-vs:mt-[0.7rem] max-vs:text-lg max-vxs:mt-[0.6rem] max-vxs:-ml-7 max-vxs:text-base"
+            id="password_show_toggler"
+          >
+            {showPassword ? (
+              <BsEye
+                onClick={() =>
+                  passwordViewToggler(showPassword, setShowPassword)
+                }
+              />
+            ) : (
+              <BsEyeSlash
+                onClick={() =>
+                  passwordViewToggler(showPassword, setShowPassword)
+                }
+              />
+            )}
+          </span>
+        </span>
+
         <span
           className="flex items-center justify-between 
          max-vs:text-xs"
