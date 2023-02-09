@@ -1,39 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { instance, passwordViewToggler } from "../utils/functions";
+import { passwordViewToggler } from "../utils/functions";
 import { BsEye, BsEyeSlash, BsInfoLg } from "react-icons/bs";
 import { useState } from "react";
-
-type Submit = {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
-
-const submit = (
-  e: React.FormEvent<HTMLFormElement>,
-  { username, email, password, confirmPassword }: Submit
-) => {
-  e.preventDefault();
-
-  if (password !== confirmPassword) {
-    alert("Passwords do not match");
-    return;
-  }
-
-  instance
-    .post("user/register", { username, email, password })
-    .then((res) => {
-      if (res.status === 201) {
-        alert("Registration successful");
-        window.location.href = "/login";
-      }
-    })
-    .catch((err) => {
-      console.log(err.response?.data);
-    });
-};
+import { registration } from "../utils/auth/authFunctions";
+import DialogBox, { dialogBoxPropsType } from "./DialogBox";
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
@@ -43,6 +13,12 @@ export default function Register() {
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
+  const [response, setResponse] = React.useState<dialogBoxPropsType>({
+    type: "info",
+    message:
+      "Password must be at least 8 characters long and contain at least 1 uppercase, 1 lowercase, 1 number",
+  });
+
   return (
     // This division have a form containing the username, email,password and confirm Password fields and password requirements and a submit button
 
@@ -51,9 +27,18 @@ export default function Register() {
         method="post"
         className=" flex w-72 flex-col gap-5 max-vs:w-[95%] max-vs:gap-3 "
         onSubmit={(e) =>
-          submit(e, { username, email, password, confirmPassword })
+          registration(e, {
+            username,
+            email,
+            password,
+            confirmPassword,
+            setResponse,
+          })
         }
       >
+        <div id="response">
+          <DialogBox message={response.message} type={response.type} />
+        </div>
         {/* Username Input Field */}
         <input
           type="text"
@@ -171,13 +156,13 @@ export default function Register() {
           </span>
         </span>
 
-        {/* This contains information about password requirements */}
+        {/* This contains information about password requirements
         <span>
           <h2 className="grid grid-cols-[0.1fr,1fr]  text-[0.75rem]">
             <BsInfoLg /> Password must be at least 8 characters long and contain
             at least 1 uppercase, 1 lowercase, 1 number
           </h2>
-        </span>
+        </span> */}
         {/* Register Button (Form Submit) */}
         <button
           type="submit"

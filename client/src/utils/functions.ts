@@ -33,3 +33,7 @@ export const passwordViewToggler = (
     password.type = "password";
   }
 };
+
+export const isAuthenticated = (): boolean => {
+  return true;
+};

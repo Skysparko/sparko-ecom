@@ -3,7 +3,6 @@ import { VscThreeBars } from "react-icons/vsc";
 import { FaUserAlt } from "react-icons/fa";
 import { MdOutlineKeyboardArrowRight, MdSearch } from "react-icons/md";
 import { RiShoppingCartFill } from "react-icons/ri";
-import "../App.css";
 import SideBar, { openSidebar } from "./SideBar";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -19,20 +18,11 @@ export default function Header() {
     });
     // Elements
     const header: HTMLElement | null = document.getElementById("header");
-    const searchMobileForm: HTMLElement | null =
-      document.getElementById("search_mobile_form");
-    const submitSearch: HTMLElement | null = document.getElementById(
-      "submit_search_mobile"
-    );
-    const categories: HTMLElement | null =
-      document.getElementById("categories_mobile");
+
     //logic for responsive design
     if (width < 850) {
-      header?.classList.remove("grid-cols-[1fr,2.5fr,1fr]");
       header?.classList.add("grid-cols-[1fr,1fr]");
-      searchMobileForm?.classList.remove("rounded-md");
-      submitSearch?.classList.remove("rounded-r-md");
-      categories?.classList.remove("rounded-l-md");
+      header?.classList.remove("grid-cols-[1fr,2.5fr,1fr]");
       header?.classList.remove("border", "border-black");
     } else {
       header?.classList.remove("grid-cols-[1fr,1fr]");
@@ -50,11 +40,11 @@ export default function Header() {
       {/*  Three grid containing name search and function */}
       <article
         id="header"
-        className="grid select-none grid-cols-[1fr,2.5fr,1fr] border border-black  bg-sky-600  py-2 text-2xl  max-lg:text-xl max-md:text-lg"
+        className="grid select-none grid-cols-[1fr,2.5fr,1fr] border border-black  bg-sky-900 py-2  text-2xl bg-blend-hue  max-lg:text-xl max-md:text-lg"
       >
         {/* hamburger column and the name of the company */}
         <div className=" flex  items-center  gap-5  pl-5 text-3xl text-white max-lg:text-2xl max-md:gap-2 max-md:pl-2 max-sm:text-[1.4rem]">
-          <button className="cursor-pointer" onClick={openSidebar}>
+          <button className="cursor-pointer " onClick={openSidebar}>
             <VscThreeBars />
           </button>
 
@@ -65,7 +55,7 @@ export default function Header() {
 
         {
           /* Ui for search (devices having screens more then 850px)*/
-          width > 850 ? (
+          width > 850 && (
             <div id="search_desktop">
               <form
                 id="search_desktop_form"
@@ -103,31 +93,27 @@ export default function Header() {
                 </button>
               </form>
             </div>
-          ) : (
-            <></>
           )
         }
 
         {/* section containing login and cart  */}
-        <div className=" flex  justify-end  gap-10 pr-5 text-white max-md:gap-5">
+        <div className=" flex  justify-end gap-10  pr-10 text-xl text-white max-lg:pr-5 max-md:gap-5 max-sm:text-[1.15rem] max-xs:text-[1rem]">
           {/* Login section */}
           <span
             className="flex cursor-pointer items-center"
             onClick={() => navigate("/authentication")}
           >
-            {width > 250 ? (
+            {width > 250 && (
               <span className="flex cursor-pointer items-center">
-                <h3 className="">Login</h3>{" "}
-                <MdOutlineKeyboardArrowRight size={15} />
+                <h3>Login</h3>
+                <MdOutlineKeyboardArrowRight />
               </span>
-            ) : (
-              <></>
             )}
 
             <FaUserAlt />
           </span>
           {/* cart section */}
-          <button className="text-3xl max-lg:text-2xl">
+          <button className="text-2xl max-sm:text-[1.3rem] max-xs:text-[1.25rem]">
             <Link to="/cart">
               <RiShoppingCartFill />
             </Link>
@@ -136,18 +122,18 @@ export default function Header() {
       </article>
 
       {/* search section for devices having screens less than 850px  */}
-      {width < 850 ? (
+      {width < 850 && (
         <div id="search_mobile">
           <form
             id="search_mobile_form"
             method="get"
-            className="flex justify-center rounded-md border  border-black text-base focus-within:outline focus-within:outline-2 focus-within:outline-blue-300 max-sm:text-sm"
+            className="flex justify-center border  border-black text-base focus-within:outline focus-within:outline-2 focus-within:outline-blue-300 max-sm:text-sm"
           >
             {/* Categories */}
             <select
               name="categories"
               id="categories_mobile"
-              className="rounded-l-md border border-black bg-white text-center outline-none"
+              className="border border-black bg-white text-center outline-none"
             >
               <option value="All">All</option>
               <option value="Clothing">Clothing</option>
@@ -169,14 +155,12 @@ export default function Header() {
             <button
               type="submit"
               id="submit_search_mobile"
-              className="rounded-r-md border border-black bg-blue-300 p-1 text-3xl max-lg:text-2xl"
+              className="border border-black bg-blue-300 p-1 text-3xl max-lg:text-2xl"
             >
               <MdSearch />
             </button>
           </form>
         </div>
-      ) : (
-        <></>
       )}
     </>
   );

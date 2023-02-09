@@ -1,37 +1,9 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import React from "react";
 import { BsEyeSlash, BsEye } from "react-icons/bs";
-import "../App.css";
 import { useState } from "react";
 import { passwordViewToggler } from "../utils/functions";
-
-type Submit = {
-  email: string;
-  password: string;
-};
-
-const submit = (
-  e: React.FormEvent<HTMLFormElement>,
-  { email, password }: Submit
-) => {
-  e.preventDefault();
-  console.log();
-  console.log({ email, password });
-  axios.defaults.withCredentials = true;
-  axios
-    .post("http://localhost:8080/api/v1/user/login", {
-      email,
-      password,
-    })
-    .then((res: AxiosResponse) => {
-      if (res.status === 200) {
-        alert("Login successful");
-      }
-    })
-    .catch((error: AxiosError) => {
-      console.log(error.response?.data);
-    });
-};
+import { authentication } from "../utils/auth/authFunctions";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -44,7 +16,7 @@ export default function Login() {
       <form
         method="post"
         className=" flex w-72 flex-col gap-5  max-vs:w-[95%]"
-        onSubmit={(e) => submit(e, { email, password })}
+        onSubmit={(e) => authentication(e, { email, password })}
       >
         {/* Email Bar */}
         <input
@@ -74,7 +46,7 @@ export default function Login() {
           />
           {/* Password View Toggle Button */}
           <span
-            className="-ml-8 mt-3  cursor-pointer text-xl max-vs:mt-[0.7rem] max-vs:text-lg max-vxs:mt-[0.6rem] max-vxs:-ml-7 max-vxs:text-base"
+            className="-ml-8 mt-3  hidden cursor-pointer text-xl max-vs:mt-[0.7rem] max-vs:text-lg max-vxs:mt-[0.6rem] max-vxs:-ml-7 max-vxs:text-base"
             id="password_show_toggler"
           >
             {/* Toggle password show or hide */}
