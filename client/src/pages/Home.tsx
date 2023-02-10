@@ -21,7 +21,15 @@ import React from "react";
 //     });
 //   window.location.reload();
 // };
+interface PropTypes {
+  isAuthenticated: boolean;
+  user: Object;
+}
 
-export default function Home() {
-  return <div className="h-[2000px]">Home</div>;
+export default function Home({ isAuthenticated, user }: PropTypes) {
+  return (
+    <div className="h-[2000px]">
+      {isAuthenticated ? "You are authenticated" : "you are not authenticated"}
+    </div>
+  );
 }

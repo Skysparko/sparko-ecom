@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
-import SideBar from "./SideBar";
 import Footer from "./Footer";
 
-export default function Layout() {
+interface LayoutPropTypes {
+  isAuthenticated: boolean;
+  user: Object;
+}
+
+export default function Layout({ isAuthenticated, user }: LayoutPropTypes) {
   return (
     <div>
       <header>
-        <Header />
+        <Header isAuthenticated={isAuthenticated} user={user}/>
       </header>
       <main>
         <Outlet />

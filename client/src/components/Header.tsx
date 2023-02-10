@@ -6,7 +6,12 @@ import { RiShoppingCartFill } from "react-icons/ri";
 import SideBar, { openSidebar } from "./SideBar";
 import { useNavigate, Link } from "react-router-dom";
 
-export default function Header() {
+interface PropTypes {
+  isAuthenticated: boolean;
+  user: Object;
+}
+
+export default function Header({ isAuthenticated, user }: PropTypes) {
   const navigate = useNavigate();
   //logic for responsive design
   const [width, setWidth] = useState(
@@ -105,7 +110,7 @@ export default function Header() {
           >
             {width > 250 && (
               <span className="flex cursor-pointer items-center">
-                <h3>Login</h3>
+                {isAuthenticated ? <h3>Logout</h3> : <h3>Login</h3>}
                 <MdOutlineKeyboardArrowRight />
               </span>
             )}

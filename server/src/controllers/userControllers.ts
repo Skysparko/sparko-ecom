@@ -59,7 +59,7 @@ export const register = async (req: Request, res: Response) => {
     //saving the user to the database
     await newUser.save();
     //returning the new created user in the response
-    return res.status(201).send(newUser);
+    return res.status(201).send("Registration Successful");
   } catch (error) {
     //returning the error message
     console.log(error);
@@ -103,7 +103,7 @@ export const login = async (req: Request, res: Response) => {
       expires: new Date(Date.now() + 999999),
     });
     //returning the token in the response
-    return res.status(200).send("Login successfully");
+    return res.status(200).json(user);
   } catch (error) {
     //returning the error message
     console.log(error);
@@ -118,6 +118,20 @@ export const logout = (req: Request, res: Response) => {
     return res.status(200).send("Logout successfully");
   } catch (error) {
     //returning the error message
+    console.log(error);
+    return res.status(500).send((error as Error).message);
+  }
+};
+
+//checking whether user is logged in
+export const authenticate = async (req: Request, res: Response) => {
+  try {
+    const user: Object = Object(req)["user"];
+    if (!user) {
+      return res.status(400).send("You are not Authenticated");
+    }
+    return res.status(200).json(user);
+  } catch (error) {
     console.log(error);
     return res.status(500).send((error as Error).message);
   }

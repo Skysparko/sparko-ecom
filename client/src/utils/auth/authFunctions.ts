@@ -47,14 +47,14 @@ export const registration = async (
 interface loginFormTypes {
   email: string;
   password: string;
+  setResponse: React.Dispatch<React.SetStateAction<dialogBoxPropsType>>;
 }
 
-export const authentication = (
+export const loggingIn = (
   e: React.FormEvent<HTMLFormElement>,
-  { email, password }: loginFormTypes
+  { email, password, setResponse }: loginFormTypes
 ) => {
   e.preventDefault();
-
   instance
     .post("user/login", {
       email,
@@ -62,10 +62,18 @@ export const authentication = (
     })
     .then((res) => {
       if (res.status === 200) {
-        alert("Login successful");
+        setResponse({
+          type: "success",
+          message: "Successfully logged in",
+        });
+        location.href = "/";
       }
     })
     .catch((error) => {
       console.log(error.response?.data);
+      setResponse({
+        type: "error",
+        message: error.response?.data,
+      });
     });
 };

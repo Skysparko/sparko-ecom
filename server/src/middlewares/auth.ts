@@ -16,6 +16,7 @@ export const isAuthorized = async (
 ) => {
   try {
     const authHeader = req.headers.authorization;
+    console.log(authHeader);
 
     //checking if there is token available or not
     if (!authHeader) {

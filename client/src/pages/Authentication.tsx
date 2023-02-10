@@ -3,6 +3,7 @@ import Register from "../components/Register";
 import Login from "../components/Login";
 
 import { Link } from "react-router-dom";
+import { dialogBoxPropsType } from "../components/DialogBox";
 
 const toggleExpand = () => {
   //login elements

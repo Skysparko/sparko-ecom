@@ -6,7 +6,7 @@ export const getCookie = (cookieName: string) => {
     .split(";")
     .find((c) => c.trim().startsWith(cookieName));
 
-  return cookie ? cookie.split("=")[1] : null;
+  return cookie ? cookie.split("=")[1] : "";
 };
 
 //axios instance method for api requests
@@ -32,8 +32,4 @@ export const passwordViewToggler = (
   } else {
     password.type = "password";
   }
-};
-
-export const isAuthenticated = (): boolean => {
-  return true;
 };

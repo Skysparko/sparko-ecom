@@ -3,21 +3,33 @@ import React from "react";
 import { BsEyeSlash, BsEye } from "react-icons/bs";
 import { useState } from "react";
 import { passwordViewToggler } from "../utils/functions";
-import { authentication } from "../utils/auth/authFunctions";
+import DialogBox, { dialogBoxPropsType } from "./DialogBox";
+import { loggingIn } from "../utils/auth/authFunctions";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
-
+  const [response, setResponse] = useState<dialogBoxPropsType>({
+    type: "info",
+    message:
+      "Password must be at least 8 characters long and contain at least 1 uppercase, 1 lowercase, 1 number",
+  });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   return (
     // This have a form containing email and password input bar with a button for show password and checkbox for remember me and forgot password button
-    <div className="  my-7 flex  flex-col items-center justify-center   ">
+    <div className="my-7 flex  flex-col items-center justify-center">
       <form
         method="post"
         className=" flex w-72 flex-col gap-5  max-vs:w-[95%]"
-        onSubmit={(e) => authentication(e, { email, password })}
+        onSubmit={(e) =>
+          loggingIn(e, {
+            email,
+            password,
+            setResponse,
+          })
+        }
       >
+        <DialogBox type={response.type} message={response.message} />
         {/* Email Bar */}
         <input
           type="email"
@@ -46,7 +58,7 @@ export default function Login() {
           />
           {/* Password View Toggle Button */}
           <span
-            className="-ml-8 mt-3  hidden cursor-pointer text-xl max-vs:mt-[0.7rem] max-vs:text-lg max-vxs:mt-[0.6rem] max-vxs:-ml-7 max-vxs:text-base"
+            className="-ml-8 mt-3 cursor-pointer text-xl max-vs:mt-[0.7rem] max-vs:text-lg max-vxs:mt-[0.6rem] max-vxs:-ml-7 max-vxs:text-base"
             id="password_show_toggler"
           >
             {/* Toggle password show or hide */}
