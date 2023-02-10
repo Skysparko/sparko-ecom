@@ -48,17 +48,20 @@ interface loginFormTypes {
   email: string;
   password: string;
   setResponse: React.Dispatch<React.SetStateAction<dialogBoxPropsType>>;
+  rememberMe: boolean;
 }
 
 export const loggingIn = (
   e: React.FormEvent<HTMLFormElement>,
-  { email, password, setResponse }: loginFormTypes
+  { email, password, setResponse, rememberMe }: loginFormTypes
 ) => {
   e.preventDefault();
+  console.log(rememberMe);
   instance
     .post("user/login", {
       email,
       password,
+      rememberMe,
     })
     .then((res) => {
       if (res.status === 200) {
@@ -75,5 +78,28 @@ export const loggingIn = (
         type: "error",
         message: error.response?.data,
       });
+    });
+};
+
+interface forgotPasswordTypes {
+  email: string;
+}
+
+//a lot of work is left to implement
+export const forgotPassword = async (
+  e: React.FormEvent<HTMLFormElement>,
+  { email }: forgotPasswordTypes
+) => {
+  e.preventDefault();
+
+  instance
+    .post("user/forgot-password", { email })
+    .then((res) => {
+      if (res.status === 200) {
+        console.log("");
+      }
+    })
+    .catch((err) => {
+      console.log(err.response?.data);
     });
 };

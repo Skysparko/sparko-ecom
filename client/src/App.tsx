@@ -12,25 +12,42 @@ import Authentication from "./pages/Authentication";
 import Cart from "./pages/Cart";
 import { createContext, useEffect, useState } from "react";
 import { instance } from "./utils/functions";
+import Signing from "./pages/Signing";
+import ForgotPassword from "./pages/ForgotPassword";
+
+export type User = {
+  name: string;
+  id: string;
+  email: string;
+  role: string;
+};
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState({});
-  // useEffect(() => {
-  window.addEventListener("load", () => {
-    instance
-      .post("user/authenticate")
-      .then((res) => {
-        if (res.status === 200) {
-          setIsAuthenticated(true);
-          setUser(res.data);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+
+  //! useState is not working it is not setting up the values
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    role: "",
+    id: "",
   });
-  // });
+  useEffect(() => {
+    window.addEventListener("load", () => {
+      instance
+        .post("user/authenticate")
+        .then((res) => {
+          if (res.status === 200) {
+            setUser(res.data);
+
+            setIsAuthenticated(true);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
+  });
 
   return (
     <BrowserRouter>
@@ -46,7 +63,10 @@ function App() {
           <Route path="cart" element={<Cart />} />
         </Route>
         {!isAuthenticated && (
-          <Route path="/authentication" element={<Authentication />} />
+          <Route path="/authentication" element={<Authentication />}>
+            <Route index element={<Signing />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+          </Route>
         )}
       </Routes>
     </BrowserRouter>

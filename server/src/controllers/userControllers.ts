@@ -71,7 +71,7 @@ export const register = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   try {
     //getting values from the request
-    const { email, password } = req.body;
+    const { email, password, rememberMe } = req.body;
     //checking whether user filled all the fields or not
     if (!email || !password) {
       return res.status(400).send("Please fill all fields");
@@ -95,15 +95,17 @@ export const login = async (req: Request, res: Response) => {
     if (!isMatch) {
       return res.status(400).send("Invalid email or password");
     }
+
     //singing a new token using user id and secret message and setting up the expiration time as options
     const bearerToken = jwt.sign({ id: user._id }, process.env.SECRET!, {
-      expiresIn: "1h",
+      expiresIn: rememberMe ? "365d" : "7d",
     });
+
     res.cookie("bearerToken", bearerToken, {
       expires: new Date(Date.now() + 999999),
     });
     //returning the token in the response
-    return res.status(200).json(user);
+    return res.status(200).send("Logined successfully");
   } catch (error) {
     //returning the error message
     console.log(error);
@@ -123,14 +125,26 @@ export const logout = (req: Request, res: Response) => {
   }
 };
 
+interface User {
+  username: string;
+  email: string;
+  _id: string;
+  role: string;
+}
+
 //checking whether user is logged in
 export const authenticate = async (req: Request, res: Response) => {
   try {
-    const user: Object = Object(req)["user"];
+    const user: User = Object(req)["user"];
     if (!user) {
       return res.status(400).send("You are not Authenticated");
     }
-    return res.status(200).json(user);
+    return res.status(200).json({
+      name: user.username,
+      email: user.email,
+      id: user._id,
+      role: user.role,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).send((error as Error).message);

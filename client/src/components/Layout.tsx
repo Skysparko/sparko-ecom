@@ -2,17 +2,23 @@ import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
+// import { User } from "../App";
 
-interface LayoutPropTypes {
+interface PropTypes {
   isAuthenticated: boolean;
-  user: Object;
+  user: {
+    name: string;
+    email: string;
+    role: string;
+    id: string;
+  };
 }
 
-export default function Layout({ isAuthenticated, user }: LayoutPropTypes) {
+export default function Layout({ isAuthenticated, user }: PropTypes) {
   return (
     <div>
       <header>
-        <Header isAuthenticated={isAuthenticated} user={user}/>
+        <Header isAuthenticated={isAuthenticated} user={user} />
       </header>
       <main>
         <Outlet />

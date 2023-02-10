@@ -5,16 +5,19 @@ import { useState } from "react";
 import { passwordViewToggler } from "../utils/functions";
 import DialogBox, { dialogBoxPropsType } from "./DialogBox";
 import { loggingIn } from "../utils/auth/authFunctions";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [response, setResponse] = useState<dialogBoxPropsType>({
     type: "info",
-    message:
-      "Password must be at least 8 characters long and contain at least 1 uppercase, 1 lowercase, 1 number",
+    message: "Please enter your email and password ! ",
   });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+
   return (
     // This have a form containing email and password input bar with a button for show password and checkbox for remember me and forgot password button
     <div className="my-7 flex  flex-col items-center justify-center">
@@ -26,6 +29,7 @@ export default function Login() {
             email,
             password,
             setResponse,
+            rememberMe,
           })
         }
       >
@@ -97,11 +101,15 @@ export default function Login() {
               name="remember"
               id="remember"
               className="text-sm"
+              onChange={() => setRememberMe(!rememberMe)}
             />
             <label htmlFor="remember">Remember me</label>
           </span>
           {/* Forgot Password Section */}
-          <h3 className=" cursor-pointer justify-self-end text-right text-sm text-blue-700 max-vs:text-xs">
+          <h3
+            className=" cursor-pointer justify-self-end text-right text-sm text-blue-700 max-vs:text-xs"
+            onClick={() => navigate("forgot-password")}
+          >
             forgot password?
           </h3>
         </span>

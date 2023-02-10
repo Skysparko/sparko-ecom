@@ -5,10 +5,16 @@ import { MdOutlineKeyboardArrowRight, MdSearch } from "react-icons/md";
 import { RiShoppingCartFill } from "react-icons/ri";
 import SideBar, { openSidebar } from "./SideBar";
 import { useNavigate, Link } from "react-router-dom";
+import skysparko from "../assets/images/skysparko.jpg";
 
 interface PropTypes {
   isAuthenticated: boolean;
-  user: Object;
+  user: {
+    name: string;
+    email: string;
+    role: string;
+    id: string;
+  };
 }
 
 export default function Header({ isAuthenticated, user }: PropTypes) {
@@ -17,6 +23,9 @@ export default function Header({ isAuthenticated, user }: PropTypes) {
   const [width, setWidth] = useState(
     window.innerWidth > 0 ? window.innerWidth : screen.width
   );
+
+  const [profileMenu, setProfileMenu] = useState(false);
+
   useEffect(() => {
     window.addEventListener("resize", () => {
       setWidth(window.innerWidth > 0 ? window.innerWidth : screen.width);
@@ -103,26 +112,47 @@ export default function Header({ isAuthenticated, user }: PropTypes) {
 
         {/* section containing login and cart  */}
         <div className=" flex  justify-end gap-10  pr-10 text-xl text-white max-lg:pr-5 max-md:gap-5 max-sm:text-[1.15rem] max-xs:text-[1rem]">
-          {/* Login section */}
-          <span
-            className="flex cursor-pointer items-center"
-            onClick={() => navigate("/authentication")}
-          >
-            {width > 250 && (
-              <span className="flex cursor-pointer items-center">
-                {isAuthenticated ? <h3>Logout</h3> : <h3>Login</h3>}
-                <MdOutlineKeyboardArrowRight />
-              </span>
-            )}
-
-            <FaUserAlt />
-          </span>
           {/* cart section */}
           <button className="text-2xl max-sm:text-[1.3rem] max-xs:text-[1.25rem]">
             <Link to="/cart">
               <RiShoppingCartFill />
             </Link>
           </button>
+          {isAuthenticated ? (
+            //User section
+            <section className="border border-black">
+              <img
+                src={skysparko}
+                alt={user.name}
+                className="w-10 rounded-full"
+                onClick={() => setProfileMenu(!profileMenu)}
+              />
+              {profileMenu && (
+                <span className="absolute right-5 border border-black text-black">
+                  <ul>
+                    <li>Profile</li>
+                    <li>Orders</li>
+                    <li>Logout</li>
+                  </ul>
+                </span>
+              )}
+            </section>
+          ) : (
+            /* Login section */
+            <span
+              className="flex cursor-pointer items-center"
+              onClick={() => navigate("/authentication")}
+            >
+              {width > 250 && (
+                <span className="flex cursor-pointer items-center">
+                  <h3>Login</h3>
+                  <MdOutlineKeyboardArrowRight />
+                </span>
+              )}
+
+              <FaUserAlt />
+            </span>
+          )}
         </div>
       </article>
 
