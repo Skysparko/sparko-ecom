@@ -2,11 +2,14 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel";
 import dotenv from "dotenv";
+import { string } from "joi";
 dotenv.config();
 
 interface JwtPayload {
   id: string;
 }
+
+//! Error on expired token server is crashing work on that issue
 
 //logic to check if user is logged in
 export const isAuthorized = async (
@@ -59,5 +62,36 @@ export const isAuthorized = async (
   } catch (error) {
     console.log(error);
     return res.status(500).send((error as Error).message);
+  }
+};
+
+export const isResetTokenValid = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(404).send("token not found");
+    }
+
+    const { id } = jwt.verify(token, process.env.SECRET!) as JwtPayload;
+    if (!id) {
+      return res.status(400).send("invalid token");
+    }
+    console.log(id);
+    // const id = (<{ id: string }>decodedToken).id;
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).send("Your token is not valid. Please try again.");
+    }
+    Object.assign(req, { user: user });
+    next();
+  } catch (error) {
+    console.log(error);
+    return res.status(401).send((error as Error).message);
   }
 };

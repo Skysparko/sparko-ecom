@@ -3,11 +3,13 @@ import { FiKey } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { BiLeftArrowAlt } from "react-icons/bi";
 import DialogBox, { dialogBoxPropsType } from "../components/DialogBox";
+import { forgotPassword } from "../utils/auth/authFunctions";
 export default function ForgotPassword() {
   const [response, setResponse] = useState<dialogBoxPropsType>({
     type: "info",
     message: "Please enter your registered email here ! ",
   });
+  const [email, setEmail] = useState("");
   return (
     <>
       <span className="flex rounded-full bg-sky-100 p-3 ">
@@ -25,6 +27,7 @@ export default function ForgotPassword() {
       <form
         method="post"
         className="flex flex-col gap-3 p-2 max-xs:w-[90%] max-xs:text-[0.95rem] max-vxs:text-[0.8rem]"
+        onSubmit={(e) => forgotPassword(e, { email, setResponse })}
       >
         <DialogBox message={response.message} type={response.type} />
         <input
@@ -33,6 +36,7 @@ export default function ForgotPassword() {
           id="email"
           placeholder="Enter your email"
           className="rounded border border-gray-700 p-2 "
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <button className="rounded bg-sky-700 p-2 text-white  ">

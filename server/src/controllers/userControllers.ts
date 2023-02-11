@@ -9,6 +9,7 @@ import User from "../models/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import Transporter from "../services/email";
 dotenv.config();
 
 //logic for registering the user with name, email and password
@@ -150,3 +151,75 @@ export const authenticate = async (req: Request, res: Response) => {
     return res.status(500).send((error as Error).message);
   }
 };
+
+//logic for forgot password it accepts email and sends a mail with reset link
+export const forgotPassword = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+
+    if (!validateEmail(email)) {
+      return res.status(403).send("please enter valid email");
+    }
+
+    const userExists = await User.findOne({ email });
+
+    if (!userExists) {
+      return res.status(404).send("Please enter a registered email address");
+    }
+
+    const payload = { id: userExists._id };
+    const forgotToken = await jwt.sign(payload, process.env.SECRET!, {
+      expiresIn: "1hr",
+    });
+
+    const resetLink = `http://localhost:3000/authentication/reset-password?token=${forgotToken}`;
+
+    const mailOptions = {
+      from: "shubhamrakhecha5@gmail.com",
+      to: email,
+      cc: [],
+      bcc: [],
+      subject: "password reset",
+      html: `<h1>Want to change your password right??</h1><p>If you send this request then click on reset password to reset your password or just ignore it</p><a href="${resetLink}">reset password</a>`,
+    };
+
+    Transporter.sendMail(mailOptions, (err: Error, info: String) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Email sended with=", info);
+      }
+    });
+
+    return res.status(200).send("email sent successfully");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send((error as Error).message);
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+  try {
+    const { password } = req.body;
+    const user = Object(req)["user"];
+    console.log(user);
+
+    if (!validatePassword(password)) {
+      return res.status(400).json({
+        err: "Error: Invalid password: password must be at least 8 characters long and must include at least one - one uppercase letter, one lowercase letter, one digit, one special character",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    user.password = hashedPassword;
+
+    await user.save();
+
+    return res.status(200).send("password changed successfully");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send((error as Error).message);
+  }
+};
+//

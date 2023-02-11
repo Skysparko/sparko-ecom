@@ -14,6 +14,7 @@ import { createContext, useEffect, useState } from "react";
 import { instance } from "./utils/functions";
 import Signing from "./pages/Signing";
 import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 export type User = {
   name: string;
@@ -66,6 +67,7 @@ function App() {
           <Route path="/authentication" element={<Authentication />}>
             <Route index element={<Signing />} />
             <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="reset-password" element={<ResetPassword />} />
           </Route>
         )}
       </Routes>
