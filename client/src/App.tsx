@@ -8,13 +8,13 @@ import {
 } from "react-router-dom";
 import Home from "./pages/Home";
 import Layout from "./components/Layout";
-import Authentication from "./pages/Authentication";
+import Authentication from "./components/auth/Authentication";
 import Cart from "./pages/Cart";
 import { createContext, useEffect, useState } from "react";
 import { instance } from "./utils/functions";
-import Signing from "./pages/Signing";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
+import Signing from "./pages/auth/Signing";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 export type User = {
   name: string;
@@ -26,7 +26,6 @@ export type User = {
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  //! useState is not working it is not setting up the values
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -61,7 +60,10 @@ function App() {
             index
             element={<Home isAuthenticated={isAuthenticated} user={user} />}
           />
-          <Route path="cart" element={<Cart />} />
+          <Route
+            path="cart"
+            element={<Cart isAuthenticated={isAuthenticated} user={user} />}
+          />
         </Route>
         {!isAuthenticated && (
           <Route path="/authentication" element={<Authentication />}>

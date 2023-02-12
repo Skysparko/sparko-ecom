@@ -2,7 +2,17 @@ import React from "react";
 import emptyShoppingCart from "../assets/video/emptyShoppingCart.gif";
 import { useNavigate } from "react-router-dom";
 
-export default function Cart() {
+interface PropTypes {
+  isAuthenticated: boolean;
+  user: {
+    name: string;
+    email: string;
+    role: string;
+    id: string;
+  };
+}
+
+export default function Cart({ isAuthenticated, user }: PropTypes) {
   const navigate = useNavigate();
   return (
     <section className=" border border-black bg-slate-100 p-10 max-lg:p-5 max-vxs:p-0">
@@ -13,12 +23,14 @@ export default function Cart() {
             Your cart is empty.
           </h1>
           <span className="flex justify-between max-lg:flex-col max-lg:gap-5">
-            <button
-              onClick={() => navigate("/authentication")}
-              className="m-auto w-48 rounded border-2 border-black bg-sky-600 py-2 text-white max-lg:text-sm"
-            >
-              Register & Login
-            </button>
+            {!isAuthenticated && (
+              <button
+                onClick={() => navigate("/authentication")}
+                className="m-auto w-48 rounded border-2 border-black bg-sky-600 py-2 text-white max-lg:text-sm"
+              >
+                Register & Login
+              </button>
+            )}
             <button
               onClick={() => navigate("/")}
               className="m-auto w-48 rounded border-2 border-black py-2 max-lg:text-sm"

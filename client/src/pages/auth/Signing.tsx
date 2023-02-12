@@ -1,8 +1,8 @@
 import React from "react";
 import { useEffect } from "react";
-import { dialogBoxPropsType } from "../components/DialogBox";
-import Register from "../components/Register";
-import Login from "../components/Login";
+import { dialogBoxPropsType } from "../../components/utils/DialogBox";
+import Register from "../../components/auth/Register";
+import Login from "../../components/auth/Login";
 
 const toggleExpand = () => {
   //login elements
@@ -58,7 +58,7 @@ export default function Signing() {
     <>
       {/* Register Section */}
       <section
-        className="h-12 w-96 overflow-hidden rounded-t border border-black bg-gray-200 p-2 max-vs:w-[90%]"
+        className="h-12 w-96 overflow-hidden rounded-t border border-black bg-gray-200 p-2 shadow-md max-vs:w-[90%]"
         id="register"
       >
         <div className="grid  grid-cols-[0.1fr,1fr] items-center ">

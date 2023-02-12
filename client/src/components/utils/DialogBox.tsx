@@ -1,13 +1,14 @@
 import React, { useEffect, useRef } from "react";
-import warning from "../assets/images/warning.png";
-import success from "../assets/images/success.png";
-import error from "../assets/images/error.png";
-import info from "../assets/images/info.png";
+import warning from "../../assets/images/warning.png";
+import success from "../../assets/images/success.png";
+import error from "../../assets/images/error.png";
+import info from "../../assets/images/info.png";
 export interface dialogBoxPropsType {
   type: "warning" | "success" | "info" | "error";
   message: string;
 }
 
+//dialog box component definition
 export default function (props: dialogBoxPropsType) {
   switch (props.type) {
     case "warning":

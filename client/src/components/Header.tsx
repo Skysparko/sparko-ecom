@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { VscThreeBars } from "react-icons/vsc";
-import { FaUserAlt } from "react-icons/fa";
-import { MdOutlineKeyboardArrowRight, MdSearch } from "react-icons/md";
+import { FaRegUserCircle, FaUserAlt } from "react-icons/fa";
+import {
+  MdHelpOutline,
+  MdOutlineKeyboardArrowRight,
+  MdSearch,
+} from "react-icons/md";
 import { RiShoppingCartFill } from "react-icons/ri";
 import SideBar, { openSidebar } from "./SideBar";
 import { useNavigate, Link } from "react-router-dom";
 import skysparko from "../assets/images/skysparko.jpg";
+import { BiEdit, BiLogOut } from "react-icons/bi";
+import { FiSettings } from "react-icons/fi";
+import { logout } from "../utils/auth/authFunctions";
 
 interface PropTypes {
   isAuthenticated: boolean;
@@ -43,6 +50,13 @@ export default function Header({ isAuthenticated, user }: PropTypes) {
       header?.classList.add("grid-cols-[1fr,2.5fr,1fr]");
       header?.classList.add("border", "border-black");
     }
+    document.addEventListener("click", (e) => {
+      const userImage: HTMLElement | null =
+        document.getElementById("user_image");
+      if (e.target != userImage) {
+        setProfileMenu(false);
+      }
+    });
   });
 
   return (
@@ -120,21 +134,48 @@ export default function Header({ isAuthenticated, user }: PropTypes) {
           </button>
           {isAuthenticated ? (
             //User section
-            <section className="border border-black">
+            <section id="user" className="p-1">
               <img
+                id="user_image"
                 src={skysparko}
                 alt={user.name}
-                className="w-10 rounded-full"
+                className="w-9 cursor-pointer  rounded-full max-lg:w-8 max-sm:w-7"
                 onClick={() => setProfileMenu(!profileMenu)}
               />
               {profileMenu && (
-                <span className="absolute right-5 border border-black text-black">
+                <div
+                  id="user_profile_menu"
+                  className="absolute right-5 mt-3 w-40 rounded-lg bg-white p-2 text-base text-black shadow-lg max-lg:right-0 max-lg:w-36  max-lg:text-[0.9rem] max-xs:w-32 max-xs:text-[0.8rem]"
+                >
+                  <span className="absolute right-8 -top-2 float-right h-5 w-5 rotate-45  bg-white"></span>
                   <ul>
-                    <li>Profile</li>
-                    <li>Orders</li>
-                    <li>Logout</li>
+                    <li className="flex items-center gap-2  p-1 ">
+                      <FaRegUserCircle />
+                      <a href="#">My profile</a>
+                    </li>
+                    <li className="flex items-center gap-2 border-y p-1 ">
+                      <BiEdit />
+                      <a href="#">Edit profile</a>
+                    </li>
+
+                    <li className="flex items-center gap-2  p-1 ">
+                      <FiSettings />
+                      <a href="#">Setting</a>
+                    </li>
+                    <li className="flex items-center gap-2 border-y p-1 ">
+                      <MdHelpOutline />
+
+                      <a href="#">Help</a>
+                    </li>
+                    <li
+                      className="flex cursor-pointer items-center  gap-2 p-1 "
+                      onClick={logout}
+                    >
+                      <BiLogOut />
+                      Logout
+                    </li>
                   </ul>
-                </span>
+                </div>
               )}
             </section>
           ) : (

@@ -106,7 +106,7 @@ export const login = async (req: Request, res: Response) => {
       expires: new Date(Date.now() + 999999),
     });
     //returning the token in the response
-    return res.status(200).send("Logined successfully");
+    return res.status(200).send("Login successful");
   } catch (error) {
     //returning the error message
     console.log(error);
@@ -202,7 +202,6 @@ export const resetPassword = async (req: Request, res: Response) => {
   try {
     const { password } = req.body;
     const user = Object(req)["user"];
-    console.log(user);
 
     if (!validatePassword(password)) {
       return res.status(400).json({
@@ -210,11 +209,36 @@ export const resetPassword = async (req: Request, res: Response) => {
       });
     }
 
+    const isSame = await bcrypt.compare(password, user.password);
+
+    if (isSame) {
+      return res
+        .status(100)
+        .send("Your new password must be different then the previous one");
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     user.password = hashedPassword;
 
     await user.save();
+
+    const mailOptions = {
+      from: "shubhamrakhecha5@gmail.com",
+      to: user.email,
+      cc: [],
+      bcc: [],
+      subject: "password changed",
+      html: `<h1>password changed successfully</h1>`,
+    };
+
+    Transporter.sendMail(mailOptions, (err: Error, info: String) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Email sended with=", info);
+      }
+    });
 
     return res.status(200).send("password changed successfully");
   } catch (error) {

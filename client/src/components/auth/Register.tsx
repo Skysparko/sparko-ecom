@@ -1,9 +1,9 @@
 import React from "react";
-import { passwordViewToggler } from "../utils/functions";
+import { passwordViewToggler } from "../../utils/functions";
 import { BsEye, BsEyeSlash, BsInfoLg } from "react-icons/bs";
 import { useState } from "react";
-import { registration } from "../utils/auth/authFunctions";
-import DialogBox, { dialogBoxPropsType } from "./DialogBox";
+import { registration } from "../../utils/auth/authFunctions";
+import DialogBox, { dialogBoxPropsType } from "../utils/DialogBox";
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);

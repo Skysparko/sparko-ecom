@@ -2,9 +2,9 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import React from "react";
 import { BsEyeSlash, BsEye } from "react-icons/bs";
 import { useState } from "react";
-import { passwordViewToggler } from "../utils/functions";
-import DialogBox, { dialogBoxPropsType } from "./DialogBox";
-import { loggingIn } from "../utils/auth/authFunctions";
+import { passwordViewToggler } from "../../utils/functions";
+import DialogBox, { dialogBoxPropsType } from "../utils/DialogBox";
+import { loggingIn } from "../../utils/auth/authFunctions";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {

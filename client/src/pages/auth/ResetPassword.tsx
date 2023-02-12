@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { instance, passwordViewToggler } from "../utils/functions";
+import { instance, passwordViewToggler } from "../../utils/functions";
 import { useEffect } from "react";
 import { FiKey } from "react-icons/fi";
-import DialogBox, { dialogBoxPropsType } from "../components/DialogBox";
+import DialogBox, {
+  dialogBoxPropsType,
+} from "../../components/utils/DialogBox";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
-import { resetPassword } from "../utils/auth/authFunctions";
+import { resetPassword } from "../../utils/auth/authFunctions";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");

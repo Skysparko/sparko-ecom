@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { FiKey } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { BiLeftArrowAlt } from "react-icons/bi";
-import DialogBox, { dialogBoxPropsType } from "../components/DialogBox";
-import { forgotPassword } from "../utils/auth/authFunctions";
+import DialogBox, {
+  dialogBoxPropsType,
+} from "../../components/utils/DialogBox";
+import { forgotPassword } from "../../utils/auth/authFunctions";
 export default function ForgotPassword() {
   const [response, setResponse] = useState<dialogBoxPropsType>({
     type: "info",

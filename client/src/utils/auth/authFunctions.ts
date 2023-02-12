@@ -1,6 +1,6 @@
 import { instance } from "../functions";
 
-import { dialogBoxPropsType } from "../../components/DialogBox";
+import { dialogBoxPropsType } from "../../components/utils/DialogBox";
 
 interface registerFormTypes {
   username: string;
@@ -10,7 +10,7 @@ interface registerFormTypes {
   setResponse: React.Dispatch<React.SetStateAction<dialogBoxPropsType>>;
 }
 
-//a lot of work is left to implement
+//make a request to the server with username ,email and password
 export const registration = async (
   e: React.FormEvent<HTMLFormElement>,
   { username, email, password, confirmPassword, setResponse }: registerFormTypes
@@ -51,6 +51,7 @@ interface loginFormTypes {
   rememberMe: boolean;
 }
 
+//accepts email and password with remember me option and make a request to the server to confirm the password
 export const loggingIn = (
   e: React.FormEvent<HTMLFormElement>,
   { email, password, setResponse, rememberMe }: loginFormTypes
@@ -86,7 +87,7 @@ interface forgotPasswordTypes {
   setResponse: React.Dispatch<React.SetStateAction<dialogBoxPropsType>>;
 }
 
-//a lot of work is left to implement
+//accepts email make a request to forgot password
 export const forgotPassword = async (
   e: React.FormEvent<HTMLFormElement>,
   { email, setResponse }: forgotPasswordTypes
@@ -119,6 +120,7 @@ interface resetPasswordTypes {
   token: string;
 }
 
+//reset password action
 export const resetPassword = async (
   e: React.FormEvent<HTMLFormElement>,
   { token, password, confirmPassword, setResponse }: resetPasswordTypes
@@ -153,5 +155,19 @@ export const resetPassword = async (
         type: "error",
         message: err.response?.data,
       });
+    });
+};
+
+//for logging out
+export const logout = () => {
+  instance
+    .get("user/logout")
+    .then((res) => {
+      if (res.status === 200) {
+        location.reload();
+      }
+    })
+    .catch((err) => {
+      console.log(err.response?.data);
     });
 };
