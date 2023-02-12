@@ -82,7 +82,6 @@ export const isResetTokenValid = async (
       return res.status(400).send("invalid token");
     }
     console.log(id);
-    // const id = (<{ id: string }>decodedToken).id;
     const user = await User.findById(id);
 
     if (!user) {

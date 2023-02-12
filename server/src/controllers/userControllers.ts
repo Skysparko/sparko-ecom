@@ -156,17 +156,19 @@ export const authenticate = async (req: Request, res: Response) => {
 export const forgotPassword = async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
-
+    //validating email format
     if (!validateEmail(email)) {
       return res.status(403).send("please enter valid email");
     }
-
+    //finding user by email address in the database
     const userExists = await User.findOne({ email });
 
+    //checking if user exists
     if (!userExists) {
       return res.status(404).send("Please enter a registered email address");
     }
 
+    // signing a jwt token for the user
     const payload = { id: userExists._id };
     const forgotToken = await jwt.sign(payload, process.env.SECRET!, {
       expiresIn: "1hr",
@@ -174,6 +176,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     const resetLink = `http://localhost:3000/authentication/reset-password?token=${forgotToken}`;
 
+    // email options configuration
     const mailOptions = {
       from: "shubhamrakhecha5@gmail.com",
       to: email,
@@ -183,6 +186,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
       html: `<h1>Want to change your password right??</h1><p>If you send this request then click on reset password to reset your password or just ignore it</p><a href="${resetLink}">reset password</a>`,
     };
 
+    //sending email to the given email address
     Transporter.sendMail(mailOptions, (err: Error, info: String) => {
       if (err) {
         console.log(err);
@@ -198,31 +202,34 @@ export const forgotPassword = async (req: Request, res: Response) => {
   }
 };
 
+//reset password procedure
 export const resetPassword = async (req: Request, res: Response) => {
   try {
     const { password } = req.body;
+    // getting user from middleware
     const user = Object(req)["user"];
 
+    //validating password
     if (!validatePassword(password)) {
       return res.status(400).json({
         err: "Error: Invalid password: password must be at least 8 characters long and must include at least one - one uppercase letter, one lowercase letter, one digit, one special character",
       });
     }
 
+    //checking if the given password is same as previous password
     const isSame = await bcrypt.compare(password, user.password);
-
     if (isSame) {
       return res
-        .status(100)
+        .status(400)
         .send("Your new password must be different then the previous one");
     }
 
+    // hashing and saving the password to the database
     const hashedPassword = await bcrypt.hash(password, 10);
-
     user.password = hashedPassword;
-
     await user.save();
 
+    //sending a password changed email to the user
     const mailOptions = {
       from: "shubhamrakhecha5@gmail.com",
       to: user.email,
@@ -231,7 +238,6 @@ export const resetPassword = async (req: Request, res: Response) => {
       subject: "password changed",
       html: `<h1>password changed successfully</h1>`,
     };
-
     Transporter.sendMail(mailOptions, (err: Error, info: String) => {
       if (err) {
         console.log(err);
@@ -246,4 +252,3 @@ export const resetPassword = async (req: Request, res: Response) => {
     return res.status(500).send((error as Error).message);
   }
 };
-//

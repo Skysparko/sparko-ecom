@@ -37,7 +37,14 @@ router.post("/authenticate", isAuthorized, authenticate);
 //@access Public
 router.post("/forgot-password", forgotPassword);
 
+//@route PUT api/v1/user/reset-password
+//@desc Reset password
+//@access reset-token
 router.put("/reset-password", isResetTokenValid, resetPassword);
+
+//@route PUT api/v1/user/verify-reset-token
+//@desc verify-reset-token
+//@access reset-token
 router.put("/verify-reset-token", isResetTokenValid, (req, res) => {
   res.status(200).send("Reset token is valid");
 });
