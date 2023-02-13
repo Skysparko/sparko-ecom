@@ -16,7 +16,6 @@ export const instance = axios.create({
     authorization: `Bearer ${getCookie("bearerToken")}`,
   },
   withCredentials: true,
-  timeout: 1000,
 });
 
 //This function is Use to toggle password Show and Hide it accepts two variable from useState hook and string like this (#id) for password input id

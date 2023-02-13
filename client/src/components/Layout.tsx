@@ -11,6 +11,7 @@ interface PropTypes {
     email: string;
     role: string;
     id: string;
+    pfp: string;
   };
 }
 

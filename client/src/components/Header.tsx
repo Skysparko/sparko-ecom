@@ -4,14 +4,16 @@ import { FaRegUserCircle, FaUserAlt } from "react-icons/fa";
 import {
   MdHelpOutline,
   MdOutlineKeyboardArrowRight,
+  MdOutlineLocationOn,
+  MdOutlinePayments,
   MdSearch,
 } from "react-icons/md";
 import { RiShoppingCartFill } from "react-icons/ri";
 import SideBar, { openSidebar } from "./SideBar";
 import { useNavigate, Link } from "react-router-dom";
-import skysparko from "../assets/images/skysparko.jpg";
+
 import { BiEdit, BiLogOut } from "react-icons/bi";
-import { FiSettings } from "react-icons/fi";
+import { MdOutlineShoppingBag } from "react-icons/md";
 import { logout } from "../utils/auth/authFunctions";
 
 interface PropTypes {
@@ -21,6 +23,7 @@ interface PropTypes {
     email: string;
     role: string;
     id: string;
+    pfp: string;
   };
 }
 
@@ -71,7 +74,7 @@ export default function Header({ isAuthenticated, user }: PropTypes) {
         className="grid select-none grid-cols-[1fr,2.5fr,1fr] border border-black  bg-sky-900 py-2  text-2xl bg-blend-hue  max-lg:text-xl max-md:text-lg"
       >
         {/* hamburger column and the name of the company */}
-        <div className=" flex  items-center  gap-5  pl-5 text-3xl text-white max-lg:text-2xl max-md:gap-2 max-md:pl-2 max-sm:text-[1.4rem]">
+        <div className=" max-lg:text-2x  flex  items-center  gap-5 pl-5 text-3xl text-white max-md:pl-2 max-sm:gap-2 max-sm:text-[1.4rem]">
           <button className="cursor-pointer " onClick={openSidebar}>
             <VscThreeBars />
           </button>
@@ -125,50 +128,52 @@ export default function Header({ isAuthenticated, user }: PropTypes) {
         }
 
         {/* section containing login and cart  */}
-        <div className=" flex  justify-end gap-10  pr-10 text-xl text-white max-lg:pr-5 max-md:gap-5 max-sm:text-[1.15rem] max-xs:text-[1rem]">
-          {/* cart section */}
-          <button className="text-2xl max-sm:text-[1.3rem] max-xs:text-[1.25rem]">
-            <Link to="/cart">
-              <RiShoppingCartFill />
-            </Link>
-          </button>
+        <div className=" flex  justify-end gap-10  pr-10 text-xl text-white max-lg:pr-5 max-sm:gap-5 max-sm:text-[1.15rem] max-xs:text-[1rem]">
           {isAuthenticated ? (
             //User section
-            <section id="user" className="p-1">
+            <section id="user" className="pt-1 max-sm:pt-[0.2rem]">
               <img
                 id="user_image"
-                src={skysparko}
+                src={user.pfp}
                 alt={user.name}
-                className="w-9 cursor-pointer  rounded-full max-lg:w-8 max-sm:w-7"
+                className="w-10 cursor-pointer  rounded-full max-lg:w-8 max-sm:w-7"
                 onClick={() => setProfileMenu(!profileMenu)}
               />
               {profileMenu && (
                 <div
                   id="user_profile_menu"
-                  className="absolute right-5 mt-3 w-40 rounded-lg bg-white p-2 text-base text-black shadow-lg max-lg:right-0 max-lg:w-36  max-lg:text-[0.9rem] max-xs:w-32 max-xs:text-[0.8rem]"
+                  className="absolute right-14 mt-3 w-60 rounded-lg bg-white p-2 text-base text-black shadow-lg max-lg:right-8 max-lg:w-56 max-lg:text-[0.9rem] max-sm:hidden "
                 >
-                  <span className="absolute right-8 -top-2 float-right h-5 w-5 rotate-45  bg-white"></span>
+                  <span className="absolute right-14 -top-2 float-right h-5 w-5 rotate-45  bg-white"></span>
                   <ul>
-                    <li className="flex items-center gap-2  p-1 ">
+                    <li className="flex items-center gap-2  p-1.5 ">
                       <FaRegUserCircle />
-                      <a href="#">My profile</a>
+                      <a href="#">My Account</a>
                     </li>
-                    <li className="flex items-center gap-2 border-y p-1 ">
+                    <li className="flex items-center gap-2 border-y p-1.5 ">
                       <BiEdit />
-                      <a href="#">Edit profile</a>
+                      <a href="#">Edit Profile</a>
                     </li>
 
-                    <li className="flex items-center gap-2  p-1 ">
-                      <FiSettings />
-                      <a href="#">Setting</a>
+                    <li className="flex items-center gap-2  p-1.5 ">
+                      <MdOutlineShoppingBag />
+                      <a href="#">Orders</a>
                     </li>
-                    <li className="flex items-center gap-2 border-y p-1 ">
+                    <li className="border- flex items-center gap-2 border-y p-1.5 ">
+                      <MdOutlinePayments />
+                      <a href="#">Payment Options</a>
+                    </li>
+                    <li className="flex items-center gap-2  p-1.5 ">
+                      <MdOutlineLocationOn />
+                      <a href="#">Manage Addresses</a>
+                    </li>
+                    <li className="flex items-center gap-2 border-y p-1.5 ">
                       <MdHelpOutline />
 
                       <a href="#">Help</a>
                     </li>
                     <li
-                      className="flex cursor-pointer items-center  gap-2 p-1 "
+                      className="flex cursor-pointer items-center  gap-2 p-1.5 "
                       onClick={logout}
                     >
                       <BiLogOut />
@@ -194,6 +199,12 @@ export default function Header({ isAuthenticated, user }: PropTypes) {
               <FaUserAlt />
             </span>
           )}
+          {/* cart section */}
+          <button className="text-2xl max-sm:text-[1.3rem] max-xs:text-[1.25rem]">
+            <Link to="/cart">
+              <RiShoppingCartFill />
+            </Link>
+          </button>
         </div>
       </article>
 

@@ -10,6 +10,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import Transporter from "../services/email";
+import { getGender, getProfileImages } from "../utils/functions";
+import path from "path";
+import cloudinary from "../services/cloudinary";
 dotenv.config();
 
 //logic for registering the user with name, email and password
@@ -51,14 +54,24 @@ export const register = async (req: Request, res: Response) => {
     //encrypting password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // getting setting up the user's gender in the database
+    const gender = await getGender(username);
+
+    //assigning a random image according to the user's gender
+    const profileImage = await getProfileImages(gender);
+
     //creating a new user
     const newUser = new User({
       username,
       email,
       password: hashedPassword,
+      gender,
+      profileImage,
     });
+
     //saving the user to the database
     await newUser.save();
+
     //returning the new created user in the response
     return res.status(201).send("Registration Successful");
   } catch (error) {
@@ -98,13 +111,15 @@ export const login = async (req: Request, res: Response) => {
     }
 
     //singing a new token using user id and secret message and setting up the expiration time as options
-    const bearerToken = jwt.sign({ id: user._id }, process.env.SECRET!, {
+    const bearerToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, {
       expiresIn: rememberMe ? "365d" : "7d",
     });
 
+    //!have to work on the expiration of the cookie
     res.cookie("bearerToken", bearerToken, {
       expires: new Date(Date.now() + 999999),
     });
+
     //returning the token in the response
     return res.status(200).send("Login successful");
   } catch (error) {
@@ -131,6 +146,8 @@ interface User {
   email: string;
   _id: string;
   role: string;
+  gender: string;
+  profileImage: string;
 }
 
 //checking whether user is logged in
@@ -140,11 +157,37 @@ export const authenticate = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(400).send("You are not Authenticated");
     }
+
+    // //upload file
+    // const response = await cloudinary.uploader.upload(
+    //   "https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg"
+    // );
+
+    // // Generate
+    // const url = cloudinary.url("olympic_flag", {
+    //   width: 100,
+    //   height: 150,
+    //   Crop: "fill",
+    // });
+
+    // // The output url
+    // console.log(url);
+    // const pfp = path.join(
+    //   __dirname,
+    //   "..",
+    //   "assets",
+    //   "random_pfp",
+    //   "male",
+    //   "0.jpeg"
+    // );
+    // console.log(pfp);
     return res.status(200).json({
       name: user.username,
       email: user.email,
       id: user._id,
       role: user.role,
+      gender: user.gender,
+      pfp: user.profileImage,
     });
   } catch (error) {
     console.log(error);
@@ -170,7 +213,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     // signing a jwt token for the user
     const payload = { id: userExists._id };
-    const forgotToken = await jwt.sign(payload, process.env.SECRET!, {
+    const forgotToken = await jwt.sign(payload, process.env.JWT_SECRET!, {
       expiresIn: "1hr",
     });
 

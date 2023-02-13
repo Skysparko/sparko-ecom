@@ -20,6 +20,15 @@ const userSchema = new mongoose.Schema({
     required: true,
     enum: ["user", "admin"],
   },
+  gender: {
+    type: String,
+    required: true,
+    enum: ["male", "female", "unknown"],
+  },
+  profileImage: {
+    type: String,
+    required: true,
+  },
 });
 
 export default mongoose.model("User", userSchema);

@@ -38,7 +38,7 @@ export const isAuthorized = async (
     }
 
     // decrypting token
-    const { id } = jwt.verify(token, process.env.SECRET!) as JwtPayload;
+    const { id } = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     if (!id) {
       return res.status(401).json({
         message: "Invalid token",
@@ -77,7 +77,7 @@ export const isResetTokenValid = async (
       return res.status(404).send("token not found");
     }
 
-    const { id } = jwt.verify(token, process.env.SECRET!) as JwtPayload;
+    const { id } = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     if (!id) {
       return res.status(400).send("invalid token");
     }

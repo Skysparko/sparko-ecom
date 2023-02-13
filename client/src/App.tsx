@@ -16,12 +16,12 @@ import Signing from "./pages/auth/Signing";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 
-export type User = {
-  name: string;
-  id: string;
-  email: string;
-  role: string;
-};
+// export type User = {
+//   name: string;
+//   id: string;
+//   email: string;
+//   role: string;
+// };
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -31,6 +31,7 @@ function App() {
     email: "",
     role: "",
     id: "",
+    pfp: "",
   });
   useEffect(() => {
     window.addEventListener("load", () => {
