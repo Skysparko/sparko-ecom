@@ -164,7 +164,7 @@ export const logout = () => {
     .get("user/logout")
     .then((res) => {
       if (res.status === 200) {
-        location.reload();
+        location.href = "/";
       }
     })
     .catch((err) => {

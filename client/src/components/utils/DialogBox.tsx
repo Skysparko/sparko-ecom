@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import warning from "../../assets/images/warning.png";
-import success from "../../assets/images/success.png";
-import error from "../../assets/images/error.png";
-import info from "../../assets/images/info.png";
+import warning from "../../assets/images/dialogBox/warning.png";
+import success from "../../assets/images/dialogBox/success.png";
+import error from "../../assets/images/dialogBox/error.png";
+import info from "../../assets/images/dialogBox/info.png";
 export interface dialogBoxPropsType {
   type: "warning" | "success" | "info" | "error";
   message: string;

@@ -131,7 +131,7 @@ export default function Header({ isAuthenticated, user }: PropTypes) {
         <div className=" flex  justify-end gap-10  pr-10 text-xl text-white max-lg:pr-5 max-sm:gap-5 max-sm:text-[1.15rem] max-xs:text-[1rem]">
           {isAuthenticated ? (
             //User section
-            <section id="user" className="pt-1 max-sm:pt-[0.2rem]">
+            <section id="user_icon" className="pt-1 max-sm:pt-[0.2rem]">
               <img
                 id="user_image"
                 src={user.pfp}
@@ -142,35 +142,35 @@ export default function Header({ isAuthenticated, user }: PropTypes) {
               {profileMenu && (
                 <div
                   id="user_profile_menu"
-                  className="absolute right-14 mt-3 w-60 rounded-lg bg-white p-2 text-base text-black shadow-lg max-lg:right-8 max-lg:w-56 max-lg:text-[0.9rem] max-sm:hidden "
+                  className="absolute right-14 mt-3 w-60 rounded-lg bg-white p-2 text-base text-black shadow-lg max-lg:right-8 max-lg:w-56 max-lg:text-[0.9rem] max-sm:hidden"
                 >
                   <span className="absolute right-14 -top-2 float-right h-5 w-5 rotate-45  bg-white"></span>
                   <ul>
                     <li className="flex items-center gap-2  p-1.5 ">
                       <FaRegUserCircle />
-                      <a href="#">My Account</a>
+                      <Link to="/account">My Account</Link>
                     </li>
                     <li className="flex items-center gap-2 border-y p-1.5 ">
                       <BiEdit />
-                      <a href="#">Edit Profile</a>
+                      <Link to="/user">Edit Profile</Link>
                     </li>
 
                     <li className="flex items-center gap-2  p-1.5 ">
                       <MdOutlineShoppingBag />
-                      <a href="#">Orders</a>
+                      <Link to="/user/orders">Orders</Link>
                     </li>
                     <li className="border- flex items-center gap-2 border-y p-1.5 ">
                       <MdOutlinePayments />
-                      <a href="#">Payment Options</a>
+                      <Link to="/user/payment">Payment Options</Link>
                     </li>
                     <li className="flex items-center gap-2  p-1.5 ">
                       <MdOutlineLocationOn />
-                      <a href="#">Manage Addresses</a>
+                      <Link to="/user/addresses">Manage Addresses</Link>
                     </li>
                     <li className="flex items-center gap-2 border-y p-1.5 ">
                       <MdHelpOutline />
 
-                      <a href="#">Help</a>
+                      <Link to="/user/help">Help</Link>
                     </li>
                     <li
                       className="flex cursor-pointer items-center  gap-2 p-1.5 "

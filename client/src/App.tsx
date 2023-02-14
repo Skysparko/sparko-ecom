@@ -15,6 +15,13 @@ import { instance } from "./utils/functions";
 import Signing from "./pages/auth/Signing";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
+import User from "./components/user/User";
+import UserProfile from "./pages/user/UserProfile";
+import Orders from "./pages/user/Orders";
+import Addresses from "./pages/user/Addresses";
+import Payment from "./pages/user/Payment";
+import MyAccount from "./pages/MyAccount";
+import Help from "./pages/user/Help";
 
 // export type User = {
 //   name: string;
@@ -53,10 +60,36 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* main */}
         <Route
           path="/"
           element={<Layout isAuthenticated={isAuthenticated} user={user} />}
         >
+          {isAuthenticated && (
+            <>
+              <Route
+                path="account"
+                element={
+                  <MyAccount isAuthenticated={isAuthenticated} user={user} />
+                }
+              />
+              <Route path="user" element={<User />}>
+                <Route
+                  index
+                  element={
+                    <UserProfile
+                      isAuthenticated={isAuthenticated}
+                      user={user}
+                    />
+                  }
+                />
+                <Route path="orders" element={<Orders />} />
+                <Route path="payment" element={<Payment />} />
+                <Route path="addresses" element={<Addresses />} />
+                <Route path="help" element={<Help />} />
+              </Route>
+            </>
+          )}
           <Route
             index
             element={<Home isAuthenticated={isAuthenticated} user={user} />}
@@ -66,6 +99,7 @@ function App() {
             element={<Cart isAuthenticated={isAuthenticated} user={user} />}
           />
         </Route>
+        {/* authentication */}
         {!isAuthenticated && (
           <Route path="/authentication" element={<Authentication />}>
             <Route index element={<Signing />} />
