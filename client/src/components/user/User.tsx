@@ -28,8 +28,8 @@ export default function User() {
   });
   const navigate = useNavigate();
   return (
-    <section className="grid h-[90vh] grid-cols-[1fr,4fr]">
-      <aside className="flex flex-col border-2 border-black ">
+    <section className="grid  grid-cols-[1fr,4fr] max-lg:grid-cols-1">
+      <aside className="flex flex-col border-2 border-black max-lg:hidden">
         <h1 className="mt-5 text-center text-3xl">My Account</h1>
         <ul className="mt-14 text-[1.2rem]" id="user_menu">
           <li
@@ -52,7 +52,7 @@ export default function User() {
           </li>
           <li
             id="payment"
-            className=" border- flex cursor-pointer items-center gap-2 border-y p-5 text-gray-500 hover:border-r-4 hover:border-r-sky-700 hover:text-black"
+            className=" flex cursor-pointer items-center gap-2 border border-y p-5 text-gray-500 hover:border-r-4 hover:border-r-sky-700 hover:text-black"
             onClick={() => navigate("/user/payment")}
           >
             <MdOutlinePayments />
@@ -75,17 +75,17 @@ export default function User() {
             Help
           </li>
         </ul>
-        <div className="flex grow items-end border border-black p-5 text-red-600  hover:text-[#eb0202]">
+        <div className="flex grow items-end p-5 text-red-600  hover:text-[#eb0202]">
           <span
             onClick={logout}
-            className="inline-flex cursor-pointer items-center gap-2 border border-black"
+            className="inline-flex cursor-pointer items-center gap-2"
           >
             <BiLogOut />
             <h1>Logout</h1>
           </span>
         </div>
       </aside>
-      <main className="overflow-y-scroll border-2 border-black">
+      <main className="">
         <Outlet />
       </main>
     </section>

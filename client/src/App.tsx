@@ -23,7 +23,8 @@ import Payment from "./pages/user/Payment";
 import MyAccount from "./pages/MyAccount";
 import Help from "./pages/user/Help";
 import { BallTriangle } from "react-loader-spinner";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/Dashboard/Dashboard";
+import DashboardLayout from "./components/Dashboard/DashboardLayout";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -85,6 +86,11 @@ function App() {
               path="/"
               element={<Layout isAuthenticated={isAuthenticated} user={user} />}
             >
+              {isAuthenticated && user.role !== "user" && (
+                <Route path="dashboard" element={<DashboardLayout />}>
+                  <Route index element={<Dashboard />} />
+                </Route>
+              )}
               {isAuthenticated && (
                 <>
                   <Route
@@ -122,9 +128,6 @@ function App() {
                 element={<Cart isAuthenticated={isAuthenticated} user={user} />}
               />
             </Route>
-            {isAuthenticated && user.role !== "user" && (
-              <Route path="/dashboard" element={<Dashboard />}></Route>
-            )}
 
             {/* authentication */}
             {!isAuthenticated && (
