@@ -12,4 +12,24 @@ const Transporter = nodemailer.createTransport({
   },
 });
 
-export default Transporter;
+interface mailOptions {
+  from: string;
+  to: string;
+  cc: Array<string>;
+  bcc: Array<string>;
+  subject: string;
+  html: string;
+}
+
+const sendEmail = (mailOptions: mailOptions) => {
+  //sending email to the given email address
+  Transporter.sendMail(mailOptions, (err: Error, info: String) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Email sended with=", info);
+    }
+  });
+};
+
+export default sendEmail;

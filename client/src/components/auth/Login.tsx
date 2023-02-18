@@ -6,6 +6,7 @@ import { passwordViewToggler } from "../../utils/functions";
 import DialogBox, { dialogBoxPropsType } from "../utils/DialogBox";
 import { loggingIn } from "../../utils/auth/authFunctions";
 import { useNavigate } from "react-router-dom";
+import { TailSpin } from "react-loader-spinner";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     // This have a form containing email and password input bar with a button for show password and checkbox for remember me and forgot password button
@@ -30,6 +32,7 @@ export default function Login() {
             password,
             setResponse,
             rememberMe,
+            setIsLoading,
           })
         }
       >
@@ -118,7 +121,22 @@ export default function Login() {
           type="submit"
           className=" rounded border-2 border-black bg-blue-500 py-1 text-white"
         >
-          Login
+          {isLoading ? (
+            <h1 className=" flex justify-center">
+              <TailSpin
+                height="24"
+                width="24"
+                color="#ffffff"
+                ariaLabel="tail-spin-loading"
+                radius="1"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
+            </h1>
+          ) : (
+            <h1>login</h1>
+          )}
         </button>
       </form>
     </div>

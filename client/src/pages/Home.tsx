@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 interface PropTypes {
   isAuthenticated: boolean;
@@ -11,6 +11,7 @@ interface PropTypes {
 }
 
 export default function Home({ isAuthenticated, user }: PropTypes) {
+  useEffect(() => {});
   return (
     <div className="h-[2000px] bg-gray-100">
       {isAuthenticated

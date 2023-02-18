@@ -8,12 +8,20 @@ interface registerFormTypes {
   password: string;
   confirmPassword: string;
   setResponse: React.Dispatch<React.SetStateAction<dialogBoxPropsType>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 //make a request to the server with username ,email and password
 export const registration = async (
   e: React.FormEvent<HTMLFormElement>,
-  { username, email, password, confirmPassword, setResponse }: registerFormTypes
+  {
+    username,
+    email,
+    password,
+    confirmPassword,
+    setResponse,
+    setIsLoading,
+  }: registerFormTypes
 ) => {
   e.preventDefault();
 
@@ -25,6 +33,7 @@ export const registration = async (
     });
     return;
   }
+  setIsLoading(true);
   instance
     .post("user/register", { username, email, password })
     .then((res) => {
@@ -33,6 +42,8 @@ export const registration = async (
           message: "Successfully registered",
           type: "success",
         });
+        setIsLoading(false);
+        location.reload();
       }
     })
     .catch((err) => {
@@ -41,6 +52,7 @@ export const registration = async (
         message: err.response?.data,
         type: "error",
       });
+      setIsLoading(false);
     });
 };
 
@@ -49,15 +61,17 @@ interface loginFormTypes {
   password: string;
   setResponse: React.Dispatch<React.SetStateAction<dialogBoxPropsType>>;
   rememberMe: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 //accepts email and password with remember me option and make a request to the server to confirm the password
 export const loggingIn = (
   e: React.FormEvent<HTMLFormElement>,
-  { email, password, setResponse, rememberMe }: loginFormTypes
+  { email, password, setResponse, rememberMe, setIsLoading }: loginFormTypes
 ) => {
   e.preventDefault();
-  console.log(rememberMe);
+
+  setIsLoading(true);
   instance
     .post("user/login", {
       email,
@@ -70,6 +84,7 @@ export const loggingIn = (
           type: "success",
           message: "Successfully logged in",
         });
+        setIsLoading(false);
         location.href = "/";
       }
     })
@@ -79,6 +94,7 @@ export const loggingIn = (
         type: "error",
         message: error.response?.data,
       });
+      setIsLoading(false);
     });
 };
 

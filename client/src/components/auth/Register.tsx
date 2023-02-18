@@ -4,6 +4,8 @@ import { BsEye, BsEyeSlash, BsInfoLg } from "react-icons/bs";
 import { useState } from "react";
 import { registration } from "../../utils/auth/authFunctions";
 import DialogBox, { dialogBoxPropsType } from "../utils/DialogBox";
+import { register } from "../../../../server/src/controllers/userControllers";
+import { TailSpin } from "react-loader-spinner";
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,6 +14,7 @@ export default function Register() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const [response, setResponse] = React.useState<dialogBoxPropsType>({
     type: "info",
@@ -33,6 +36,7 @@ export default function Register() {
             password,
             confirmPassword,
             setResponse,
+            setIsLoading,
           })
         }
       >
@@ -168,7 +172,22 @@ export default function Register() {
           type="submit"
           className="  rounded border-2 border-black bg-blue-500 py-1 px-3 text-white"
         >
-          Register
+          {isLoading ? (
+            <h1 className=" flex justify-center">
+              <TailSpin
+                height="24"
+                width="24"
+                color="#ffffff"
+                ariaLabel="tail-spin-loading"
+                radius="1"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
+            </h1>
+          ) : (
+            <h1>register</h1>
+          )}
         </button>
       </form>
     </div>

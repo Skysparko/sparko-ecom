@@ -129,6 +129,9 @@ export default function Header({ isAuthenticated, user }: PropTypes) {
 
         {/* section containing login and cart  */}
         <div className=" flex  justify-end gap-10  pr-10 text-xl text-white max-lg:pr-5 max-sm:gap-5 max-sm:text-[1.15rem] max-xs:text-[1rem]">
+          {isAuthenticated && user.role === "owner" && (
+            <Link to="/dashboard">Dashboard</Link>
+          )}
           {isAuthenticated ? (
             //User section
             <section id="user_icon" className="pt-1 max-sm:pt-[0.2rem]">

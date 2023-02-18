@@ -9,10 +9,10 @@ import User from "../models/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import Transporter from "../services/email";
 import { getGender, getProfileImages } from "../utils/functions";
-import path from "path";
 import cloudinary from "../services/cloudinary";
+import sendEmail from "../services/email";
+import userModel from "../models/userModel";
 dotenv.config();
 
 //logic for registering the user with name, email and password
@@ -116,9 +116,7 @@ export const login = async (req: Request, res: Response) => {
     });
 
     //!have to work on the expiration of the cookie
-    res.cookie("bearerToken", bearerToken, {
-      expires: new Date(Date.now() + 999999),
-    });
+    res.cookie("bearerToken", bearerToken);
 
     //returning the token in the response
     return res.status(200).send("Login successful");
@@ -149,52 +147,6 @@ interface User {
   gender: string;
   profileImage: string;
 }
-
-//checking whether user is logged in
-export const authenticate = async (req: Request, res: Response) => {
-  try {
-    const user: User = Object(req)["user"];
-    if (!user) {
-      return res.status(400).send("You are not Authenticated");
-    }
-
-    // //upload file
-    // const response = await cloudinary.uploader.upload(
-    //   "https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg"
-    // );
-
-    // // Generate
-    // const url = cloudinary.url("olympic_flag", {
-    //   width: 100,
-    //   height: 150,
-    //   Crop: "fill",
-    // });
-
-    // // The output url
-    // console.log(url);
-    // const pfp = path.join(
-    //   __dirname,
-    //   "..",
-    //   "assets",
-    //   "random_pfp",
-    //   "male",
-    //   "0.jpeg"
-    // );
-    // console.log(pfp);
-    return res.status(200).json({
-      name: user.username,
-      email: user.email,
-      id: user._id,
-      role: user.role,
-      gender: user.gender,
-      pfp: user.profileImage,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).send((error as Error).message);
-  }
-};
-
 //logic for forgot password it accepts email and sends a mail with reset link
 export const forgotPassword = async (req: Request, res: Response) => {
   try {
@@ -230,13 +182,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     };
 
     //sending email to the given email address
-    Transporter.sendMail(mailOptions, (err: Error, info: String) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("Email sended with=", info);
-      }
-    });
+    sendEmail(mailOptions);
 
     return res.status(200).send("email sent successfully");
   } catch (error) {
@@ -274,22 +220,153 @@ export const resetPassword = async (req: Request, res: Response) => {
 
     //sending a password changed email to the user
     const mailOptions = {
-      from: "shubhamrakhecha5@gmail.com",
+      from: "sstore_security@gmail.com",
       to: user.email,
       cc: [],
       bcc: [],
       subject: "password changed",
       html: `<h1>password changed successfully</h1>`,
     };
-    Transporter.sendMail(mailOptions, (err: Error, info: String) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("Email sended with=", info);
-      }
-    });
+
+    sendEmail(mailOptions);
 
     return res.status(200).send("password changed successfully");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send((error as Error).message);
+  }
+};
+
+//checking whether user is logged in
+export const authenticate = async (req: Request, res: Response) => {
+  try {
+    const user: User = Object(req)["user"];
+    if (!user) {
+      return res.status(400).send("You are not Authenticated");
+    }
+    return res.status(200).json({ user });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send((error as Error).message);
+  }
+};
+
+//updating user information
+export const userUpdate = async (req: Request, res: Response) => {
+  try {
+    const { username, password, email, gender, profileImage } = req.body;
+
+    if (!username || !password || !email || !gender || !profileImage) {
+      return res.status(400).send(" Please fill all the required fields");
+    }
+
+    //validating username(Name must be at least 3 character long and must not include numbers or special characters)
+    if (!validateName(username)) {
+      return res.status(400).send("Invalid name");
+    }
+    //validating email(email should be in the email address format)
+    if (!validateEmail(email)) {
+      return res.status(400).send("Invalid email");
+    }
+    //validating password(Password must be at least 8 character long and it must include at least - one uppercase letter, one lowercase letter, one digit, one special character)
+    if (!validatePassword(password)) {
+      return res.status(400).send("Invalid password");
+    }
+
+    // getting user from middleware
+    const user = Object(req)["user"];
+
+    user.username = username;
+    user.password = password;
+    user.email = email;
+    user.gender = gender;
+    user.profileImage = profileImage;
+
+    await user.save();
+
+    return res.status(200).send("User successfully updated");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send((error as Error).message);
+  }
+};
+
+//creating a owner manually
+export const createOwner = async (req: Request, res: Response) => {
+  try {
+    //getting values from the request
+
+    const { username, email, password } = req.body;
+
+    //checking whether user filled all the fields or not
+    if (!username) {
+      return res.status(400).send("Please Enter your name");
+    }
+    if (!email) {
+      return res.status(400).send("Please Enter your email");
+    }
+    if (!password) {
+      return res.status(400).send("Please Enter your password");
+    }
+
+    //validating username(Name must be at least 3 character long and must not include numbers or special characters)
+    if (!validateName(username)) {
+      return res.status(400).send("Invalid name");
+    }
+    //validating email(email should be in the email address format)
+    if (!validateEmail(email)) {
+      return res.status(400).send("Invalid email");
+    }
+    //validating password(Password must be at least 8 character long and it must include at least - one uppercase letter, one lowercase letter, one digit, one special character)
+    if (!validatePassword(password)) {
+      return res.status(400).send("Invalid password");
+    }
+    //checking whether the user already exists in the database
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(409).send("User already exists");
+    }
+
+    //encrypting password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // getting setting up the user's gender in the database
+    const gender = await getGender(username);
+
+    //assigning a random image according to the user's gender
+    const profileImage = await getProfileImages(gender);
+
+    //creating a new user
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      gender,
+      profileImage,
+      role: "owner",
+    });
+
+    //saving the user to the database
+    await newUser.save();
+
+    //returning the new created user in the response
+    return res.status(201).send("Owner created Successful");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send((error as Error).message);
+  }
+};
+
+//creating admin
+export const createAdmin = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    if (!email || !validateEmail(email)) {
+      return res.status(400).send("Invalid email");
+    }
+
+    const workingUser = await userModel.findOne({ email });
+    workingUser?.role;
   } catch (error) {
     console.log(error);
     return res.status(500).send((error as Error).message);
