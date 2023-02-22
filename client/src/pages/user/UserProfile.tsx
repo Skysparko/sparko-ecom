@@ -242,7 +242,7 @@ export default function UserProfile({ isAuthenticated, user }: PropTypes) {
           <h1 className="ml-5 text-4xl underline-offset-1">
             Personal Information
           </h1>
-          <div className="ml-32  flex flex-col gap-10">
+          <div className="ml-32  flex flex-col gap-10 max-vs:ml-10">
             <span>
               <label htmlFor="user_profile_username" className="mr-5">
                 Enter Your Username Here:-
@@ -283,7 +283,7 @@ export default function UserProfile({ isAuthenticated, user }: PropTypes) {
               />
             </span>
 
-            <span className="flex gap-5">
+            <span className="flex gap-5 max-sm:flex-col">
               <label htmlFor="user_profile_male" className="mr-5">
                 Please select your gender:-
               </label>
@@ -317,8 +317,14 @@ export default function UserProfile({ isAuthenticated, user }: PropTypes) {
               </span>
             </span>
           </div>
+          <button
+            type="submit"
+            className="m-5 w-40 rounded border border-black bg-sky-700 py-2 text-white shadow-md"
+          >
+            Save changes
+          </button>
           <h1 className="my-5 ml-5 text-4xl">Login and Security</h1>
-          <div className="ml-32 flex flex-col gap-5">
+          <div className="ml-32 flex flex-col gap-5 max-vs:ml-10">
             <h3 className="text-2xl ">Want to change your Password?</h3>
             <span>
               <label htmlFor="user_profile_current_password" className="mr-5">

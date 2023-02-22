@@ -1,7 +1,6 @@
 import axios from "axios";
 import dotenv from "dotenv";
 import cloudinary from "../services/cloudinary";
-import fs from "fs";
 dotenv.config();
 
 export const getGender = async (name: string) => {
@@ -31,4 +30,11 @@ export const getProfileImages = async (gender: string) => {
   } catch (error) {
     return "https://pbs.twimg.com/media/FGCpQkBXMAIqA6d?format=jpg&name=large";
   }
+};
+
+export const getTimeInDays = (days: number) => {
+  var today = new Date();
+  var resultDate = new Date(today);
+  resultDate.setDate(today.getDate() + days);
+  return resultDate;
 };

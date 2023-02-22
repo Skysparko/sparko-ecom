@@ -1,4 +1,4 @@
-import { Response, Request } from "express";
+import { Response, Request, NextFunction } from "express";
 import { Error } from "mongoose";
 import {
   validateName,
@@ -9,10 +9,12 @@ import User from "../models/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { getGender, getProfileImages } from "../utils/functions";
+import { getGender, getProfileImages, getTimeInDays } from "../utils/functions";
 import cloudinary from "../services/cloudinary";
 import sendEmail from "../services/email";
 import userModel from "../models/userModel";
+import { v4 as uuid } from "uuid";
+import { forgotPasswordMail, verificationMail } from "../utils/emailTemplates";
 dotenv.config();
 
 //logic for registering the user with name, email and password
@@ -39,8 +41,9 @@ export const register = async (req: Request, res: Response) => {
     }
     //validating email(email should be in the email address format)
     if (!validateEmail(email)) {
-      return res.status(400).send("Invalid email");
+      return res.status(400).send("Please enter a valid email address");
     }
+
     //validating password(Password must be at least 8 character long and it must include at least - one uppercase letter, one lowercase letter, one digit, one special character)
     if (!validatePassword(password)) {
       return res.status(400).send("Invalid password");
@@ -72,8 +75,28 @@ export const register = async (req: Request, res: Response) => {
     //saving the user to the database
     await newUser.save();
 
+    // signing a jwt token for the user
+    const payload = { id: newUser._id };
+    const verificationToken = await jwt.sign(payload, process.env.JWT_SECRET!);
+
+    const verificationLink = `${process.env.CLIENT_APP_URL}/authentication/verification/?token=${verificationToken}`;
+
+    const mailOptions = {
+      from: "security@example.com",
+      to: newUser.email,
+      cc: [],
+      bcc: [],
+      subject: "Please verify your email address",
+      html: verificationMail(verificationLink),
+    };
+
+    sendEmail(mailOptions);
     //returning the new created user in the response
-    return res.status(201).send("Registration Successful");
+    return res
+      .status(201)
+      .send(
+        "Registration successful. Please check your inbox for verification!"
+      );
   } catch (error) {
     //returning the error message
     console.log(error);
@@ -104,6 +127,11 @@ export const login = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(400).send("Invalid email or password");
     }
+
+    if (user.status === "pending") {
+      return res.status(400).send("Please verify your email before login.");
+    }
+
     //checking whether password is correct or not
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
@@ -115,8 +143,9 @@ export const login = async (req: Request, res: Response) => {
       expiresIn: rememberMe ? "365d" : "7d",
     });
 
-    //!have to work on the expiration of the cookie
-    res.cookie("bearerToken", bearerToken);
+    res.cookie("bearerToken", bearerToken, {
+      expires: getTimeInDays(rememberMe ? 365 : 7),
+    });
 
     //returning the token in the response
     return res.status(200).send("Login successful");
@@ -166,19 +195,19 @@ export const forgotPassword = async (req: Request, res: Response) => {
     // signing a jwt token for the user
     const payload = { id: userExists._id };
     const forgotToken = await jwt.sign(payload, process.env.JWT_SECRET!, {
-      expiresIn: "1hr",
+      expiresIn: "24hr",
     });
 
-    const resetLink = `http://localhost:3000/authentication/reset-password?token=${forgotToken}`;
+    const resetLink = `${process.env.CLIENT_APP_URL}/authentication/reset-password?token=${forgotToken}`;
 
     // email options configuration
     const mailOptions = {
-      from: "shubhamrakhecha5@gmail.com",
+      from: "security@example.com",
       to: email,
       cc: [],
       bcc: [],
-      subject: "password reset",
-      html: `<h1>Want to change your password right??</h1><p>If you send this request then click on reset password to reset your password or just ignore it</p><a href="${resetLink}">reset password</a>`,
+      subject: "Your password reset link",
+      html: forgotPasswordMail(resetLink, userExists.username),
     };
 
     //sending email to the given email address
@@ -370,5 +399,38 @@ export const createAdmin = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     return res.status(500).send((error as Error).message);
+  }
+};
+
+export const verifyEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(404).send("token not found");
+    }
+
+    const { id } = jwt.verify(token, process.env.JWT_SECRET!) as { id: string };
+    if (!id) {
+      return res.status(400).send("invalid token");
+    }
+
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).send("Your token is not valid. Please try again.");
+    }
+
+    user.status = "active";
+    await user.save();
+
+    return res.status(200).send("Your email has been verified.");
+  } catch (error) {
+    console.log(error);
+    return res.status(401).send((error as Error).message);
   }
 };

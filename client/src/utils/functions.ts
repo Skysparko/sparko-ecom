@@ -1,4 +1,5 @@
 import axios from "axios";
+import { dialogBoxPropsType } from "../components/utils/DialogBox";
 
 //this function take name as parameter and return its value
 export const getCookie = (cookieName: string) => {

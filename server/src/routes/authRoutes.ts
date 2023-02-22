@@ -1,4 +1,4 @@
-import { isResetTokenValid } from "./../middlewares/auth";
+import { isResetTokenValid } from "../middlewares/auth";
 import express from "express";
 import {
   authenticate,
@@ -8,9 +8,10 @@ import {
   register,
   resetPassword,
   userUpdate,
-} from "../controllers/userControllers";
+  verifyEmail,
+} from "../controllers/auth.controllers";
 import { isAuthorized } from "../middlewares/auth";
-import { forgotPassword } from "../controllers/userControllers";
+import { forgotPassword } from "../controllers/auth.controllers";
 
 const router = express.Router();
 
@@ -60,5 +61,10 @@ router.put("/update-user", isAuthorized, userUpdate);
 //@desc Create Owner
 //@access Manually using code
 router.post("/create-owner", createOwner);
+
+//@route POST api/v1/user/verify-email
+//@desc Verify email address
+//@access verification-token
+router.post("/verify-email", verifyEmail);
 
 export default router;

@@ -23,8 +23,15 @@ import Payment from "./pages/user/Payment";
 import MyAccount from "./pages/MyAccount";
 import Help from "./pages/user/Help";
 import { BallTriangle } from "react-loader-spinner";
-import Dashboard from "./components/Dashboard/Dashboard";
-import DashboardLayout from "./components/Dashboard/DashboardLayout";
+import Overview from "./pages/dashboard/Overview";
+import Dashboard from "./components/dashboard/Dashboard";
+import Products from "./pages/dashboard/Products";
+import Transactions from "./pages/dashboard/Transactions";
+import Shipments from "./pages/dashboard/Shipments";
+import Reports from "./pages/dashboard/Reports";
+import Customers from "./pages/dashboard/Customers";
+import Orders_Dashboard from "./pages/dashboard/Orders";
+import Verification from "./pages/auth/Verification";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -87,8 +94,14 @@ function App() {
               element={<Layout isAuthenticated={isAuthenticated} user={user} />}
             >
               {isAuthenticated && user.role !== "user" && (
-                <Route path="dashboard" element={<DashboardLayout />}>
-                  <Route index element={<Dashboard />} />
+                <Route path="dashboard" element={<Dashboard />}>
+                  <Route index element={<Overview />} />
+                  <Route path="orders" element={<Orders_Dashboard />} />
+                  <Route path="products" element={<Products />} />
+                  <Route path="transactions" element={<Transactions />} />
+                  <Route path="shipments" element={<Shipments />} />
+                  <Route path="reports" element={<Reports />} />
+                  <Route path="customers" element={<Customers />} />
                 </Route>
               )}
               {isAuthenticated && (
@@ -135,6 +148,7 @@ function App() {
                 <Route index element={<Signing />} />
                 <Route path="forgot-password" element={<ForgotPassword />} />
                 <Route path="reset-password" element={<ResetPassword />} />
+                <Route path="Verification" element={<Verification />} />
               </Route>
             )}
           </Routes>

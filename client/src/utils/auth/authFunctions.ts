@@ -39,11 +39,10 @@ export const registration = async (
     .then((res) => {
       if (res.status === 201) {
         setResponse({
-          message: "Successfully registered",
+          message: res.data,
           type: "success",
         });
         setIsLoading(false);
-        location.reload();
       }
     })
     .catch((err) => {
@@ -109,7 +108,6 @@ export const forgotPassword = async (
   { email, setResponse }: forgotPasswordTypes
 ) => {
   e.preventDefault();
-
   instance
     .post("user/forgot-password", { email })
     .then((res) => {

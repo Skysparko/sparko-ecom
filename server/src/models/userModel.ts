@@ -29,6 +29,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  status: {
+    type: String,
+    default: "pending",
+    required: true,
+    enum: ["pending", "active"],
+  },
 });
 
 export default mongoose.model("User", userSchema);
