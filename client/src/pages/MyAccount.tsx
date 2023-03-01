@@ -4,20 +4,23 @@ import address from "../assets/images/MyAccount/address.png";
 import payment from "../assets/images/MyAccount/payment.png";
 import help from "../assets/images/MyAccount/help.png";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-export interface PropTypes {
-  isAuthenticated: boolean;
-  user: {
-    name: string;
-    email: string;
-    role: string;
-    id: string;
-    pfp: string;
-  };
-}
-
-export default function MyAccount({ isAuthenticated, user }: PropTypes) {
+export default function MyAccount() {
   const navigate = useNavigate();
+  const user = useSelector(
+    (state: {
+      user: {
+        email: string;
+        isAuthenticated: boolean;
+        name: string;
+        gender: string;
+        role: string;
+        id: string;
+        pfp: string;
+      };
+    }) => state.user
+  );
   return (
     <article className="bg-gray-100 px-60 pb-10 max-lg:px-28 max-md:px-10 max-sm:px-24 max-vs:px-10">
       <h1 className="py-5 text-3xl">Hey,{user.name}</h1>

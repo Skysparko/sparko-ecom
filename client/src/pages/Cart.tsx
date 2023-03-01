@@ -1,19 +1,23 @@
 import React from "react";
 import emptyShoppingCart from "../assets/video/emptyShoppingCart.gif";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-interface PropTypes {
-  isAuthenticated: boolean;
-  user: {
-    name: string;
-    email: string;
-    role: string;
-    id: string;
-  };
-}
-
-export default function Cart({ isAuthenticated, user }: PropTypes) {
+export default function Cart() {
   const navigate = useNavigate();
+  const user = useSelector(
+    (state: {
+      user: {
+        email: string;
+        isAuthenticated: boolean;
+        name: string;
+        gender: string;
+        role: string;
+        id: string;
+        pfp: string;
+      };
+    }) => state.user
+  );
   return (
     <section className=" border border-black bg-slate-100 p-10 max-lg:p-5 max-vxs:p-0">
       <div className="flex items-center justify-evenly bg-white p-10 shadow-lg max-md:flex-col max-md:gap-10 max-vxs:p-5 ">
@@ -23,7 +27,7 @@ export default function Cart({ isAuthenticated, user }: PropTypes) {
             Your cart is empty.
           </h1>
           <span className="flex justify-between max-lg:flex-col max-lg:gap-5">
-            {!isAuthenticated && (
+            {!user.isAuthenticated && (
               <button
                 onClick={() => navigate("/authentication")}
                 className="m-auto w-48 rounded border-2 border-black bg-sky-600 py-2 text-white max-lg:text-sm"

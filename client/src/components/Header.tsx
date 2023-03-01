@@ -16,20 +16,24 @@ import { BiEdit, BiLogOut } from "react-icons/bi";
 import { MdOutlineShoppingBag } from "react-icons/md";
 import { logout } from "../utils/auth/authFunctions";
 import { RxDashboard } from "react-icons/rx";
+import { useSelector } from "react-redux";
 
-interface PropTypes {
-  isAuthenticated: boolean;
-  user: {
-    name: string;
-    email: string;
-    role: string;
-    id: string;
-    pfp: string;
-  };
-}
-
-export default function Header({ isAuthenticated, user }: PropTypes) {
+export default function Header() {
   const navigate = useNavigate();
+
+  const user = useSelector(
+    (state: {
+      user: {
+        email: string;
+        isAuthenticated: boolean;
+        name: string;
+        gender: string;
+        role: string;
+        id: string;
+        pfp: string;
+      };
+    }) => state.user
+  );
   //logic for responsive design
   const [width, setWidth] = useState(
     window.innerWidth > 0 ? window.innerWidth : screen.width
@@ -130,7 +134,7 @@ export default function Header({ isAuthenticated, user }: PropTypes) {
 
         {/* section containing login and cart  */}
         <div className=" flex  justify-end gap-10  pr-10 text-xl text-white max-lg:pr-5 max-sm:gap-5 max-sm:text-[1.15rem] max-xs:text-[1rem]">
-          {isAuthenticated ? (
+          {user.isAuthenticated ? (
             //User section
             <section id="user_icon" className="pt-1 max-sm:pt-[0.2rem]">
               <img
@@ -147,7 +151,7 @@ export default function Header({ isAuthenticated, user }: PropTypes) {
                 >
                   <span className="absolute right-14 -top-2 float-right h-5 w-5 rotate-45  bg-white"></span>
                   <ul>
-                    {isAuthenticated && user.role === "owner" && (
+                    {user.isAuthenticated && user.role === "owner" && (
                       <li className="flex items-center gap-2 border-b   p-1.5 ">
                         <RxDashboard />
                         <Link to="/dashboard">My Dashboard</Link>

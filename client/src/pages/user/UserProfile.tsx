@@ -6,17 +6,7 @@ import { useEffect } from "react";
 import Cropper, { Area, Point } from "react-easy-crop";
 import { useRef } from "react";
 import { validateEmail } from "../../../../server/src/utils/validators";
-
-interface PropTypes {
-  isAuthenticated: boolean;
-  user: {
-    name: string;
-    email: string;
-    role: string;
-    id: string;
-    pfp: string;
-  };
-}
+import { useSelector } from "react-redux";
 
 // const Output = ({ croppedArea }) => {
 //   return (
@@ -28,7 +18,20 @@ interface PropTypes {
 
 //!there is a error here because crop work after two click initially and can't find the canvas on load
 
-export default function UserProfile({ isAuthenticated, user }: PropTypes) {
+export default function UserProfile() {
+  const user = useSelector(
+    (state: {
+      user: {
+        email: string;
+        isAuthenticated: boolean;
+        name: string;
+        gender: string;
+        role: string;
+        id: string;
+        pfp: string;
+      };
+    }) => state.user
+  );
   const Output = async (
     croppedAreaPixels: Area,
     image: HTMLImageElement,

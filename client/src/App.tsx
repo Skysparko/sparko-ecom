@@ -1,11 +1,4 @@
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-  BrowserRouter,
-  Routes,
-} from "react-router-dom";
+import { Route, BrowserRouter, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import Authentication from "./components/auth/Authentication";
@@ -33,38 +26,49 @@ import Customers from "./pages/dashboard/Customers";
 import Orders_Dashboard from "./pages/dashboard/Orders";
 import Verification from "./pages/auth/Verification";
 import { useSelector, useDispatch } from "react-redux";
-import { setName } from "./store/authSlice";
+import { addUserData } from "./redux/userSlice";
 
 function App() {
   const dispatch = useDispatch();
-  const { name } = useSelector(
-    (state: { auth: { name: string } }) => state.auth
-  );
+  // const { name } = useSelector(
+  //   (state: { auth: { name: string } }) => state.auth
+  // );
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    role: "",
-    id: "",
-    pfp: "",
-  });
+  const user = useSelector(
+    (state: {
+      user: {
+        email: string;
+        isAuthenticated: boolean;
+        name: string;
+        gender: string;
+        role: string;
+        id: string;
+        pfp: string;
+      };
+    }) => state.user
+  );
   useEffect(() => {
     // window.addEventListener("load", () => {
     instance
       .post("user/authenticate")
       .then((res) => {
         if (res.status === 200) {
-          setUser({
-            name: res.data.user.username,
-            email: res.data.user.email,
-            role: res.data.user.role,
-            id: res.data.user._id,
-            pfp: res.data.user.profileImage,
-          });
           setIsLoading(false);
-          setIsAuthenticated(true);
+
+          dispatch(
+            addUserData({
+              name: res.data.user.username,
+              email: res.data.user.email,
+              role: res.data.user.role,
+              gender: res.data.user.gender,
+              id: res.data.user._id,
+              pfp: res.data.user.profileImage,
+              isAuthenticated: true,
+            })
+          );
+          // dispatch(
+          //   setUserData({ email: res.data.user.email, isAuthenticated: true })
+          // );
         }
       })
       .catch((error) => {
@@ -87,7 +91,6 @@ function App() {
     //         console.log(error);
     //       });
     //   });
-    dispatch(setName("skysparko"));
   }, [dispatch]);
 
   return (
@@ -96,11 +99,8 @@ function App() {
         <BrowserRouter>
           <Routes>
             {/* main */}
-            <Route
-              path="/"
-              element={<Layout isAuthenticated={isAuthenticated} user={user} />}
-            >
-              {isAuthenticated && user.role !== "user" && (
+            <Route path="/" element={<Layout />}>
+              {user.isAuthenticated && user.role !== "user" && (
                 <Route path="dashboard" element={<Dashboard />}>
                   <Route index element={<Overview />} />
                   <Route path="orders" element={<Orders_Dashboard />} />
@@ -111,27 +111,11 @@ function App() {
                   <Route path="customers" element={<Customers />} />
                 </Route>
               )}
-              {isAuthenticated && (
+              {user.isAuthenticated && (
                 <>
-                  <Route
-                    path="account"
-                    element={
-                      <MyAccount
-                        isAuthenticated={isAuthenticated}
-                        user={user}
-                      />
-                    }
-                  />
+                  <Route path="account" element={<MyAccount />} />
                   <Route path="user" element={<User />}>
-                    <Route
-                      index
-                      element={
-                        <UserProfile
-                          isAuthenticated={isAuthenticated}
-                          user={user}
-                        />
-                      }
-                    />
+                    <Route index element={<UserProfile />} />
                     <Route path="orders" element={<Orders />} />
                     <Route path="payment" element={<Payment />} />
                     <Route path="addresses" element={<Addresses />} />
@@ -139,18 +123,12 @@ function App() {
                   </Route>
                 </>
               )}
-              <Route
-                index
-                element={<Home isAuthenticated={isAuthenticated} user={user} />}
-              />
-              <Route
-                path="cart"
-                element={<Cart isAuthenticated={isAuthenticated} user={user} />}
-              />
+              <Route index element={<Home />} />
+              <Route path="cart" element={<Cart />} />
             </Route>
 
             {/* authentication */}
-            {!isAuthenticated && (
+            {!user.isAuthenticated && (
               <Route path="/authentication" element={<Authentication />}>
                 <Route index element={<Signing />} />
                 <Route path="forgot-password" element={<ForgotPassword />} />

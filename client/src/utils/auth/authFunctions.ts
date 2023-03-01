@@ -1,6 +1,9 @@
 import { instance } from "../functions";
 
 import { dialogBoxPropsType } from "../../components/utils/DialogBox";
+import { useDispatch } from "react-redux";
+import store from "../../redux/store";
+import { removeUserData } from "../../redux/userSlice";
 
 interface registerFormTypes {
   username: string;
@@ -101,7 +104,7 @@ export const loggingIn = (
 interface forgotPasswordTypes {
   email: string;
   setResponse: React.Dispatch<React.SetStateAction<dialogBoxPropsType>>;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 //accepts email make a request to forgot password
@@ -137,13 +140,19 @@ interface resetPasswordTypes {
   confirmPassword: string;
   setResponse: React.Dispatch<React.SetStateAction<dialogBoxPropsType>>;
   token: string;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 //reset password action
 export const resetPassword = async (
   e: React.FormEvent<HTMLFormElement>,
-  { token, password, confirmPassword, setResponse, setIsLoading }: resetPasswordTypes
+  {
+    token,
+    password,
+    confirmPassword,
+    setResponse,
+    setIsLoading,
+  }: resetPasswordTypes
 ) => {
   e.preventDefault();
 
@@ -155,7 +164,7 @@ export const resetPassword = async (
     });
     return;
   }
-  setIsLoading(true)
+  setIsLoading(true);
   instance
     .put("user/reset-password", { token, password })
     .then((res) => {
@@ -164,7 +173,7 @@ export const resetPassword = async (
           type: "success",
           message: "Your Password Successfully changed!",
         });
-        setIsLoading(false)
+        setIsLoading(false);
         setTimeout(() => {
           location.href = "/authentication";
         }, 3000);
@@ -176,8 +185,7 @@ export const resetPassword = async (
         type: "error",
         message: err.response?.data,
       });
-      setIsLoading(false)
-
+      setIsLoading(false);
     });
 };
 
@@ -187,6 +195,17 @@ export const logout = () => {
     .get("user/logout")
     .then((res) => {
       if (res.status === 200) {
+        store.dispatch(
+          removeUserData({
+            name: "",
+            email: "",
+            role: "",
+            gender: "",
+            id: "",
+            pfp: "",
+            isAuthenticated: false,
+          })
+        );
         location.href = "/";
       }
     })
