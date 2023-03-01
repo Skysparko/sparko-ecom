@@ -109,6 +109,11 @@ export default function UserProfile({ isAuthenticated, user }: PropTypes) {
 
   let initialImage = new Image();
   useEffect(() => {
+    if (email !== user.email) {
+      document.getElementById("emailVerifyButton")?.classList.remove("hidden");
+    } else {
+      document.getElementById("emailVerifyButton")?.classList.add("hidden");
+    }
     const file = document.querySelector("#file")!;
     window.addEventListener("load", () => {
       const canvas: HTMLCanvasElement = document.querySelector("#canvas")!;
@@ -149,6 +154,11 @@ export default function UserProfile({ isAuthenticated, user }: PropTypes) {
       document.querySelector("#main")?.classList.remove("hidden");
     }
   });
+
+  function verify(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    e.preventDefault();
+    alert("please check your email address");
+  }
 
   return (
     <article className="flex">
@@ -242,7 +252,7 @@ export default function UserProfile({ isAuthenticated, user }: PropTypes) {
           <h1 className="ml-5 text-4xl underline-offset-1">
             Personal Information
           </h1>
-          <div className="ml-32  flex flex-col gap-10 max-vs:ml-10">
+          <div className="ml-32  flex flex-col gap-10 max-vs:ml-10 max-xs:m-5 ">
             <span>
               <label htmlFor="user_profile_username" className="mr-5">
                 Enter Your Username Here:-
@@ -256,18 +266,30 @@ export default function UserProfile({ isAuthenticated, user }: PropTypes) {
                 onChange={(e) => setUsername(e.target.value)}
               />
             </span>
-            <span>
+            <span className="flex flex-wrap items-center">
               <label htmlFor="user_profile_email" className="mr-5">
                 Enter Your Email address Here:-
               </label>
-              <input
-                type="email"
-                id="user_profile_email"
-                value={email}
-                placeholder="Email address"
-                onChange={(e) => setEmail(e.target.value)}
-                className="rounded-md border border-gray-500 p-2 shadow-inner"
-              />
+              <span className="flex flex-wrap gap-3">
+                <input
+                  type="email"
+                  id="user_profile_email"
+                  value={email}
+                  placeholder="Email address"
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="rounded-md border border-gray-500 p-2 shadow-inner"
+                />
+
+                <button
+                  className=" hidden cursor-pointer rounded-md border border-gray-500 bg-sky-600 px-5 text-white shadow-sm"
+                  id="emailVerifyButton"
+                  onClick={(e) => {
+                    verify(e);
+                  }}
+                >
+                  Verify
+                </button>
+              </span>
             </span>
             <span>
               <label htmlFor="user_profile_phone" className="mr-5">
@@ -324,7 +346,7 @@ export default function UserProfile({ isAuthenticated, user }: PropTypes) {
             Save changes
           </button>
           <h1 className="my-5 ml-5 text-4xl">Login and Security</h1>
-          <div className="ml-32 flex flex-col gap-5 max-vs:ml-10">
+          <div className="ml-32 flex flex-col gap-5 max-vs:ml-10 max-xs:m-5 ">
             <h3 className="text-2xl ">Want to change your Password?</h3>
             <span>
               <label htmlFor="user_profile_current_password" className="mr-5">

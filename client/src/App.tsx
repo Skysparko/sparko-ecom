@@ -32,8 +32,14 @@ import Reports from "./pages/dashboard/Reports";
 import Customers from "./pages/dashboard/Customers";
 import Orders_Dashboard from "./pages/dashboard/Orders";
 import Verification from "./pages/auth/Verification";
+import { useSelector, useDispatch } from "react-redux";
+import { setName } from "./store/authSlice";
 
 function App() {
+  const dispatch = useDispatch();
+  const { name } = useSelector(
+    (state: { auth: { name: string } }) => state.auth
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -81,7 +87,8 @@ function App() {
     //         console.log(error);
     //       });
     //   });
-  }, []);
+    dispatch(setName("skysparko"));
+  }, [dispatch]);
 
   return (
     <>

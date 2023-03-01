@@ -7,9 +7,11 @@ import DialogBox, {
 } from "../../components/utils/DialogBox";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { resetPassword } from "../../utils/auth/authFunctions";
+import { TailSpin } from "react-loader-spinner";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isTokenValid, setIsTokenValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -57,6 +59,7 @@ export default function ResetPassword() {
                 confirmPassword,
                 setResponse,
                 token,
+                setIsLoading,
               })
             }
           >
@@ -151,7 +154,22 @@ export default function ResetPassword() {
             </span>
 
             <button className="rounded bg-sky-700 p-2 text-white  ">
-              Reset password
+              {isLoading ? (
+                <h1 className=" flex justify-center">
+                  <TailSpin
+                    height="24"
+                    width="24"
+                    color="#ffffff"
+                    ariaLabel="tail-spin-loading"
+                    radius="1"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                  />
+                </h1>
+              ) : (
+                <h1>Submit</h1>
+              )}
             </button>
           </form>
         </>

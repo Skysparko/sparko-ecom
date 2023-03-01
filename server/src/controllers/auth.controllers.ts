@@ -10,10 +10,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { getGender, getProfileImages, getTimeInDays } from "../utils/functions";
-import cloudinary from "../services/cloudinary";
 import sendEmail from "../services/email";
 import userModel from "../models/userModel";
-import { v4 as uuid } from "uuid";
 import { forgotPasswordMail, verificationMail } from "../utils/emailTemplates";
 dotenv.config();
 

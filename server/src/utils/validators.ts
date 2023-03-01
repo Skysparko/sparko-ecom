@@ -1,4 +1,4 @@
-import axios from "axios";
+import * as EmailValidator from 'email-validator';
 
 //* Validates user's name. Rules: Name must be at least 3 character long and must not include numbers or special characters
 export const validateName = (name: string) => {
@@ -7,39 +7,12 @@ export const validateName = (name: string) => {
 };
 
 //* Validates user's email.
-export const validateEmail = async (email: string) => {
-  try {
-    const response = await axios.get(
-      `https://emailvalidation.abstractapi.com/v1/?api_key=${process.env.VALIDATION_API_KEY}&email=${email}`
-    );
-
-    if (response.status === 200) {
-      return true;
-    }
-  } catch (error) {
-    return false;
-  }
+export const validateEmail = (email: string) => {
+  const result = EmailValidator.validate(email)
+  console.log(result)
+  return result;
 
   //* checks whether the entered email is valid or not and returns true or false accordingly
-};
-
-//* Validates user's Phone Number.
-export const validatePhone = (phone: string) => {
-  let result;
-  axios
-    .get(
-      `https://phonevalidation.abstractapi.com/v1/?api_key=${process.env.VALIDATION_API_KEY}&phone=${phone}`
-    )
-    .then((response) => {
-      if (response.status === 200) {
-        result = true;
-      }
-    })
-    .catch((error) => {
-      result = false;
-    });
-  return result;
-  //* checks whether the entered phone number is  valid or not and returns true or false accordingly
 };
 
 //* Validates user's password. Rules: Password must be at least 8 character long and it must include at least - one uppercase letter, one lowercase letter, one digit, one special character

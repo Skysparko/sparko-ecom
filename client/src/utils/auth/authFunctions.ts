@@ -84,6 +84,7 @@ export const loggingIn = (
           message: "Successfully logged in",
         });
         setIsLoading(false);
+
         location.href = "/";
       }
     })
@@ -100,14 +101,16 @@ export const loggingIn = (
 interface forgotPasswordTypes {
   email: string;
   setResponse: React.Dispatch<React.SetStateAction<dialogBoxPropsType>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 //accepts email make a request to forgot password
 export const forgotPassword = async (
   e: React.FormEvent<HTMLFormElement>,
-  { email, setResponse }: forgotPasswordTypes
+  { email, setResponse, setIsLoading }: forgotPasswordTypes
 ) => {
   e.preventDefault();
+  setIsLoading(true);
   instance
     .post("user/forgot-password", { email })
     .then((res) => {
@@ -116,6 +119,7 @@ export const forgotPassword = async (
           type: "success",
           message: "Email sent to the given email address",
         });
+        setIsLoading(false);
       }
     })
     .catch((err) => {
@@ -124,6 +128,7 @@ export const forgotPassword = async (
         type: "error",
         message: err.response?.data,
       });
+      setIsLoading(false);
     });
 };
 
@@ -132,12 +137,13 @@ interface resetPasswordTypes {
   confirmPassword: string;
   setResponse: React.Dispatch<React.SetStateAction<dialogBoxPropsType>>;
   token: string;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 //reset password action
 export const resetPassword = async (
   e: React.FormEvent<HTMLFormElement>,
-  { token, password, confirmPassword, setResponse }: resetPasswordTypes
+  { token, password, confirmPassword, setResponse, setIsLoading }: resetPasswordTypes
 ) => {
   e.preventDefault();
 
@@ -149,7 +155,7 @@ export const resetPassword = async (
     });
     return;
   }
-
+  setIsLoading(true)
   instance
     .put("user/reset-password", { token, password })
     .then((res) => {
@@ -158,6 +164,7 @@ export const resetPassword = async (
           type: "success",
           message: "Your Password Successfully changed!",
         });
+        setIsLoading(false)
         setTimeout(() => {
           location.href = "/authentication";
         }, 3000);
@@ -169,6 +176,8 @@ export const resetPassword = async (
         type: "error",
         message: err.response?.data,
       });
+      setIsLoading(false)
+
     });
 };
 

@@ -4,7 +4,6 @@ import { BsEye, BsEyeSlash, BsInfoLg } from "react-icons/bs";
 import { useState } from "react";
 import { registration } from "../../utils/auth/authFunctions";
 import DialogBox, { dialogBoxPropsType } from "../utils/DialogBox";
-import { register } from "../../../../server/src/controllers/userControllers";
 import { TailSpin } from "react-loader-spinner";
 
 export default function Register() {

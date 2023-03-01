@@ -6,7 +6,9 @@ import DialogBox, {
   dialogBoxPropsType,
 } from "../../components/utils/DialogBox";
 import { forgotPassword } from "../../utils/auth/authFunctions";
+import { TailSpin } from "react-loader-spinner";
 export default function ForgotPassword() {
+  const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState<dialogBoxPropsType>({
     type: "info",
     message: "Please enter your registered email here ! ",
@@ -29,7 +31,9 @@ export default function ForgotPassword() {
       <form
         method="post"
         className="flex flex-col gap-3 p-2 max-xs:w-[90%] max-xs:text-[0.95rem] max-vxs:text-[0.8rem]"
-        onSubmit={(e) => forgotPassword(e, { email, setResponse })}
+        onSubmit={(e) =>
+          forgotPassword(e, { email, setResponse, setIsLoading })
+        }
       >
         <DialogBox message={response.message} type={response.type} />
         <input
@@ -42,7 +46,22 @@ export default function ForgotPassword() {
         />
 
         <button className="rounded bg-sky-700 p-2 text-white  ">
-          Reset password
+          {isLoading ? (
+            <h1 className=" flex justify-center">
+              <TailSpin
+                height="24"
+                width="24"
+                color="#ffffff"
+                ariaLabel="tail-spin-loading"
+                radius="1"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
+            </h1>
+          ) : (
+            <h1>Submit</h1>
+          )}
         </button>
       </form>
       <span className="mt-5 p-2  max-xs:mt-3">
