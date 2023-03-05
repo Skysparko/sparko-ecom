@@ -213,3 +213,6 @@ export const logout = () => {
       console.log(err.response?.data);
     });
 };
+
+//for verification of email address
+const verifyEmail = (token: string) => {};

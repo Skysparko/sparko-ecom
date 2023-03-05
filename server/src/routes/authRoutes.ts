@@ -1,17 +1,17 @@
-import { isResetTokenValid } from "../middlewares/auth";
+import { isResetTokenValid } from "../middlewares/auth.middleware";
 import express from "express";
 import {
   authenticate,
-  createOwner,
   login,
   logout,
   register,
   resetPassword,
-  userUpdate,
   verifyEmail,
 } from "../controllers/auth.controllers";
-import { isAuthorized } from "../middlewares/auth";
+import { isAuthorized } from "../middlewares/auth.middleware";
 import { forgotPassword } from "../controllers/auth.controllers";
+import { userUpdate } from "../controllers/user.controllers";
+import { createOwner } from "../controllers/roles.controllers";
 
 const router = express.Router();
 
@@ -52,11 +52,6 @@ router.put("/verify-reset-token", isResetTokenValid, (req, res) => {
   res.status(200).send("Reset token is valid");
 });
 
-//@route PUT api/v1/user/update-user
-//@desc update-user
-//@access Authorized user
-router.put("/update-user", isAuthorized, userUpdate);
-
 //@route PUT api/v1/user/create-owner
 //@desc Create Owner
 //@access Manually using code
@@ -66,5 +61,10 @@ router.post("/create-owner", createOwner);
 //@desc Verify email address
 //@access verification-token
 router.post("/verify-email", verifyEmail);
+
+//@route PUT api/v1/user/update-user
+//@desc update-user
+//@access Authorized user
+router.put("/update-user", isAuthorized, userUpdate);
 
 export default router;
