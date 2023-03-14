@@ -1,7 +1,19 @@
 import React from "react";
 import { BiLeftArrowAlt } from "react-icons/bi";
+import DialogBox, {
+  dialogBoxPropsType,
+} from "../../components/utils/DialogBox";
+import { TailSpin } from "react-loader-spinner";
+import { submitHelpQuery } from "../../utils/help.functions";
 
 export default function Help() {
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [question, setQuestion] = React.useState("");
+  const [showResponse, setShowResponse] = React.useState(false);
+  const [response, setResponse] = React.useState<dialogBoxPropsType>({
+    type: "info",
+    message: "",
+  });
   return (
     <article>
       <header className="flex flex-col gap-5 border-b border-gray-600 p-10">
@@ -94,15 +106,46 @@ export default function Help() {
       </main>
       <footer className="flex flex-col gap-5 border-t border-black p-10 text-center ">
         <h3 className="text-4xl font-semibold">Help Box</h3>
+
+        {showResponse && (
+          <span className="m-auto">
+            <DialogBox type={response.type} message={response.message} />
+          </span>
+        )}
         <input
           type="text"
           name="help_box"
           id="help_box"
           className="m-auto w-3/4 rounded border border-gray-500 p-2 shadow-inner"
           placeholder="Please Enter your question or problem here"
+          required
+          onChange={(e) => setQuestion(e.target.value)}
         />
-        <button className="m-auto w-44 rounded bg-sky-800 p-2 text-base text-white">
-          Submit
+        <button
+          className="m-auto flex w-44 justify-center rounded bg-sky-800 p-2 text-base text-white"
+          onClick={() =>
+            submitHelpQuery(
+              question,
+              setIsLoading,
+              setShowResponse,
+              setResponse
+            )
+          }
+        >
+          {isLoading ? (
+            <TailSpin
+              height="24"
+              width="24"
+              color="#ffffff"
+              ariaLabel="tail-spin-loading"
+              radius="1"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+            />
+          ) : (
+            <>Submit</>
+          )}
         </button>
       </footer>
     </article>

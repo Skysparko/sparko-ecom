@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/user.routes.js";
+import helpRoutes from "./routes/help.routes.js";
 import logger from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -32,6 +33,7 @@ app.use(cookieParser());
 //routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/help", helpRoutes);
 
 //listening on port 8080
 app.listen(process.env.PORT || 8080, () => {

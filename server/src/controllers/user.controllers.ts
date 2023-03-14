@@ -50,7 +50,7 @@ export const userUpdate = async (req: Request, res: Response) => {
   }
 };
 
-export const verifyUpdatedEmail = (req: Request, res: Response) => {
+export const verifyUpdatedEmail = async (req: Request, res: Response) => {
   try {
     const email = req.body.email;
     if (!email) {
@@ -69,7 +69,7 @@ export const verifyUpdatedEmail = (req: Request, res: Response) => {
     });
 
     user.otp = otp;
-    user.save();
+    await user.save();
 
     const mailOptions = {
       from: "security@gmail.com",
@@ -80,14 +80,14 @@ export const verifyUpdatedEmail = (req: Request, res: Response) => {
       html: emailUpdateOtpMail(otp),
     };
     sendEmail(mailOptions);
-    return res.status(200).send("success");
+    return res.status(200).send("Please check your email address for otp.");
   } catch (error) {
     console.log(error);
     return res.status(500).send((error as Error).message);
   }
 };
 
-export const emailUpdate = (req: Request, res: Response) => {
+export const emailUpdate = async (req: Request, res: Response) => {
   try {
     const { email, otp } = req.body;
 
@@ -119,8 +119,43 @@ export const emailUpdate = (req: Request, res: Response) => {
     user.email = email;
     user.otp = "000000";
 
-    user.save();
-    return res.status(200).send("success");
+    await user.save();
+    return res.status(200).send("Email successfully updated");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send((error as Error).message);
+  }
+};
+
+export const passwordUpdate = async (req: Request, res: Response) => {
+  try {
+    const { currPassword, newPassword } = req.body;
+
+    if (!newPassword || !currPassword) {
+      return res.status(400).send("Please fill all the required fields");
+    }
+    if (!validatePassword(newPassword) || !validatePassword(currPassword)) {
+      return res.status(400).send("Invalid password");
+    }
+    const user = Object(req)["user"];
+
+    if (currPassword === newPassword) {
+      return res
+        .status(400)
+        .send("Your new password must be different than the current password");
+    }
+
+    const isMatch = await bcrypt.compare(currPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).send("Your current password is incorrect");
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+
+    await user.save();
+
+    return res.status(200).send("Password updated successfully");
   } catch (error) {
     console.log(error);
     return res.status(500).send((error as Error).message);

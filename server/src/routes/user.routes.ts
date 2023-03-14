@@ -2,6 +2,7 @@ import { Router } from "express";
 import { isAuthorized } from "../middlewares/auth.middleware";
 import {
   emailUpdate,
+  passwordUpdate,
   userUpdate,
   verifyUpdatedEmail,
 } from "../controllers/user.controllers";
@@ -21,5 +22,10 @@ router.post("/verify-email", isAuthorized, verifyUpdatedEmail);
 //@desc update-email
 //@access Authorized user
 router.put("/update-email", isAuthorized, emailUpdate);
+
+//@route PUT api/v1/user/update-password
+//@desc update-password
+//@access Authorized user
+router.put("/update-password", isAuthorized, passwordUpdate);
 
 export default router;
