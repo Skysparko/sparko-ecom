@@ -38,7 +38,7 @@ export const registration = async (
   }
   setIsLoading(true);
   instance
-    .post("user/register", { username, email, password })
+    .post("auth/register", { username, email, password })
     .then((res) => {
       if (res.status === 201) {
         setResponse({
@@ -75,7 +75,7 @@ export const loggingIn = (
 
   setIsLoading(true);
   instance
-    .post("user/login", {
+    .post("auth/login", {
       email,
       password,
       rememberMe,
@@ -115,7 +115,7 @@ export const forgotPassword = async (
   e.preventDefault();
   setIsLoading(true);
   instance
-    .post("user/forgot-password", { email })
+    .post("auth/forgot-password", { email })
     .then((res) => {
       if (res.status === 200) {
         setResponse({
@@ -166,7 +166,7 @@ export const resetPassword = async (
   }
   setIsLoading(true);
   instance
-    .put("user/reset-password", { token, password })
+    .put("auth/reset-password", { token, password })
     .then((res) => {
       if (res.status === 200) {
         setResponse({
@@ -192,7 +192,7 @@ export const resetPassword = async (
 //for logging out
 export const logout = () => {
   instance
-    .get("user/logout")
+    .get("auth/logout")
     .then((res) => {
       if (res.status === 200) {
         store.dispatch(

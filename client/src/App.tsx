@@ -1,4 +1,10 @@
-import { Route, BrowserRouter, Routes } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter,
+  Routes,
+  useNavigation,
+  useNavigate,
+} from "react-router-dom";
 import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import Authentication from "./components/auth/Authentication";
@@ -9,7 +15,7 @@ import Signing from "./pages/auth/Signing";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import User from "./components/user/User";
-import UserProfile from "./pages/user/UserProfile";
+import UserProfile from "./pages/user/user_profile/UserProfile";
 import Orders from "./pages/user/Orders";
 import Addresses from "./pages/user/Addresses";
 import Payment from "./pages/user/Payment";
@@ -27,6 +33,9 @@ import Orders_Dashboard from "./pages/dashboard/Orders";
 import Verification from "./pages/auth/Verification";
 import { useSelector, useDispatch } from "react-redux";
 import { addUserData } from "./redux/userSlice";
+import EditEmail from "./pages/user/user_profile/EditEmail";
+import LoginSecurity from "./components/user/user_profile/LoginSecurity";
+import EditPassword from "./pages/user/user_profile/EditPassword";
 
 function App() {
   const dispatch = useDispatch();
@@ -50,7 +59,7 @@ function App() {
   useEffect(() => {
     // window.addEventListener("load", () => {
     instance
-      .post("user/authenticate")
+      .post("auth/authenticate")
       .then((res) => {
         if (res.status === 200) {
           setIsLoading(false);
@@ -116,6 +125,12 @@ function App() {
                   <Route path="account" element={<MyAccount />} />
                   <Route path="user" element={<User />}>
                     <Route index element={<UserProfile />} />
+                    <Route path="login-security" element={<LoginSecurity />}>
+                      <Route path="edit-email" element={<EditEmail />} />
+
+                      <Route path="edit-password" element={<EditPassword />} />
+                    </Route>
+
                     <Route path="orders" element={<Orders />} />
                     <Route path="payment" element={<Payment />} />
                     <Route path="addresses" element={<Addresses />} />

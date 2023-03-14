@@ -10,22 +10,40 @@ import {
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { logout } from "../../utils/auth/authFunctions";
 
+const highlightSelected = (id: string) => {
+  const div = document.querySelectorAll("#user_menu li");
+  div.forEach((e) => {
+    // remove the class from the others
+    div.forEach((d) => d.classList.remove("text-black"));
+    div.forEach((d) => d.classList.remove("border-r-4"));
+    div.forEach((d) => d.classList.remove("border-r-sky-700"));
+    div.forEach((d) => d.classList.add("text-gray-500"));
+  });
+  const page = document.getElementById(id);
+  page?.classList.remove("text-gray-500");
+  page?.classList.add("border-r-4", "border-r-sky-700", "text-black");
+};
+
 export default function User() {
   useEffect(() => {
-    const div = document.querySelectorAll("#user_menu li");
+    const id = location.href.split("/")[4];
+    if (
+      id === "orders" ||
+      id === "payment" ||
+      id === "addresses" ||
+      id === "help"
+    ) {
+      const page = document.getElementById(id);
 
-    div.forEach((e) => {
-      // remove the class from the others
-      div.forEach((d) => d.classList.remove("text-black"));
-      div.forEach((d) => d.classList.remove("border-r-4"));
-      div.forEach((d) => d.classList.remove("border-r-sky-700"));
-      div.forEach((d) => d.classList.add("text-gray-500"));
-    });
-    const pageUrl = location.href.split("/");
-    const page = document.getElementById(pageUrl[pageUrl.length - 1]);
-    page?.classList.remove("text-gray-500");
-    page?.classList.add("border-r-4", "border-r-sky-700", "text-black");
-  });
+      page?.classList.remove("text-gray-500");
+      page?.classList.add("border-r-4", "border-r-sky-700", "text-black");
+    } else {
+      const page = document.getElementById("user");
+
+      page?.classList.remove("text-gray-500");
+      page?.classList.add("border-r-4", "border-r-sky-700", "text-black");
+    }
+  }, []);
   const navigate = useNavigate();
   return (
     <section className="grid  grid-cols-[1fr,4fr] max-lg:grid-cols-1">
@@ -36,7 +54,10 @@ export default function User() {
             id="user"
             className=" flex cursor-pointer items-center gap-2 border-y p-5  text-gray-500   hover:border-r-4 hover:border-r-sky-700 hover:text-black 
             "
-            onClick={() => navigate("/user")}
+            onClick={() => {
+              highlightSelected("user");
+              navigate("/user");
+            }}
           >
             <BiEdit />
             Edit Profile
@@ -45,7 +66,10 @@ export default function User() {
           <li
             id="orders"
             className=" flex cursor-pointer items-center  gap-2 p-5 text-gray-500 hover:border-r-4 hover:border-r-sky-700 hover:text-black"
-            onClick={() => navigate("/user/orders")}
+            onClick={() => {
+              highlightSelected("orders");
+              navigate("/user/orders");
+            }}
           >
             <MdOutlineShoppingBag />
             Orders
@@ -53,7 +77,10 @@ export default function User() {
           <li
             id="payment"
             className=" flex cursor-pointer items-center gap-2 border border-y p-5 text-gray-500 hover:border-r-4 hover:border-r-sky-700 hover:text-black"
-            onClick={() => navigate("/user/payment")}
+            onClick={() => {
+              highlightSelected("payment");
+              navigate("/user/payment");
+            }}
           >
             <MdOutlinePayments />
             Payment Options
@@ -61,7 +88,10 @@ export default function User() {
           <li
             id="addresses"
             className=" flex cursor-pointer items-center  gap-2 p-5 text-gray-500 hover:border-r-4 hover:border-r-sky-700 hover:text-black"
-            onClick={() => navigate("/user/addresses")}
+            onClick={() => {
+              highlightSelected("addresses");
+              navigate("/user/addresses");
+            }}
           >
             <MdOutlineLocationOn />
             Manage Addresses
@@ -69,7 +99,10 @@ export default function User() {
           <li
             id="help"
             className=" flex cursor-pointer items-center gap-2 border-y p-5 text-gray-500 hover:border-r-4 hover:border-r-sky-700 hover:text-black"
-            onClick={() => navigate("/user/help")}
+            onClick={() => {
+              highlightSelected("help");
+              navigate("/user/help");
+            }}
           >
             <MdHelpOutline />
             Help

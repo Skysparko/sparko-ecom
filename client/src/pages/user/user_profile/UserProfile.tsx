@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from "react";
 import { BsFillCameraFill } from "react-icons/bs";
 import { RiShoppingCartFill } from "react-icons/ri";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { useEffect } from "react";
 import Cropper, { Area, Point } from "react-easy-crop";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
-import { updatePersonalInformation } from "../../utils/user/user.functions";
+import { updatePersonalInformation } from "../../../utils/user/user.functions";
 import { TailSpin } from "react-loader-spinner";
 
 export default function UserProfile() {
@@ -63,6 +63,9 @@ export default function UserProfile() {
   //loading state
   const [loading, setLoading] = useState(false);
 
+  //extra States
+  const [showEditEmail, setShowEditEmail] = useState(false);
+
   //cropping states
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -81,10 +84,8 @@ export default function UserProfile() {
   const [username, setUsername] = useState(user.name);
   const [email, setEmail] = useState(user.email);
   const [gender, setGender] = useState(user.gender);
-  const [phone, setPhone] = useState("");
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const onCropComplete = useCallback(
     (croppedArea: Area, croppedAreaPixels: Area) => {
@@ -96,11 +97,6 @@ export default function UserProfile() {
   let initialImage = new Image();
 
   useEffect(() => {
-    if (email !== user.email) {
-      document.getElementById("emailVerifyButton")?.classList.remove("hidden");
-    } else {
-      document.getElementById("emailVerifyButton")?.classList.add("hidden");
-    }
     const file = document.querySelector("#file")!;
 
     document.querySelector("#cropper")?.classList.remove("hidden");
@@ -126,11 +122,6 @@ export default function UserProfile() {
       document.querySelector("#main")?.classList.remove("hidden");
     }
   });
-
-  function verify(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    e.preventDefault();
-    alert("please check your email address");
-  }
 
   return (
     <article className="flex">
@@ -209,7 +200,7 @@ export default function UserProfile() {
                 id="upload_file_image"
                 width="150px"
                 height="150px"
-                className="rounded-full border  border-black object-contain"
+                className="rounded-full object-contain shadow-xl"
               />
 
               <BsFillCameraFill
@@ -311,15 +302,16 @@ export default function UserProfile() {
             )}
           </button>
         </form>
+
         <form>
           <h1 className="my-5 ml-5 text-4xl font-medium max-sm:text-3xl max-vs:ml-0 max-vs:text-center  max-vs:text-2xl">
             Login and Security
           </h1>
 
-          <div className="ml-32 flex flex-col gap-10 max-sm:ml-20 max-vs:m-auto max-vs:justify-center">
+          <div className="ml-32 mb-10 flex flex-col gap-10 max-sm:ml-20 max-vs:m-auto max-vs:justify-center">
             <span className="flex flex-wrap items-center max-vs:justify-center ">
               <label htmlFor="user_profile_email" className="mr-5">
-                Enter Your Email address Here:-
+                Email address :-
               </label>
               <span className="flex flex-wrap gap-3">
                 <input
@@ -327,90 +319,46 @@ export default function UserProfile() {
                   id="user_profile_email"
                   value={email}
                   placeholder="Email address"
-                  onChange={(e) => setEmail(e.target.value)}
+                  readOnly
                   className="rounded-md border border-gray-500 p-2 shadow-inner"
                 />
 
                 <button
-                  className=" hidden cursor-pointer rounded-md border border-gray-500 bg-sky-600 px-5 text-white shadow-sm"
-                  id="emailVerifyButton"
+                  className=" cursor-pointer rounded-md border border-gray-500 bg-sky-600 px-5 text-white shadow-sm"
                   onClick={(e) => {
-                    verify(e);
+                    e.preventDefault();
+                    navigate("login-security/edit-email");
                   }}
                 >
-                  Verify
+                  Edit
                 </button>
               </span>
             </span>
-            <span className="max-vs:flex  max-vs:flex-col max-vs:justify-center">
-              <label
-                htmlFor="user_profile_phone"
-                className="mr-5 max-vs:m-auto"
-              >
-                Enter Your Phone No. Here:-
+            <span className="flex flex-wrap items-center max-vs:justify-center ">
+              <label htmlFor="user_profile_email" className="mr-5">
+                Password :-
               </label>
-              <input
-                type="tel"
-                placeholder="Phone no."
-                id="user_profile_phone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="rounded-md border border-gray-500 p-2 shadow-inner max-vs:m-auto"
-              />
-            </span>
-            <h3 className="text-2xl font-normal max-vs:text-center max-vs:text-xl">
-              Want to change your Password?
-            </h3>
-            <span className="max-vs:flex  max-vs:flex-col max-vs:justify-center">
-              <label
-                htmlFor="user_profile_current_password"
-                className="mr-5 max-vs:m-auto"
-              >
-                Current Password:-
-              </label>
-              <input
-                type="password"
-                placeholder="Current Password"
-                id="user_profile_current_password"
-                className="rounded-md border border-gray-500 p-2 shadow-inner max-vs:m-auto"
-              />
-            </span>
-            <span className="max-vs:flex  max-vs:flex-col max-vs:justify-center">
-              <label
-                htmlFor="user_profile_new_password"
-                className="mr-5 max-vs:m-auto"
-              >
-                New Password:-
-              </label>
-              <input
-                type="password"
-                placeholder="Current Password"
-                id="user_profile_new_password"
-                className="rounded-md border border-gray-500 p-2 shadow-inner max-vs:m-auto"
-              />
-            </span>
-            <span className="max-vs:flex  max-vs:flex-col max-vs:justify-center">
-              <label
-                htmlFor="user_profile_confirm_new_password"
-                className="mr-5 max-vs:m-auto"
-              >
-                Confirm New Password:-
-              </label>
-              <input
-                type="password"
-                placeholder="Current Password"
-                id="user_profile_confirm_new_password"
-                className="rounded-md border border-gray-500 p-2 shadow-inner max-vs:m-auto max-vs:m-auto"
-              />
+              <span className="flex flex-wrap gap-3">
+                <input
+                  type="password"
+                  id="user_profile_password"
+                  value="********"
+                  readOnly
+                  className="rounded-md border border-gray-500 p-2 shadow-inner"
+                />
+
+                <button
+                  className=" cursor-pointer rounded-md border border-gray-500 bg-sky-600 px-5 text-white shadow-sm"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("login-security/edit-password");
+                  }}
+                >
+                  Edit
+                </button>
+              </span>
             </span>
           </div>
-
-          <button
-            type="submit"
-            className="m-5 w-40 rounded border border-black bg-sky-700 py-2 text-white shadow-md"
-          >
-            Save changes
-          </button>
         </form>
       </div>
     </article>

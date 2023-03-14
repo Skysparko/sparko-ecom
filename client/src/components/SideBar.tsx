@@ -16,7 +16,7 @@ export default function SideBar() {
   return (
     <div
       id="header__sidebar"
-      className=" absolute -left-80 top-0 flex text-xl   transition-all duration-500 ease-in-out "
+      className=" absolute -left-80 top-0 flex text-xl transition-all  duration-500 ease-in-out "
     >
       <section className="border border-black bg-white">
         <header className="flex w-60 items-center gap-2 border border-black py-3 pl-3">

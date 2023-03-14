@@ -35,6 +35,9 @@ const userSchema = new mongoose.Schema({
     required: true,
     enum: ["pending", "active"],
   },
+  otp: {
+    type: String,
+  },
 });
 
 export default mongoose.model("User", userSchema);

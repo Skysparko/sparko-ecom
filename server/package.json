@@ -21,6 +21,8 @@
     "@types/http-errors": "^1.8.1",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/morgan": "^1.9.3",
+    "@types/otp-generator": "^4.0.0",
+    "@types/speakeasy": "^2.0.7",
     "nodemon": "^2.0.14",
     "npm-run-all": "^4.1.5",
     "ts-node": "^10.3.0",
@@ -42,7 +44,9 @@
     "mongoose": "^6.0.11",
     "morgan": "^1.10.0",
     "nodemailer": "^6.9.1",
+    "otp-generator": "^4.0.1",
     "passport": "^0.6.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "speakeasy": "^2.0.0"
   }
 }

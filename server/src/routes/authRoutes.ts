@@ -62,9 +62,4 @@ router.post("/create-owner", createOwner);
 //@access verification-token
 router.post("/verify-email", verifyEmail);
 
-//@route PUT api/v1/user/update-user
-//@desc update-user
-//@access Authorized user
-router.put("/update-user", isAuthorized, userUpdate);
-
 export default router;
