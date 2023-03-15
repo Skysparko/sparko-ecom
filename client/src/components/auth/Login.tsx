@@ -4,7 +4,7 @@ import { BsEyeSlash, BsEye } from "react-icons/bs";
 import { useState } from "react";
 import { passwordViewToggler } from "../../utils/functions";
 import DialogBox, { dialogBoxPropsType } from "../utils/DialogBox";
-import { loggingIn } from "../../utils/auth/authFunctions";
+import { loggingIn } from "../../utils/authFunctions";
 import { useNavigate } from "react-router-dom";
 import { TailSpin } from "react-loader-spinner";
 

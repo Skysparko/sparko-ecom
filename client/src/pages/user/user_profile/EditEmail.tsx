@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {
   updateEmailAddress,
   verifyEmailAddress,
-} from "../../../utils/user/user.functions";
+} from "../../../utils/user.functions";
 import OTPInput, { ResendOTP } from "otp-input-react";
 import { TailSpin } from "react-loader-spinner";
 import DialogBox, {

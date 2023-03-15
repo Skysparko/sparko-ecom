@@ -1,5 +1,5 @@
-import { dialogBoxPropsType } from "../../components/utils/DialogBox";
-import { instance } from "../functions";
+import { dialogBoxPropsType } from "../components/utils/DialogBox";
+import { instance } from "./functions";
 
 export const updatePersonalInformation = (
   e: React.FormEvent<HTMLFormElement>,

@@ -17,7 +17,7 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import User from "./components/user/User";
 import UserProfile from "./pages/user/user_profile/UserProfile";
 import Orders from "./pages/user/Orders";
-import Addresses from "./pages/user/Addresses";
+import Addresses from "./pages/user/manage_addresses/Addresses";
 import Payment from "./pages/user/Payment";
 import MyAccount from "./pages/MyAccount";
 import Help from "./pages/user/Help";
@@ -36,6 +36,7 @@ import { addUserData } from "./redux/userSlice";
 import EditEmail from "./pages/user/user_profile/EditEmail";
 import LoginSecurity from "./components/user/user_profile/LoginSecurity";
 import EditPassword from "./pages/user/user_profile/EditPassword";
+import AddAddress from "./pages/user/manage_addresses/AddAddress";
 
 function App() {
   const dispatch = useDispatch();
@@ -73,6 +74,7 @@ function App() {
               id: res.data.user._id,
               pfp: res.data.user.profileImage,
               isAuthenticated: true,
+              address: res.data.user.address,
             })
           );
           // dispatch(
@@ -127,13 +129,15 @@ function App() {
                     <Route index element={<UserProfile />} />
                     <Route path="login-security" element={<LoginSecurity />}>
                       <Route path="edit-email" element={<EditEmail />} />
-
                       <Route path="edit-password" element={<EditPassword />} />
                     </Route>
 
                     <Route path="orders" element={<Orders />} />
                     <Route path="payment" element={<Payment />} />
-                    <Route path="addresses" element={<Addresses />} />
+                    <Route path="addresses">
+                      <Route index element={<Addresses />} />
+                      <Route path="add-address" element={<AddAddress />} />
+                    </Route>
                     <Route path="help" element={<Help />} />
                   </Route>
                 </>

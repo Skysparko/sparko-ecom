@@ -14,7 +14,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 import { BiEdit, BiLogOut } from "react-icons/bi";
 import { MdOutlineShoppingBag } from "react-icons/md";
-import { logout } from "../utils/auth/authFunctions";
+import { logout } from "../utils/authFunctions";
 import { RxDashboard } from "react-icons/rx";
 import { useSelector } from "react-redux";
 

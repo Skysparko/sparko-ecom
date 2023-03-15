@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import Cropper, { Area, Point } from "react-easy-crop";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
-import { updatePersonalInformation } from "../../../utils/user/user.functions";
+import { updatePersonalInformation } from "../../../utils/user.functions";
 import { TailSpin } from "react-loader-spinner";
 
 export default function UserProfile() {

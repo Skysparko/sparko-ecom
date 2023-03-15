@@ -1,9 +1,9 @@
-import { instance } from "../functions";
+import { instance } from "./functions";
 
-import { dialogBoxPropsType } from "../../components/utils/DialogBox";
+import { dialogBoxPropsType } from "../components/utils/DialogBox";
 import { useDispatch } from "react-redux";
-import store from "../../redux/store";
-import { removeUserData } from "../../redux/userSlice";
+import store from "../redux/store";
+import { removeUserData } from "../redux/userSlice";
 
 interface registerFormTypes {
   username: string;

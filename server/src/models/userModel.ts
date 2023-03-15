@@ -38,6 +38,10 @@ const userSchema = new mongoose.Schema({
   otp: {
     type: String,
   },
+  address: {
+    type: mongoose.Types.ObjectId,
+    ref: "Address",
+  },
 });
 
 export default mongoose.model("User", userSchema);

@@ -6,7 +6,7 @@ import DialogBox, {
   dialogBoxPropsType,
 } from "../../components/utils/DialogBox";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
-import { resetPassword } from "../../utils/auth/authFunctions";
+import { resetPassword } from "../../utils/authFunctions";
 import { TailSpin } from "react-loader-spinner";
 
 export default function ResetPassword() {

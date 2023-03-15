@@ -8,6 +8,7 @@ interface user {
   role: string;
   id: string;
   pfp: string;
+  address: string;
 }
 
 const userSlice = createSlice({
@@ -20,6 +21,7 @@ const userSlice = createSlice({
     role: "",
     id: "",
     pfp: "",
+    address: "",
   },
   reducers: {
     addUserData(state, { payload }: PayloadAction<user>) {
@@ -30,6 +32,7 @@ const userSlice = createSlice({
       state.role = payload.role;
       state.id = payload.id;
       state.pfp = payload.pfp;
+      state.address = payload.address;
     },
     removeUserData(state, { payload }: PayloadAction<user>) {
       state.name = "";
@@ -39,6 +42,7 @@ const userSlice = createSlice({
       state.role = "";
       state.id = "";
       state.pfp = "";
+      state.address = "";
     },
   },
 });

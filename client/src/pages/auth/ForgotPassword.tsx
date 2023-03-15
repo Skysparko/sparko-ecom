@@ -5,7 +5,7 @@ import { BiLeftArrowAlt } from "react-icons/bi";
 import DialogBox, {
   dialogBoxPropsType,
 } from "../../components/utils/DialogBox";
-import { forgotPassword } from "../../utils/auth/authFunctions";
+import { forgotPassword } from "../../utils/authFunctions";
 import { TailSpin } from "react-loader-spinner";
 export default function ForgotPassword() {
   const [isLoading, setIsLoading] = useState(false);

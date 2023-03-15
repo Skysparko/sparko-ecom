@@ -8,7 +8,7 @@ import {
   MdOutlineShoppingBag,
 } from "react-icons/md";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { logout } from "../../utils/auth/authFunctions";
+import { logout } from "../../utils/authFunctions";
 
 const highlightSelected = (id: string) => {
   const div = document.querySelectorAll("#user_menu li");

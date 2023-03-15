@@ -2,7 +2,7 @@ import React from "react";
 import { passwordViewToggler } from "../../utils/functions";
 import { BsEye, BsEyeSlash, BsInfoLg } from "react-icons/bs";
 import { useState } from "react";
-import { registration } from "../../utils/auth/authFunctions";
+import { registration } from "../../utils/authFunctions";
 import DialogBox, { dialogBoxPropsType } from "../utils/DialogBox";
 import { TailSpin } from "react-loader-spinner";
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TailSpin } from "react-loader-spinner";
-import { updatePassword } from "../../../utils/user/user.functions";
+import { updatePassword } from "../../../utils/user.functions";
 import DialogBox, {
   dialogBoxPropsType,
 } from "../../../components/utils/DialogBox";
