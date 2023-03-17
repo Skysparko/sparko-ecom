@@ -1,17 +1,10 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instance } from "../utils/functions";
+import { fetchUserAddress } from "../utils/address.function";
 
 export const getAllAddresses = createAsyncThunk(
   "addresses/getAll",
-  async () => {
-    try {
-      const res = await instance.get("http://localhost:8080/api/v1/address/");
-      return res.data;
-    } catch (error) {
-      console.log(error);
-      return error;
-    }
-  }
+  fetchUserAddress
 );
 
 export interface addressType {

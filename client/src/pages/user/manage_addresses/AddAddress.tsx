@@ -6,6 +6,7 @@ import axios from "axios";
 import {
   addAddress,
   getCountriesList,
+  getSpecificAddress,
   getStatesList,
   handleCountryChange,
   handleStateChange,
@@ -40,6 +41,25 @@ export default function AddAddress() {
   const [defaultAddress, setDefaultAddress] = useState("false");
 
   useEffect(() => {
+    // const addressId = new URLSearchParams(window.location.search).get(
+    //   "address"
+    // )!;
+    // if (addressId) {
+    //   getSpecificAddress(
+    //     addressId,
+    //     setCountry,
+    //     setState,
+    //     setCountryPhoneCode,
+    //     setFullName,
+    //     setMobileNumber,
+    //     setPinCode,
+    //     setAddress1,
+    //     setAddress2,
+    //     setLandmark,
+    //     setCity,
+    //     setDefaultAddress
+    //   );
+    // }
     getCountriesList(setCountriesList);
     getStatesList(setStatesList, countrySymbol);
   }, []);
@@ -193,7 +213,7 @@ export default function AddAddress() {
               id="state"
               className="rounded border border-gray-500 p-[0.610rem]
             shadow-inner"
-              defaultValue="--Select state--"
+              value={state}
               onChange={(e) =>
                 handleStateChange(
                   e,
@@ -206,10 +226,14 @@ export default function AddAddress() {
               }
               required
             >
-              <option>--Select state--</option>
+              <option value="" disabled>
+                --Select state--
+              </option>
+              {/* <datalist> */}
               {statesList?.map((item) => (
                 <option key={`${item.id}`}>{item.name}</option>
               ))}
+              {/* </datalist> */}
             </select>
           </span>
         </div>

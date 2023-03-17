@@ -3,26 +3,36 @@ import { TailSpin } from "react-loader-spinner";
 import { useEffect } from "react";
 import { instance } from "../../../utils/functions";
 import axios from "axios";
-import { addAddress } from "../../../utils/address.function";
+import {
+  addAddress,
+  editAddress,
+  getCountriesList,
+  getSpecificAddress,
+  getStatesList,
+  handleCountryChange,
+  handleStateChange,
+} from "../../../utils/address.function";
 import { Hint } from "react-autocomplete-hint";
-import { IHintOption } from "react-autocomplete-hint/dist/src/IHintOption";
+import { useSelector } from "react-redux";
 
 interface countryType {
-  country_name: String;
-  country_short_name: String;
-  country_phone_code: Number;
+  id: Number;
+  name: String;
+  iso2: String;
 }
 
 export default function AddAddress() {
   const [isLoading, setIsLoading] = useState(false);
   const [countriesList, setCountriesList] = useState<Array<countryType>>();
-  const [statesList, setStatesList] = useState<Array<{ state_name: String }>>();
+  const [statesList, setStatesList] = useState<Array<countryType>>();
   const [citiesList, setCitiesList] = useState([""]);
 
   //form States
   const [country, setCountry] = useState("India");
+  const [countrySymbol, setCountrySymbol] = useState("IN");
+  const [stateSymbol, setStateSymbol] = useState("");
   const [state, setState] = useState("");
-  const [countryCode, setCountryCode] = useState("+91");
+  const [countryPhoneCode, setCountryPhoneCode] = useState("+91");
   const [fullName, setFullName] = useState("");
   const [mobile, setMobileNumber] = useState("");
   const [pinCode, setPinCode] = useState("");
@@ -31,41 +41,64 @@ export default function AddAddress() {
   const [landmark, setLandmark] = useState("");
   const [city, setCity] = useState("");
   const [defaultAddress, setDefaultAddress] = useState("false");
+  const [showDefaultAddress, setShowDefaultAddress] = useState(true);
+  const [addressID, setAddressID] = useState("");
 
+  const user = useSelector(
+    (state: {
+      user: {
+        email: string;
+        isAuthenticated: boolean;
+        name: string;
+        gender: string;
+        role: string;
+        id: string;
+        pfp: string;
+        address: string;
+      };
+    }) => state.user
+  );
   useEffect(() => {
-    instance
-      .get("http://localhost:8080/api/v1/address/countries")
-      .then((response) => {
-        // console.log(response.data);
-        setCountriesList(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    instance
-      .get(`http://localhost:8080/api/v1/address/states/${country}`)
-      .then((response) => {
-        setStatesList(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const addressId = new URLSearchParams(window.location.search).get(
+      "address"
+    )!;
+    if (addressId) {
+      setAddressID(addressId);
+      if (addressId === user.address) {
+        setShowDefaultAddress(false);
+      }
+      getSpecificAddress(
+        addressId,
+        setCountry,
+        setState,
+        setCountryPhoneCode,
+        setFullName,
+        setMobileNumber,
+        setPinCode,
+        setAddress1,
+        setAddress2,
+        setLandmark,
+        setCity,
+        setDefaultAddress
+      );
+    }
+    getCountriesList(setCountriesList);
+    getStatesList(setStatesList, countrySymbol);
   }, []);
 
   return (
     <div className="flex flex-col gap-10 py-10 px-5  max-xs:text-sm max-vxs:px-2">
       <h1 className="m-auto text-3xl font-semibold max-xs:text-2xl ">
-        Add a new address
+        Edit address
       </h1>
       <form
         className=" m-auto flex flex-col gap-5 max-vs:w-[95%] "
         onSubmit={(e) => {
           e.preventDefault();
-          addAddress(
+          editAddress(
             country,
             state,
-            countryCode,
+            countryPhoneCode,
             fullName,
             mobile,
             pinCode,
@@ -74,7 +107,8 @@ export default function AddAddress() {
             landmark,
             city,
             setIsLoading,
-            defaultAddress
+            defaultAddress,
+            addressID
           );
         }}
       >
@@ -85,31 +119,20 @@ export default function AddAddress() {
             id="country"
             className="rounded border border-gray-500 
             p-2 shadow-sm"
-            onChange={(e) => {
-              setCountry(e.target.value);
-              const countryC = countriesList?.find((item) => {
-                if (item.country_name === e.target.value) {
-                  return item;
-                }
-              });
-
-              setCountryCode(`+${countryC!.country_phone_code}`);
-
-              instance
-                .get(
-                  `http://localhost:8080/api/v1/address/states/${e.target.value}`
-                )
-                .then((response) => {
-                  setStatesList(response.data);
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-            }}
+            onChange={(e) =>
+              handleCountryChange(
+                e,
+                countriesList,
+                setCountry,
+                setCountrySymbol,
+                setStatesList,
+                setCountryPhoneCode
+              )
+            }
             value={country}
           >
             {countriesList?.map((item) => (
-              <option key={`${item.country_name}`}>{item.country_name}</option>
+              <option key={`${item.id}`}>{item.name}</option>
             ))}
           </select>
         </span>
@@ -120,6 +143,7 @@ export default function AddAddress() {
             id="full_name"
             className="rounded border border-gray-500 p-2
             shadow-inner"
+            defaultValue={fullName}
             onChange={(e) => setFullName(e.target.value)}
             required
           />
@@ -132,7 +156,7 @@ export default function AddAddress() {
               name="country_code"
               id="country_code"
               readOnly
-              value={countryCode}
+              value={countryPhoneCode}
               required
               className="w-16 rounded border border-gray-500 p-2
               shadow-inner max-vs:w-14"
@@ -140,6 +164,7 @@ export default function AddAddress() {
             <input
               type="number"
               id="mobile_number"
+              defaultValue={mobile}
               onChange={(e) => setMobileNumber(e.target.value)}
               required
               className="flex-grow rounded border border-gray-500
@@ -152,6 +177,7 @@ export default function AddAddress() {
           <input
             type="number"
             id="pin_code"
+            defaultValue={pinCode}
             onChange={(e) => setPinCode(e.target.value)}
             required
             className="rounded border border-gray-500 p-2
@@ -167,6 +193,7 @@ export default function AddAddress() {
             id="address_part_1"
             onChange={(e) => setAddress1(e.target.value)}
             required
+            defaultValue={address1}
             className="rounded border border-gray-500 p-2
             shadow-inner"
           />
@@ -178,6 +205,7 @@ export default function AddAddress() {
             id="address_part_2"
             onChange={(e) => setAddress2(e.target.value)}
             required
+            defaultValue={address2}
             className="rounded border border-gray-500 p-2
             shadow-inner"
           />
@@ -189,6 +217,7 @@ export default function AddAddress() {
             id="landmark"
             onChange={(e) => setLandmark(e.target.value)}
             required
+            defaultValue={landmark}
             className="rounded border border-gray-500 p-2
             shadow-inner"
           />
@@ -200,6 +229,7 @@ export default function AddAddress() {
               <input
                 type="text"
                 id="town"
+                defaultValue={city}
                 onChange={(e) => setCity(e.target.value)}
                 required
                 className="w-[100%] rounded border border-gray-500
@@ -213,40 +243,42 @@ export default function AddAddress() {
               id="state"
               className="rounded border border-gray-500 p-[0.610rem]
             shadow-inner"
-              defaultValue="--Select state--"
-              onChange={async (e) => {
-                try {
-                  setState(e.target.value);
-                  let cityArray = [""];
-                  const response = await instance.get(
-                    `http://localhost:8080/api/v1/address/cities/${e.target.value}`
-                  );
-                  response.data.forEach((element: { city_name: string }) => {
-                    cityArray.push(element.city_name);
-                  });
-                  console.log(cityArray);
-                  setCitiesList(cityArray);
-                } catch (error) {
-                  console.log(error);
-                }
-              }}
+              value={state}
+              onChange={(e) =>
+                handleStateChange(
+                  e,
+                  setState,
+                  statesList,
+                  setStateSymbol,
+                  countrySymbol,
+                  setCitiesList
+                )
+              }
               required
             >
-              <option>--Select state--</option>
+              <option value="" disabled>
+                --Select state--
+              </option>
+              {/* <datalist> */}
               {statesList?.map((item) => (
-                <option key={`${item.state_name}`}>{item.state_name}</option>
+                <option key={`${item.id}`}>{item.name}</option>
               ))}
+              {/* </datalist> */}
             </select>
           </span>
         </div>
-        <span className="flex gap-2">
-          <input
-            type="checkbox"
-            id="default_address"
-            onChange={(e) => setDefaultAddress(`${e.target.checked}`)}
-          />
-          <label htmlFor="default_address">Make this my default address</label>
-        </span>
+        {showDefaultAddress && (
+          <span className="flex gap-2">
+            <input
+              type="checkbox"
+              id="default_address"
+              onChange={(e) => setDefaultAddress(`${e.target.checked}`)}
+            />
+            <label htmlFor="default_address">
+              Make this my default address
+            </label>
+          </span>
+        )}
         <button className="m-auto flex w-44 justify-center rounded bg-sky-800 p-2 text-base text-white">
           {isLoading ? (
             <TailSpin
@@ -260,7 +292,7 @@ export default function AddAddress() {
               visible={true}
             />
           ) : (
-            <>Add address</>
+            <>Save changes</>
           )}
         </button>
       </form>

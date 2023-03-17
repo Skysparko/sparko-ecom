@@ -2,6 +2,10 @@ import { Router } from "express";
 import { isAuthorized } from "../middlewares/auth.middleware";
 import { createQuery } from "../controllers/help.controllers";
 import {
+  editSpecificAddress,
+  getAddressUsingID,
+} from "../controllers/address.controllers";
+import {
   createAddress,
   deleteAddress,
   getCities,
@@ -43,14 +47,24 @@ router.post("/add", isAuthorized, createAddress);
 //@access Authorized user
 router.delete("/delete/:id", isAuthorized, deleteAddress);
 
-//@route DELETE api/v1/address/default/:id
+//@route GET api/v1/address/default/:id
 //@desc set default specific address using id
 //@access Authorized user
-router.delete("/default/:id", isAuthorized, setAsDefault);
+router.get("/default/:id", isAuthorized, setAsDefault);
+
+//@route PUT api/v1/address/edit/:id
+//@desc edit specific address using id
+//@access Authorized user
+router.put("/edit/:id", isAuthorized, editSpecificAddress);
 
 //@route GET api/v1/address/
 //@desc to get all the addresses of the user
 //@access Authorized user
 router.get("/", isAuthorized, getUserAddresses);
+
+//@route GET api/v1/address/:id
+//@desc to get specific address of the user
+//@access Authorized user
+router.get("/:id", isAuthorized, getAddressUsingID);
 
 export default router;

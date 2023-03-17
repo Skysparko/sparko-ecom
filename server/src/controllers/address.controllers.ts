@@ -201,3 +201,88 @@ export const setAsDefault = async (req: Request, res: Response) => {
     return res.status(500).send((error as Error).message);
   }
 };
+
+export const getAddressUsingID = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).send("Please provide an id");
+    }
+    const address = await Address.findById(id);
+    if (!address) {
+      return res.status(404).send("Address not found");
+    }
+    return res.status(200).json(address);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send((error as Error).message);
+  }
+};
+
+export const editSpecificAddress = async (req: Request, res: Response) => {
+  try {
+    const {
+      country,
+      state,
+      mobileNumber,
+      fullName,
+      defaultAddress,
+      pinCode,
+      address1,
+      address2,
+      landmark,
+      city,
+    } = req.body;
+
+    const id = req.params.id;
+
+    if (!id) {
+      return res.status(400).send("Please provide an id");
+    }
+
+    if (
+      !country ||
+      !state ||
+      !mobileNumber ||
+      !fullName ||
+      !defaultAddress ||
+      !pinCode ||
+      !address1 ||
+      !address2 ||
+      !landmark ||
+      !city
+    ) {
+      return res.status(400).send("Please fill all the required fields");
+    }
+
+    const user = Object(req)["user"];
+
+    const address = await Address.findById(id);
+
+    if (!address) {
+      return res.status(404).send("Address not found");
+    }
+
+    await address.updateOne({
+      country,
+      state,
+      mobileNumber,
+      fullName,
+      pinCode,
+      address1,
+      address2,
+      landmark,
+      city,
+    });
+
+    if (defaultAddress === "true") {
+      user.address = id;
+      await user.save();
+    }
+
+    return res.status(200).json({ user });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send((error as Error).message);
+  }
+};

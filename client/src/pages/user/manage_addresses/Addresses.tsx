@@ -84,7 +84,7 @@ export default function Addresses() {
                 key={i}
                 className=" w-80 rounded-md  border-2 border-gray-500 bg-white p-5 pb-2 shadow-lg max-vxs:p-2"
               >
-                <div className=" grid  h-full grid-rows-[1fr,0.1fr] ">
+                <div className=" grid h-full  grid-rows-[1fr,0.1fr] gap-5 ">
                   <span className="flex flex-col gap-2">
                     <h1 className="border-b border-black pb-2">
                       Default Address
@@ -99,7 +99,14 @@ export default function Addresses() {
                     <h2>Phone Number:{item.mobileNumber}</h2>
                   </span>
                   <span className="flex gap-2 ">
-                    <button className="text-sky-700">Edit</button>
+                    <button
+                      className="text-sky-700"
+                      onClick={() =>
+                        navigate(`edit-address?address=${item._id}`)
+                      }
+                    >
+                      Edit
+                    </button>
                     <span>|</span>
                     <button
                       className="text-sky-700"
@@ -120,7 +127,7 @@ export default function Addresses() {
                 key={i}
                 className=" w-80 rounded-md border-2  border-gray-500 bg-white p-3 pb-2 shadow-lg max-vxs:p-2"
               >
-                <div className="grid h-full grid-rows-[1fr,0.1fr] gap-2">
+                <div className="grid h-full grid-rows-[1fr,0.1fr] gap-5 ">
                   <span className="flex flex-col gap-2 align-top">
                     <h1 className="mt-3 font-semibold">{item.fullName}</h1>
                     <h2>{item.address1}</h2>
@@ -132,7 +139,14 @@ export default function Addresses() {
                     <h2>Phone Number:{item.mobileNumber}</h2>
                   </span>
                   <span className=" flex items-center gap-2 ">
-                    <button className="text-sky-700">Edit</button>
+                    <button
+                      className="text-sky-700"
+                      onClick={() =>
+                        navigate(`edit-address?address=${item._id}`)
+                      }
+                    >
+                      Edit
+                    </button>
                     <span>|</span>
                     <button
                       className="text-sky-700"

@@ -37,6 +37,7 @@ import EditEmail from "./pages/user/user_profile/EditEmail";
 import LoginSecurity from "./components/user/user_profile/LoginSecurity";
 import EditPassword from "./pages/user/user_profile/EditPassword";
 import AddAddress from "./pages/user/manage_addresses/AddAddress";
+import EditAddress from "./pages/user/manage_addresses/EditAddress";
 
 function App() {
   const dispatch = useDispatch();
@@ -137,6 +138,7 @@ function App() {
                     <Route path="addresses">
                       <Route index element={<Addresses />} />
                       <Route path="add-address" element={<AddAddress />} />
+                      <Route path="edit-address" element={<EditAddress />} />
                     </Route>
                     <Route path="help" element={<Help />} />
                   </Route>

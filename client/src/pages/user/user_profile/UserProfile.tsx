@@ -7,7 +7,7 @@ import Cropper, { Area, Point } from "react-easy-crop";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { updatePersonalInformation } from "../../../utils/user.functions";
-import { TailSpin } from "react-loader-spinner";
+import { ColorRing, TailSpin } from "react-loader-spinner";
 
 export default function UserProfile() {
   const user = useSelector(
@@ -97,10 +97,17 @@ export default function UserProfile() {
   let initialImage = new Image();
 
   useEffect(() => {
-    const file = document.querySelector("#file")!;
+    const genders: NodeListOf<HTMLInputElement> =
+      document.querySelectorAll("#gender input");
 
+    genders.forEach((gender, index) => {
+      if (gender.value === user.gender) {
+        gender.checked = true;
+      }
+    });
     document.querySelector("#cropper")?.classList.remove("hidden");
     document.querySelector("#main")?.classList.add("hidden");
+    const file = document.querySelector("#file")!;
     file.addEventListener("change", function (e) {
       //this refers to file
       const chooseFile = (e.currentTarget as HTMLInputElement).files![0];
@@ -121,7 +128,7 @@ export default function UserProfile() {
       document.querySelector("#cropper")?.classList.add("hidden");
       document.querySelector("#main")?.classList.remove("hidden");
     }
-  });
+  }, [showCropper]);
 
   return (
     <article className="flex">
@@ -185,13 +192,13 @@ export default function UserProfile() {
             <label
               htmlFor="file"
               id="upload_file_btn"
-              className=" flex  rounded-full"
+              className=" flex  cursor-pointer rounded-full"
             >
               <canvas
                 id="canvas"
                 width="150px"
                 height="150px"
-                className=" hidden rounded-full"
+                className=" hidden rounded-full "
               ></canvas>
 
               <img
@@ -247,7 +254,10 @@ export default function UserProfile() {
               />
             </span>
 
-            <span className="flex gap-5 max-sm:flex-col max-vs:m-auto">
+            <span
+              id="gender"
+              className="flex gap-5 max-sm:flex-col max-vs:m-auto"
+            >
               <label htmlFor="user_profile_male" className="mr-5 max-vs:m-auto">
                 Please select your gender:-
               </label>
@@ -256,6 +266,7 @@ export default function UserProfile() {
                   type="radio"
                   id="user_profile_male"
                   name="gender"
+                  value="male"
                   className="rounded-md border border-gray-500 p-2 shadow-inner"
                 />
                 <label htmlFor="user_profile_male">Male</label>
@@ -276,6 +287,7 @@ export default function UserProfile() {
                   type="radio"
                   id="user_profile_not"
                   name="gender"
+                  value="unknown"
                   className="rounded-md border border-gray-500 p-2 shadow-inner"
                 />
                 <label htmlFor="user_profile_not">Prefer not to say</label>

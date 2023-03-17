@@ -15,10 +15,53 @@ export const addAddress = (
   defaultAddress: string
 ) => {
   setIsLoading(true);
-  const mobileNumber = countryCode + mobile;
+  const mobileNumber = `${countryCode}-${mobile}`;
 
   instance
     .post("/address/add", {
+      country,
+      state,
+      mobileNumber,
+      fullName,
+      defaultAddress,
+      pinCode,
+      address1,
+      address2,
+      landmark,
+      city,
+    })
+    .then((res) => {
+      if (res.status === 200) {
+        setIsLoading(false);
+        location.href = "http://localhost:3000/user/addresses";
+      }
+    })
+    .catch((error) => {
+      setIsLoading(false);
+      console.log(error);
+    });
+};
+
+export const editAddress = (
+  country: string,
+  state: string,
+  countryCode: string,
+  fullName: string,
+  mobile: string,
+  pinCode: string,
+  address1: string,
+  address2: string,
+  landmark: string,
+  city: string,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  defaultAddress: string,
+  id: string
+) => {
+  setIsLoading(true);
+  const mobileNumber = `${countryCode}-${mobile}`;
+
+  instance
+    .put(`/address/edit/${id}`, {
       country,
       state,
       mobileNumber,
@@ -170,12 +213,58 @@ export const deleteAddress = (id: string) => {
 };
 export const setAddressDefault = (id: string) => {
   instance
-    .delete(`http://localhost:8080/api/v1/address/default/${id}`)
+    .get(`http://localhost:8080/api/v1/address/default/${id}`)
     .then((response) => {
       if (response.status === 200) {
         console.log(response.data);
         location.reload();
       }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export const fetchUserAddress = async () => {
+  try {
+    const res = await instance.get("http://localhost:8080/api/v1/address/");
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+export const getSpecificAddress = (
+  id: string,
+  setCountry: React.Dispatch<React.SetStateAction<string>>,
+  setState: React.Dispatch<React.SetStateAction<string>>,
+  setCountryPhoneCode: React.Dispatch<React.SetStateAction<string>>,
+  setFullName: React.Dispatch<React.SetStateAction<string>>,
+  setMobileNumber: React.Dispatch<React.SetStateAction<string>>,
+  setPinCode: React.Dispatch<React.SetStateAction<string>>,
+  setAddress1: React.Dispatch<React.SetStateAction<string>>,
+  setAddress2: React.Dispatch<React.SetStateAction<string>>,
+  setLandmark: React.Dispatch<React.SetStateAction<string>>,
+  setCity: React.Dispatch<React.SetStateAction<string>>,
+  setDefaultAddress: React.Dispatch<React.SetStateAction<string>>
+) => {
+  instance
+    .get(`http://localhost:8080/api/v1/address/${id}`)
+    .then((response) => {
+      const mobile = response.data.mobileNumber.split("-");
+      setCountry(response.data.country);
+      setCity(response.data.city);
+      setFullName(response.data.fullName);
+      setLandmark(response.data.landmark);
+      setAddress1(response.data.address1);
+      setAddress2(response.data.address2);
+      setCountryPhoneCode(mobile[0]);
+      setMobileNumber(mobile[1]);
+      setPinCode(response.data.pinCode);
+      setState(response.data.state);
+
+      console.log(response.data);
     })
     .catch((error) => {
       console.log(error);
