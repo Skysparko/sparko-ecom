@@ -75,7 +75,7 @@ export const register = async (req: Request, res: Response) => {
 
     // signing a jwt token for the user
     const payload = { id: newUser._id };
-    const verificationToken = await jwt.sign(payload, process.env.JWT_SECRET!);
+    const verificationToken = jwt.sign(payload, process.env.JWT_SECRET!);
 
     const verificationLink = `${process.env.CLIENT_APP_URL}/authentication/verification/?token=${verificationToken}`;
 
@@ -289,8 +289,9 @@ export const verifyEmail = async (
     if (!token) {
       return res.status(404).send("token not found");
     }
-
+    console.log("receiving >>>>> " + token);
     const { id } = jwt.verify(token, process.env.JWT_SECRET!) as { id: string };
+    console.log(id);
     if (!id) {
       return res.status(400).send("invalid token");
     }

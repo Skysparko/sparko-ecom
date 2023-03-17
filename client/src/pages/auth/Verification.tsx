@@ -6,17 +6,18 @@ export default function Verification() {
   const [response, setResponse] = useState("");
   useEffect(() => {
     const token = new URLSearchParams(window.location.search).get("token")!;
+    console.log(token);
     instance
-      .post("user/verify-email", { token })
+      .post("auth/verify-email", { token })
       .then((res) => {
         if (res.status === 200) {
           setResponse(res.data);
         }
       })
       .catch((err) => {
-        setResponse("Your verification link is invalid . Please try again");
+        setResponse(err.response.data.message);
       });
-  });
+  }, []);
   return (
     <div>
       <h1 className="text">{response}</h1>

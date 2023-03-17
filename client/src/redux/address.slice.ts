@@ -5,9 +5,7 @@ export const getAllAddresses = createAsyncThunk(
   "addresses/getAll",
   async () => {
     try {
-      const res = await instance.get(
-        "http://localhost:8080/api/v1/address/user-addresses"
-      );
+      const res = await instance.get("http://localhost:8080/api/v1/address/");
       return res.data;
     } catch (error) {
       console.log(error);

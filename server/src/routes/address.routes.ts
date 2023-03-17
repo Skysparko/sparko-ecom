@@ -3,10 +3,13 @@ import { isAuthorized } from "../middlewares/auth.middleware";
 import { createQuery } from "../controllers/help.controllers";
 import {
   createAddress,
+  deleteAddress,
   getCities,
   getCountries,
+  getCountryDetails,
   getStates,
   getUserAddresses,
+  setAsDefault,
 } from "../controllers/address.controllers";
 const router = Router();
 
@@ -16,23 +19,38 @@ const router = Router();
 router.get("/countries", isAuthorized, getCountries);
 
 //@route GET api/v1/address/countries
-//@desc get all countries
+//@desc get specific country's details
+//@access Authorized user
+router.get("/countries/:country", isAuthorized, getCountryDetails);
+
+//@route GET api/v1/address/states/:country
+//@desc get all states of a specific country
 //@access Authorized user
 router.get("/states/:country", isAuthorized, getStates);
 
-//@route GET api/v1/address/countries
-//@desc get all countries
+//@route GET api/v1/address/cities/:state/:country
+//@desc get all cities of a specific state of a specific country
 //@access Authorized user
-router.get("/cities/:state", isAuthorized, getCities);
+router.get("/cities/:state/:country", isAuthorized, getCities);
 
-//@route POST api/v1/address/create-new-address
+//@route POST api/v1/address/add
 //@desc creating new address
 //@access Authorized user
-router.post("/create-address", isAuthorized, createAddress);
+router.post("/add", isAuthorized, createAddress);
 
-//@route GET api/v1/address/user-addresses
+//@route DELETE api/v1/address/delete/:id
+//@desc deleting specific address using id
+//@access Authorized user
+router.delete("/delete/:id", isAuthorized, deleteAddress);
+
+//@route DELETE api/v1/address/default/:id
+//@desc set default specific address using id
+//@access Authorized user
+router.delete("/default/:id", isAuthorized, setAsDefault);
+
+//@route GET api/v1/address/
 //@desc to get all the addresses of the user
 //@access Authorized user
-router.get("/user-addresses", isAuthorized, getUserAddresses);
+router.get("/", isAuthorized, getUserAddresses);
 
 export default router;

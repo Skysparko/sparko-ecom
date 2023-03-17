@@ -12,11 +12,28 @@ dotenv.config();
 export const getCountries = async (req: Request, res: Response) => {
   try {
     const response = await axios.get(
-      `${process.env.COUNTRIES_API_URL}/countries/`,
+      `${process.env.COUNTRIES_API_URL}/countries`,
       {
         headers: {
-          Authorization: `Bearer ${process.env.AUTH_TOKEN}`,
-          Accept: "application/json",
+          "X-CSCAPI-KEY": process.env.COUNTRIES_API_KEY,
+        },
+      }
+    );
+
+    return res.status(200).json(response.data);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send((error as Error).message);
+  }
+};
+export const getCountryDetails = async (req: Request, res: Response) => {
+  try {
+    const country = req.params.country;
+    const response = await axios.get(
+      `${process.env.COUNTRIES_API_URL}/countries/${country}`,
+      {
+        headers: {
+          "X-CSCAPI-KEY": process.env.COUNTRIES_API_KEY,
         },
       }
     );
@@ -36,11 +53,10 @@ export const getStates = async (req: Request, res: Response) => {
     }
     console.log(country);
     const response = await axios.get(
-      `${process.env.COUNTRIES_API_URL}/states/${country}`,
+      `${process.env.COUNTRIES_API_URL}/countries/${country}/states`,
       {
         headers: {
-          Authorization: `Bearer ${process.env.AUTH_TOKEN}`,
-          Accept: "application/json",
+          "X-CSCAPI-KEY": process.env.COUNTRIES_API_KEY,
         },
       }
     );
@@ -54,15 +70,15 @@ export const getStates = async (req: Request, res: Response) => {
 export const getCities = async (req: Request, res: Response) => {
   try {
     const state = req.params.state;
+    const country = req.params.country;
     if (!state) {
       return res.status(400).send("Please provide state");
     }
     const response = await axios.get(
-      `${process.env.COUNTRIES_API_URL}/cities/${state}`,
+      `${process.env.COUNTRIES_API_URL}/countries/${country}/states/${state}/cities`,
       {
         headers: {
-          Authorization: `Bearer ${process.env.AUTH_TOKEN}`,
-          Accept: "application/json",
+          "X-CSCAPI-KEY": process.env.COUNTRIES_API_KEY,
         },
       }
     );
@@ -140,6 +156,46 @@ export const getUserAddresses = async (req: Request, res: Response) => {
       return res.status(404).send("No address found");
     }
     return res.status(200).send(addresses);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send((error as Error).message);
+  }
+};
+
+export const deleteAddress = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+
+    if (!id) {
+      return res.status(400).send("Please provide an id");
+    }
+    const address = await Address.findById(id);
+    if (!address) {
+      return res.status(404).send("Address not found");
+    }
+    await address.deleteOne();
+    return res.status(200).send("Address deleted");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send((error as Error).message);
+  }
+};
+
+export const setAsDefault = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).send("Please provide an id");
+    }
+    const address = await Address.findById(id);
+    if (!address) {
+      return res.status(404).send("Address not found");
+    }
+    const user = Object(req)["user"];
+
+    user.address = id;
+    user.save();
+    return res.status(200).send("Address set as default");
   } catch (error) {
     console.log(error);
     return res.status(500).send((error as Error).message);
