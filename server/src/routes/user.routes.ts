@@ -13,7 +13,7 @@ const router = Router();
 //@access Authorized user
 router.put("/update-user", isAuthorized, userUpdate);
 
-//@route PUT api/v1/user/verify-email
+//@route POST api/v1/user/verify-email
 //@desc verify-email
 //@access Authorized user
 router.post("/verify-email", isAuthorized, verifyUpdatedEmail);

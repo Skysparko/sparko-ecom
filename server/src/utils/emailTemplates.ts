@@ -1,3 +1,4 @@
+// template for verification email params: verification link
 export const verificationMail = (verificationLink: string) => {
   return `<!DOCTYPE html>
 <html>
@@ -203,6 +204,7 @@ export const verificationMail = (verificationLink: string) => {
 </html>`;
 };
 
+// template for forgot password email params:reset link and username
 export const forgotPasswordMail = (resetLink: string, username: string) => {
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   <html xmlns="http://www.w3.org/1999/xhtml">
@@ -722,6 +724,7 @@ export const forgotPasswordMail = (resetLink: string, username: string) => {
   </html>`;
 };
 
+// template for email update otp email params: otp
 export const emailUpdateOtpMail = (otp: string) => {
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
   <html xmlns="http://www.w3.org/1999/xhtml">

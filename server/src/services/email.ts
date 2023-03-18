@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 
 require("dotenv").config();
 
+// create new transporter for email
 const Transporter = nodemailer.createTransport({
   host: process.env.HOST_SERVICE,
   port: process.env.SMTP_PORT,
@@ -12,6 +13,7 @@ const Transporter = nodemailer.createTransport({
   },
 });
 
+// email Options
 interface mailOptions {
   from: string;
   to: string;
@@ -21,8 +23,8 @@ interface mailOptions {
   html: string;
 }
 
+//sending email to the given email address
 const sendEmail = (mailOptions: mailOptions) => {
-  //sending email to the given email address
   Transporter.sendMail(mailOptions, (err: Error, info: String) => {
     if (err) {
       console.log(err);

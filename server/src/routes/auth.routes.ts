@@ -30,7 +30,7 @@ router.post("/login", login);
 //@access Authorized user
 router.get("/logout", isAuthorized, logout);
 
-//@route (GET /api/v1/user/authenticate)
+//@route (POST /api/v1/user/authenticate)
 //@desc Authenticating user
 //@access Authorized user
 router.post("/authenticate", isAuthorized, authenticate);
@@ -52,7 +52,7 @@ router.put("/verify-reset-token", isResetTokenValid, (req, res) => {
   res.status(200).send("Reset token is valid");
 });
 
-//@route PUT api/v1/user/create-owner
+//@route POST api/v1/user/create-owner
 //@desc Create Owner
 //@access Manually using code
 router.post("/create-owner", createOwner);

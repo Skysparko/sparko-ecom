@@ -25,8 +25,6 @@ app.use(
   cors({
     origin: "http://localhost:3000",
     credentials: true,
-    // maxAge: 800000,
-    // methods: "GET, POST, PATCH, PUT, DELETE, OPTIONS
   })
 );
 app.use(cookieParser());
