@@ -278,30 +278,27 @@ export const authenticate = async (req: Request, res: Response) => {
   }
 };
 
-export const verifyEmail = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+// function for verification of email after registration
+export const verifyEmail = async (req: Request, res: Response) => {
   try {
     const { token } = req.body;
-
+    // checking if the token is available
     if (!token) {
       return res.status(404).send("token not found");
     }
-    console.log("receiving >>>>> " + token);
+
     const { id } = jwt.verify(token, process.env.JWT_SECRET!) as { id: string };
-    console.log(id);
+    // checking if the id is correct or not
     if (!id) {
       return res.status(400).send("invalid token");
     }
-
+    // getting user through id
     const user = await User.findById(id);
 
+    // if user is available then user's status set to active and save it
     if (!user) {
       return res.status(404).send("Your token is not valid. Please try again.");
     }
-
     user.status = "active";
     await user.save();
 

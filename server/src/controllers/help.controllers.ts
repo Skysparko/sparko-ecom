@@ -9,6 +9,7 @@ import dotenv from "dotenv";
 import Help from "../models/help.model";
 dotenv.config();
 
+// function for saving the user's questions
 export const createQuery = async (req: Request, res: Response) => {
   try {
     const { question } = req.body;
