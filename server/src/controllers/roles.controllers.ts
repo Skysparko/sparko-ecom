@@ -4,7 +4,7 @@ import {
   validateName,
   validatePassword,
 } from "../utils/validators";
-import User from "../models/userModel";
+import User from "../models/user.model";
 import bcrypt from "bcrypt";
 import { getGender, getProfileImages } from "../utils/functions";
 

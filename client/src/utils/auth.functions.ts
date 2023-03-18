@@ -3,7 +3,8 @@ import { instance } from "./functions";
 import { dialogBoxPropsType } from "../components/utils/DialogBox";
 import { useDispatch } from "react-redux";
 import store from "../redux/store";
-import { removeUserData } from "../redux/userSlice";
+import { addUserData, removeUserData } from "../redux/user.slice";
+import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 
 interface registerFormTypes {
   username: string;
@@ -203,6 +204,7 @@ export const logout = () => {
             gender: "",
             id: "",
             pfp: "",
+            address: "",
             isAuthenticated: false,
           })
         );
@@ -215,4 +217,66 @@ export const logout = () => {
 };
 
 //for verification of email address
-const verifyEmail = (token: string) => {};
+export const verifyEmailAuth = (
+  token: string,
+  setResponse: React.Dispatch<React.SetStateAction<string>>
+) => {
+  instance
+    .post("auth/verify-email", { token })
+    .then((res) => {
+      if (res.status === 200) {
+        setResponse(res.data);
+      }
+    })
+    .catch((err) => {
+      setResponse(err.response.data.message);
+    });
+};
+
+//for verification of the reset token
+export const verifyResetLink = (
+  token: string,
+  setIsTokenValid: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  instance
+    .put("auth/verify-reset-token", { token })
+    .then((res) => {
+      if (res.status === 200) {
+        setIsTokenValid(true);
+      }
+    })
+    .catch((err) => {
+      console.log(err.data);
+    });
+};
+
+// for authenticating the user
+export const authenticateUser = (
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  dispatch: Dispatch<AnyAction>
+) => {
+  instance
+    .post("auth/authenticate")
+    .then((res) => {
+      if (res.status === 200) {
+        setIsLoading(false);
+
+        dispatch(
+          addUserData({
+            name: res.data.user.username,
+            email: res.data.user.email,
+            role: res.data.user.role,
+            gender: res.data.user.gender,
+            id: res.data.user._id,
+            pfp: res.data.user.profileImage,
+            isAuthenticated: true,
+            address: res.data.user.address,
+          })
+        );
+      }
+    })
+    .catch((error) => {
+      setIsLoading(false);
+      console.log(error);
+    });
+};

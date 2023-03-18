@@ -4,7 +4,7 @@ import {
   validateName,
   validatePassword,
 } from "../utils/validators";
-import User from "../models/userModel";
+import User from "../models/user.model";
 import bcrypt from "bcrypt";
 import { getGender, getProfileImages } from "../utils/functions";
 import cloudinary from "../services/cloudinary";
@@ -72,7 +72,7 @@ export const verifyUpdatedEmail = async (req: Request, res: Response) => {
     await user.save();
 
     const mailOptions = {
-      from: "security@gmail.com",
+      from: "security@example.com",
       to: email,
       cc: [],
       bcc: [],

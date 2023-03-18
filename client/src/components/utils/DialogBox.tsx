@@ -11,6 +11,7 @@ export interface dialogBoxPropsType {
 //dialog box component definition
 export default function (props: dialogBoxPropsType) {
   switch (props.type) {
+    //warning
     case "warning":
       return (
         <span className="flex items-center gap-1 rounded  bg-yellow-100 p-2 text-[0.8rem] max-xs:text-xs max-vxs:text-[0.7rem]">
@@ -18,6 +19,7 @@ export default function (props: dialogBoxPropsType) {
           <h1>{props.message}</h1>
         </span>
       );
+    //success
     case "success":
       return (
         <span className="flex items-center gap-1 rounded  bg-green-100 p-2 text-[0.8rem] max-xs:text-xs max-vxs:text-[0.7rem]">
@@ -25,6 +27,7 @@ export default function (props: dialogBoxPropsType) {
           <h1>{props.message}</h1>
         </span>
       );
+    //error
     case "error":
       return (
         <span className="flex items-center gap-1 rounded  bg-red-100 p-2 text-[0.8rem] max-xs:text-xs max-vxs:text-[0.7rem]">
@@ -32,6 +35,7 @@ export default function (props: dialogBoxPropsType) {
           <h1>{props.message}</h1>
         </span>
       );
+    //info
     case "info":
       return (
         <span className="flex items-center gap-1 rounded  bg-blue-100 p-2 text-[0.8rem] max-xs:text-xs max-vxs:text-[0.7rem]">

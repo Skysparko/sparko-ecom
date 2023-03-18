@@ -32,19 +32,19 @@ import Customers from "./pages/dashboard/Customers";
 import Orders_Dashboard from "./pages/dashboard/Orders";
 import Verification from "./pages/auth/Verification";
 import { useSelector, useDispatch } from "react-redux";
-import { addUserData } from "./redux/userSlice";
+import { addUserData } from "./redux/user.slice";
 import EditEmail from "./pages/user/user_profile/EditEmail";
 import LoginSecurity from "./components/user/user_profile/LoginSecurity";
 import EditPassword from "./pages/user/user_profile/EditPassword";
 import AddAddress from "./pages/user/manage_addresses/AddAddress";
 import EditAddress from "./pages/user/manage_addresses/EditAddress";
+import { authenticateUser } from "./utils/auth.functions";
 
 function App() {
   const dispatch = useDispatch();
-  // const { name } = useSelector(
-  //   (state: { auth: { name: string } }) => state.auth
-  // );
+  //loading state
   const [isLoading, setIsLoading] = useState(true);
+  //getting user's info using redux store
   const user = useSelector(
     (state: {
       user: {
@@ -59,50 +59,8 @@ function App() {
     }) => state.user
   );
   useEffect(() => {
-    // window.addEventListener("load", () => {
-    instance
-      .post("auth/authenticate")
-      .then((res) => {
-        if (res.status === 200) {
-          setIsLoading(false);
-
-          dispatch(
-            addUserData({
-              name: res.data.user.username,
-              email: res.data.user.email,
-              role: res.data.user.role,
-              gender: res.data.user.gender,
-              id: res.data.user._id,
-              pfp: res.data.user.profileImage,
-              isAuthenticated: true,
-              address: res.data.user.address,
-            })
-          );
-          // dispatch(
-          //   setUserData({ email: res.data.user.email, isAuthenticated: true })
-          // );
-        }
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        console.log(error);
-      });
-    // });
-    // return () =>
-    //   window.removeEventListener("load", () => {
-    //     instance
-    //       .post("user/authenticate")
-    //       .then((res) => {
-    //         if (res.status === 200) {
-    //           setUser(res.data);
-    //           setIsLoading(false);
-    //           setIsAuthenticated(true);
-    //         }
-    //       })
-    //       .catch((error) => {
-    //         console.log(error);
-    //       });
-    //   });
+    //authenticating user on every component mounting
+    authenticateUser(setIsLoading, dispatch);
   }, [dispatch]);
 
   return (
@@ -110,7 +68,9 @@ function App() {
       {!isLoading ? (
         <BrowserRouter>
           <Routes>
-            {/* main */}
+            {/* Dashboard section,
+             access: any authorized role but not user
+              */}
             <Route path="/" element={<Layout />}>
               {user.isAuthenticated && user.role !== "user" && (
                 <Route path="dashboard" element={<Dashboard />}>
@@ -123,6 +83,9 @@ function App() {
                   <Route path="customers" element={<Customers />} />
                 </Route>
               )}
+              {/* User section,
+             access: authorized user 
+              */}
               {user.isAuthenticated && (
                 <>
                   <Route path="account" element={<MyAccount />} />
@@ -144,11 +107,16 @@ function App() {
                   </Route>
                 </>
               )}
+              {/* Home section,
+             access: anyone 
+              */}
               <Route index element={<Home />} />
               <Route path="cart" element={<Cart />} />
             </Route>
 
-            {/* authentication */}
+            {/* authentication 
+              access: anyone
+            */}
             {!user.isAuthenticated && (
               <Route path="/authentication" element={<Authentication />}>
                 <Route index element={<Signing />} />

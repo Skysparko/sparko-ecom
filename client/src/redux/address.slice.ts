@@ -1,7 +1,8 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instance } from "../utils/functions";
-import { fetchUserAddress } from "../utils/address.function";
+import { fetchUserAddress } from "../utils/address.functions";
 
+//calling api to get all addresses of the authorized user
 export const getAllAddresses = createAsyncThunk(
   "addresses/getAll",
   fetchUserAddress
@@ -23,15 +24,13 @@ export interface addressType {
 
 const addressSlice = createSlice({
   name: "address",
+  //initial state of the address
   initialState: {
     value: [],
     loading: false,
   },
-  reducers: {
-    // getAll(state, { payload }: PayloadAction<addressType>) {
-    // },
-    // removeUserData(state, { payload }: PayloadAction<addressType>) {},
-  },
+  reducers: {},
+  // these extra reducers work on the case example pending or fulfilled
   extraReducers: (builder) => {
     builder.addCase(getAllAddresses.pending, (state) => {
       state.loading = true;

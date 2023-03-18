@@ -13,6 +13,7 @@ interface user {
 
 const userSlice = createSlice({
   name: "user",
+  // initial state for this slice
   initialState: {
     email: "",
     isAuthenticated: false,
@@ -23,7 +24,9 @@ const userSlice = createSlice({
     pfp: "",
     address: "",
   },
+  //reducers function to add or delete the data from the store
   reducers: {
+    //to add the user data to the store
     addUserData(state, { payload }: PayloadAction<user>) {
       state.name = payload.name;
       state.isAuthenticated = payload.isAuthenticated;
@@ -34,6 +37,8 @@ const userSlice = createSlice({
       state.pfp = payload.pfp;
       state.address = payload.address;
     },
+    //to remove the user data from  the store
+
     removeUserData(state, { payload }: PayloadAction<user>) {
       state.name = "";
       state.isAuthenticated = false;

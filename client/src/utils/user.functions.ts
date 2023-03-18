@@ -1,6 +1,6 @@
 import { dialogBoxPropsType } from "../components/utils/DialogBox";
 import { instance } from "./functions";
-
+//function to update the user's personal information such as name and gender and pfp
 export const updatePersonalInformation = (
   e: React.FormEvent<HTMLFormElement>,
   username: string,
@@ -36,7 +36,7 @@ export const updatePersonalInformation = (
       console.log(error);
     });
 };
-
+//verification of the email address for email update
 export const verifyEmailAddress = (
   email: string,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
@@ -61,6 +61,7 @@ export const verifyEmailAddress = (
     });
 };
 
+//for updating the email address
 export const updateEmailAddress = (
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   email: string,
@@ -77,7 +78,7 @@ export const updateEmailAddress = (
         setShowOtpResponse(true);
         setResponse({ type: "success", message: response.data });
         setTimeout(() => {
-          location.href = "http://localhost:3000/user";
+          location.href = "/user";
         }, 1000);
       }
     })
@@ -89,6 +90,7 @@ export const updateEmailAddress = (
     });
 };
 
+//for updating the password
 export const updatePassword = (
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   currPassword: string,
@@ -97,8 +99,8 @@ export const updatePassword = (
 
   setResponse: React.Dispatch<React.SetStateAction<dialogBoxPropsType>>
 ) => {
-  console.log(currPassword, newPassword, confirmPassword);
   setLoading(true);
+  // checking if the new password is equal to the confirm password
   if (newPassword !== confirmPassword) {
     setResponse({
       type: "warning",
@@ -115,7 +117,7 @@ export const updatePassword = (
 
         setResponse({ type: "success", message: response.data });
         setTimeout(() => {
-          location.href = "http://localhost:3000/user";
+          location.href = "/user";
         }, 1000);
       }
     })

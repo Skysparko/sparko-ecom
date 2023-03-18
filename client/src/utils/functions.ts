@@ -1,6 +1,5 @@
 import axios from "axios";
 import { dialogBoxPropsType } from "../components/utils/DialogBox";
-
 //this function take name as parameter and return its value
 export const getCookie = (cookieName: string) => {
   const cookie = document.cookie
@@ -12,7 +11,7 @@ export const getCookie = (cookieName: string) => {
 
 //axios instance method for api requests
 export const instance = axios.create({
-  baseURL: "http://localhost:8080/api/v1/",
+  baseURL: `http://localhost:8080/api/v1/`,
   headers: {
     authorization: `Bearer ${getCookie("bearerToken")}`,
   },

@@ -7,12 +7,15 @@ import Footer from "./Footer";
 export default function Layout() {
   return (
     <div>
+      {/* header */}
       <header>
         <Header />
       </header>
+      {/* main */}
       <main>
         <Outlet />
       </main>
+      {/* footer */}
       <footer>
         <Footer />
       </footer>

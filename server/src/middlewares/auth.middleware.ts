@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import User from "../models/userModel";
+import User from "../models/user.model";
 import dotenv from "dotenv";
 import { string } from "joi";
 import { validateEmail } from "../utils/validators";

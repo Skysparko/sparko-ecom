@@ -6,50 +6,40 @@ import DialogBox, {
   dialogBoxPropsType,
 } from "../../components/utils/DialogBox";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
-import { resetPassword } from "../../utils/authFunctions";
+import { resetPassword, verifyResetLink } from "../../utils/auth.functions";
 import { TailSpin } from "react-loader-spinner";
 
 export default function ResetPassword() {
-  const [password, setPassword] = useState("");
+  //loading state
   const [isLoading, setIsLoading] = useState(false);
+  //form passwords state
+  const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  //checking states
   const [isTokenValid, setIsTokenValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  // response state
   const [response, setResponse] = useState<dialogBoxPropsType>({
     type: "info",
-    message: "Please enter your registered email here ! ",
+    message: "Please enter your registered email here !",
   });
   const token = new URLSearchParams(window.location.search).get("token")!;
   useEffect(() => {
-    instance
-      .put("user/verify-reset-token", { token })
-      .then((res) => {
-        if (res.status === 200) {
-          setIsTokenValid(true);
-        }
-      })
-      .catch((err) => {
-        console.log(err.data);
-      });
+    //checking reset link
+    verifyResetLink(token, setIsTokenValid);
   });
 
   return (
     <>
+      {/* if token is valid then the first block will run else the second block will */}
       {isTokenValid ? (
         <>
-          {/* <span className="flex rounded-full bg-sky-100 p-3 ">
-            <FiKey
-              className="rounded-full bg-sky-200 p-3 text-5xl"
-              color="#032e73"
-            />
-          </span> */}
+          {/* heading */}
           <span className="mt-7 mb-5 flex flex-col justify-center gap-5 p-2 text-center max-xs:mb-3 max-xs:mt-5 max-xs:w-[90%]">
             <h1 className=" text-4xl max-xs:text-3xl">Create new password</h1>
-            {/* <h2 className="text-gray-700 max-xs:text-[0.9rem]">
-              No worries, we'll send you reset instructions.
-            </h2> */}
           </span>
+          {/* a form where you can enter your new password and confirm new password and make a req to the server */}
           <form
             method="post"
             className="flex flex-col gap-3 p-2 max-xs:w-[90%] max-xs:text-[0.95rem] max-vxs:text-[0.8rem]"
@@ -63,6 +53,7 @@ export default function ResetPassword() {
               })
             }
           >
+            {/* req's response */}
             <DialogBox message={response.message} type={response.type} />
             {/* Password Bar */}
             <span className="flex">
@@ -152,7 +143,7 @@ export default function ResetPassword() {
                 )}
               </span>
             </span>
-
+            {/* submit button and show loading while req is completing */}
             <button className="rounded bg-sky-700 p-2 text-white  ">
               {isLoading ? (
                 <h1 className=" flex justify-center">
@@ -174,7 +165,8 @@ export default function ResetPassword() {
           </form>
         </>
       ) : (
-        <div>Invalid Token</div>
+        // if the link is invalid then
+        <div>Invalid Link</div>
       )}
     </>
   );

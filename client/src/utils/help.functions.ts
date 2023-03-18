@@ -1,6 +1,7 @@
 import { dialogBoxPropsType } from "../components/utils/DialogBox";
 import { instance } from "./functions";
 
+// function to submit the question to the backend
 export function submitHelpQuery(
   question: string,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,

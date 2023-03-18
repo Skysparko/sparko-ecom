@@ -1,5 +1,6 @@
 import { instance } from "./functions";
 
+// function to create new address
 export const addAddress = (
   country: string,
   state: string,
@@ -33,7 +34,7 @@ export const addAddress = (
     .then((res) => {
       if (res.status === 200) {
         setIsLoading(false);
-        location.href = "http://localhost:3000/user/addresses";
+        location.href = "/user/addresses";
       }
     })
     .catch((error) => {
@@ -42,6 +43,7 @@ export const addAddress = (
     });
 };
 
+// function to edit the existing address in the database
 export const editAddress = (
   country: string,
   state: string,
@@ -76,7 +78,7 @@ export const editAddress = (
     .then((res) => {
       if (res.status === 200) {
         setIsLoading(false);
-        location.href = "http://localhost:3000/user/addresses";
+        location.href = "/user/addresses";
       }
     })
     .catch((error) => {
@@ -89,22 +91,22 @@ interface countryType {
   name: String;
   iso2: String;
 }
-
+// function to get the countries names
 export const getCountriesList = (
   setCountriesList: React.Dispatch<
     React.SetStateAction<countryType[] | undefined>
   >
 ) => {
   instance
-    .get("http://localhost:8080/api/v1/address/countries")
+    .get("/address/countries")
     .then((response) => {
-      // console.log(response.data);
       setCountriesList(response.data);
     })
     .catch((error) => {
       console.log(error);
     });
 };
+// function to get the states names of the specific country
 
 export const getStatesList = (
   setStatesList: React.Dispatch<
@@ -113,7 +115,7 @@ export const getStatesList = (
   countrySymbol: string
 ) => {
   instance
-    .get(`http://localhost:8080/api/v1/address/states/${countrySymbol}`)
+    .get(`/address/states/${countrySymbol}`)
     .then((response) => {
       setStatesList(response.data);
     })
@@ -122,12 +124,13 @@ export const getStatesList = (
     });
 };
 
+// function to get the phone code of the specific country
 export const getCountryPhoneCode = (
   setCountryPhoneCode: React.Dispatch<React.SetStateAction<string>>,
   countrySymbol: string
 ) => {
   instance
-    .get(`http://localhost:8080/api/v1/address/countries/${countrySymbol}`)
+    .get(`/address/countries/${countrySymbol}`)
     .then((response) => {
       setCountryPhoneCode(`+${response.data.phonecode}`);
     })
@@ -136,6 +139,7 @@ export const getCountryPhoneCode = (
     });
 };
 
+//function to handle the change in the country input
 export const handleCountryChange = (
   e: React.ChangeEvent<HTMLSelectElement>,
   countriesList: countryType[] | undefined,
@@ -158,6 +162,7 @@ export const handleCountryChange = (
   getCountryPhoneCode(setCountryPhoneCode, countrySymbol);
 };
 
+// function to get the cities names using state and country
 export const getCitiesNamesList = (
   stateSymbol: string,
   countrySymbol: string,
@@ -165,9 +170,7 @@ export const getCitiesNamesList = (
 ) => {
   let cityArray = [""];
   instance
-    .get(
-      `http://localhost:8080/api/v1/address/cities/${stateSymbol}/${countrySymbol}`
-    )
+    .get(`/address/cities/${stateSymbol}/${countrySymbol}`)
     .then((response) => {
       response.data.forEach((element: { name: string }) => {
         cityArray.push(element.name);
@@ -179,6 +182,7 @@ export const getCitiesNamesList = (
   setCitiesList(cityArray);
 };
 
+//handles the changes in the state input
 export const handleStateChange = (
   e: React.ChangeEvent<HTMLSelectElement>,
   setState: React.Dispatch<React.SetStateAction<string>>,
@@ -198,25 +202,12 @@ export const handleStateChange = (
   getCitiesNamesList(stateSymbol, countrySymbol, setCitiesList);
 };
 
+// function to delete the address using id
 export const deleteAddress = (id: string) => {
   instance
-    .delete(`http://localhost:8080/api/v1/address/delete/${id}`)
+    .delete(`/address/delete/${id}`)
     .then((response) => {
       if (response.status === 200) {
-        console.log(response.data);
-        location.reload();
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
-export const setAddressDefault = (id: string) => {
-  instance
-    .get(`http://localhost:8080/api/v1/address/default/${id}`)
-    .then((response) => {
-      if (response.status === 200) {
-        console.log(response.data);
         location.reload();
       }
     })
@@ -225,9 +216,24 @@ export const setAddressDefault = (id: string) => {
     });
 };
 
+// function to set default  the address using id
+export const setAddressDefault = (id: string) => {
+  instance
+    .get(`/address/default/${id}`)
+    .then((response) => {
+      if (response.status === 200) {
+        location.reload();
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+// function to fetch all the address using UserId
 export const fetchUserAddress = async () => {
   try {
-    const res = await instance.get("http://localhost:8080/api/v1/address/");
+    const res = await instance.get("/address/");
     return res.data;
   } catch (error) {
     console.log(error);
@@ -235,6 +241,7 @@ export const fetchUserAddress = async () => {
   }
 };
 
+// function to fetch the address using Id
 export const getSpecificAddress = (
   id: string,
   setCountry: React.Dispatch<React.SetStateAction<string>>,
@@ -250,7 +257,7 @@ export const getSpecificAddress = (
   setDefaultAddress: React.Dispatch<React.SetStateAction<string>>
 ) => {
   instance
-    .get(`http://localhost:8080/api/v1/address/${id}`)
+    .get(`/address/${id}`)
     .then((response) => {
       const mobile = response.data.mobileNumber.split("-");
       setCountry(response.data.country);
@@ -263,8 +270,6 @@ export const getSpecificAddress = (
       setMobileNumber(mobile[1]);
       setPinCode(response.data.pinCode);
       setState(response.data.state);
-
-      console.log(response.data);
     })
     .catch((error) => {
       console.log(error);

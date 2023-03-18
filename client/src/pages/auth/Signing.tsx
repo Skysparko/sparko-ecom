@@ -4,6 +4,7 @@ import { dialogBoxPropsType } from "../../components/utils/DialogBox";
 import Register from "../../components/auth/Register";
 import Login from "../../components/auth/Login";
 
+//toggling styling function
 const toggleExpand = () => {
   //login elements
   const loginButton: HTMLInputElement | null =
@@ -48,12 +49,11 @@ const toggleExpand = () => {
 
 export default function Signing() {
   // on load
-
   useEffect(() => {
     const loginButton: HTMLInputElement | null =
       document.querySelector("#login_button")!;
     loginButton.checked = true;
-  });
+  }, []);
   return (
     <>
       {/* Register Section */}
@@ -61,6 +61,7 @@ export default function Signing() {
         className="h-12 w-96 overflow-hidden rounded-t border border-black bg-gray-200 p-2 shadow-md max-vs:w-[90%]"
         id="register"
       >
+        {/* header for the register section */}
         <div className="grid  grid-cols-[0.1fr,1fr] items-center ">
           <input
             type="radio"
@@ -77,7 +78,7 @@ export default function Signing() {
             <h3 className="text-sm max-vs:text-xs">New to SStore?</h3>
           </label>
         </div>
-        {/* login box containing login form */}
+        {/* register box containing register form */}
         <div id="register_box">
           <Register />
         </div>
@@ -87,6 +88,7 @@ export default function Signing() {
         className=" w-96 rounded-b border border-black  bg-white p-2 max-vs:w-[90%]"
         id="login"
       >
+        {/* header for the login section */}
         <div className="grid grid-cols-[0.1fr,1fr] items-center">
           <input
             type="radio"

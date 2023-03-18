@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 
 export default function MyAccount() {
   const navigate = useNavigate();
+  //getting user info from redux store
   const user = useSelector(
     (state: {
       user: {
@@ -22,9 +23,11 @@ export default function MyAccount() {
     }) => state.user
   );
   return (
+    // This article contains the following sections
     <article className="bg-gray-100 px-60 pb-10 max-lg:px-28 max-md:px-10 max-sm:px-24 max-vs:px-10">
       <h1 className="py-5 text-3xl">Hey,{user.name}</h1>
       <div className="grid grid-cols-2 grid-rows-3 gap-10 max-sm:grid-cols-1">
+        {/* user profile section with image , title and desc to navigate to the respected page*/}
         <section
           className="flex cursor-pointer gap-5 rounded-md border border-gray-300 bg-white p-5 shadow-lg hover:bg-slate-100 max-xl:flex-col max-xl:items-center"
           onClick={() => navigate("/user")}
@@ -37,6 +40,8 @@ export default function MyAccount() {
             </p>
           </span>
         </section>
+        {/* orders section with image , title and desc  to navigate to the respected page*/}
+
         <section
           className="flex cursor-pointer gap-5 rounded-md border border-gray-300 bg-white p-5 shadow-lg hover:bg-slate-100 max-xl:flex-col max-xl:items-center"
           onClick={() => navigate("/user/orders")}
@@ -49,6 +54,8 @@ export default function MyAccount() {
             </p>
           </span>
         </section>
+        {/* payment section with image , title and desc to navigate to the respected page */}
+
         <section
           className="flex cursor-pointer gap-5 rounded-md border border-gray-300 bg-white p-5 shadow-lg hover:bg-slate-100 max-xl:flex-col max-xl:items-center"
           onClick={() => navigate("/user/payment")}
@@ -65,6 +72,8 @@ export default function MyAccount() {
             </p>
           </span>
         </section>
+        {/* addresses section with image , title and desc to navigate to the respected page */}
+
         <section
           className="flex cursor-pointer gap-5 rounded-md border border-gray-300 bg-white p-5 shadow-lg hover:bg-slate-100 max-xl:flex-col max-xl:items-center"
           onClick={() => navigate("/user/addresses")}
@@ -82,6 +91,8 @@ export default function MyAccount() {
             </p>
           </span>
         </section>
+        {/* help section with image , title and desc to navigate to the respected page */}
+
         <section
           className="flex cursor-pointer gap-5 rounded-md border border-gray-300 bg-white p-5 shadow-lg hover:bg-slate-100 max-xl:flex-col max-xl:items-center"
           onClick={() => navigate("/user/help")}

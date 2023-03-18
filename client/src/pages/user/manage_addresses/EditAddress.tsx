@@ -11,7 +11,7 @@ import {
   getStatesList,
   handleCountryChange,
   handleStateChange,
-} from "../../../utils/address.function";
+} from "../../../utils/address.functions";
 import { Hint } from "react-autocomplete-hint";
 import { useSelector } from "react-redux";
 
@@ -22,7 +22,11 @@ interface countryType {
 }
 
 export default function AddAddress() {
+  //loading state
+
   const [isLoading, setIsLoading] = useState(false);
+  //country api lists
+
   const [countriesList, setCountriesList] = useState<Array<countryType>>();
   const [statesList, setStatesList] = useState<Array<countryType>>();
   const [citiesList, setCitiesList] = useState([""]);
@@ -62,6 +66,7 @@ export default function AddAddress() {
     const addressId = new URLSearchParams(window.location.search).get(
       "address"
     )!;
+    //if the url have the address id then using this logic we get all the data and place it in the fields
     if (addressId) {
       setAddressID(addressId);
       if (addressId === user.address) {
@@ -82,15 +87,25 @@ export default function AddAddress() {
         setDefaultAddress
       );
     }
+    // getting all the countries
+
     getCountriesList(setCountriesList);
+    //getting all the states of the given country by default it is set to the india
+
     getStatesList(setStatesList, countrySymbol);
   }, []);
 
   return (
+    // this section is for adding the new addresses
+
     <div className="flex flex-col gap-10 py-10 px-5  max-xs:text-sm max-vxs:px-2">
+      {/* heading for the form */}
+
       <h1 className="m-auto text-3xl font-semibold max-xs:text-2xl ">
         Edit address
       </h1>
+      {/* a address form  */}
+
       <form
         className=" m-auto flex flex-col gap-5 max-vs:w-[95%] "
         onSubmit={(e) => {
@@ -112,6 +127,8 @@ export default function AddAddress() {
           );
         }}
       >
+        {/* this section contain label and select dropdown for countries */}
+
         <span className=" flex flex-col">
           <label htmlFor="country">Country/Region</label>
           <select
@@ -131,11 +148,15 @@ export default function AddAddress() {
             }
             value={country}
           >
+            {/* logic for populating the countries as options */}
+
             {countriesList?.map((item) => (
               <option key={`${item.id}`}>{item.name}</option>
             ))}
           </select>
         </span>
+        {/* name section */}
+
         <span className="flex flex-col ">
           <label htmlFor="full_name">Full name</label>
           <input
@@ -148,9 +169,12 @@ export default function AddAddress() {
             required
           />
         </span>
+        {/* mobile number section containing two input one for country phone code and second for mobile number */}
         <span className="flex flex-col ">
           <label htmlFor="mobile_number">Mobile number</label>
           <span className=" flex gap-1">
+            {/* country phone code input  */}
+
             <input
               type="tel"
               name="country_code"
@@ -161,6 +185,8 @@ export default function AddAddress() {
               className="w-16 rounded border border-gray-500 p-2
               shadow-inner max-vs:w-14"
             />
+            {/* mobile number input */}
+
             <input
               type="number"
               id="mobile_number"
@@ -172,6 +198,8 @@ export default function AddAddress() {
             />
           </span>
         </span>
+        {/* pin code section containing label and input field  */}
+
         <span className="flex flex-col ">
           <label htmlFor="pin_code">Pin code</label>
           <input
@@ -184,6 +212,8 @@ export default function AddAddress() {
             shadow-inner"
           />
         </span>
+        {/* address1 section containing label and input field  */}
+
         <span className="flex flex-col ">
           <label htmlFor="address_part_1">
             Flat, House no., Building, Company, Apartment
@@ -198,6 +228,8 @@ export default function AddAddress() {
             shadow-inner"
           />
         </span>
+        {/* address2 section containing label and input field  */}
+
         <span className="flex flex-col ">
           <label htmlFor="address_part_2">Area, Street, Sector, Village</label>
           <input
@@ -210,6 +242,8 @@ export default function AddAddress() {
             shadow-inner"
           />
         </span>
+        {/* landmark section containing label and input field  */}
+
         <span className="flex flex-col ">
           <label htmlFor="landmark">Landmark</label>
           <input
@@ -222,6 +256,8 @@ export default function AddAddress() {
             shadow-inner"
           />
         </span>
+        {/* town section containing label and input field  */}
+
         <div className="grid grid-cols-2 gap-2 max-sm:grid-cols-1 max-sm:grid-rows-2 ">
           <span className="flex flex-col">
             <label htmlFor="town">Town/City</label>
@@ -237,6 +273,8 @@ export default function AddAddress() {
               />
             </Hint>
           </span>
+          {/* state section containing label and select field */}
+
           <span className=" flex flex-col">
             <label htmlFor="state">State</label>
             <select
@@ -256,17 +294,21 @@ export default function AddAddress() {
               }
               required
             >
+              {/* default option but user cannot select it  */}
+
               <option value="" disabled>
                 --Select state--
               </option>
-              {/* <datalist> */}
+              {/* logic for populating states options */}
+
               {statesList?.map((item) => (
                 <option key={`${item.id}`}>{item.name}</option>
               ))}
-              {/* </datalist> */}
             </select>
           </span>
         </div>
+        {/* this section contain a checkbox and label and only show if the address is not default*/}
+
         {showDefaultAddress && (
           <span className="flex gap-2">
             <input
@@ -279,6 +321,8 @@ export default function AddAddress() {
             </label>
           </span>
         )}
+        {/* edit address button and loading while the req is running */}
+
         <button className="m-auto flex w-44 justify-center rounded bg-sky-800 p-2 text-base text-white">
           {isLoading ? (
             <TailSpin

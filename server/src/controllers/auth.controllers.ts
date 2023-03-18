@@ -5,13 +5,13 @@ import {
   validateEmail,
   validatePassword,
 } from "../utils/validators";
-import User from "../models/userModel";
+import User from "../models/user.model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { getGender, getProfileImages, getTimeInDays } from "../utils/functions";
 import sendEmail from "../services/email";
-import userModel from "../models/userModel";
+import userModel from "../models/user.model";
 import { forgotPasswordMail, verificationMail } from "../utils/emailTemplates";
 dotenv.config();
 
@@ -247,7 +247,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 
     //sending a password changed email to the user
     const mailOptions = {
-      from: "sstore_security@gmail.com",
+      from: "security@example.com",
       to: user.email,
       cc: [],
       bcc: [],

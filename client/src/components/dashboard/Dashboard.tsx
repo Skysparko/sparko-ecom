@@ -8,7 +8,7 @@ import {
   MdOutlineShoppingBag,
 } from "react-icons/md";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { logout } from "../../utils/authFunctions";
+import { logout } from "../../utils/auth.functions";
 
 export default function User() {
   useEffect(() => {

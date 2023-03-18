@@ -8,17 +8,12 @@ import Products from "../../dashboard/Products";
 import {
   deleteAddress,
   setAddressDefault,
-} from "../../../utils/address.function";
+} from "../../../utils/address.functions";
 
 export default function Addresses() {
-  const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  // const productsState = useSelector(
-  //   (state: { address: addressType }) => state.address
-  // );
-  // const addresses = productsState ?? {};
-
+  //getting user from redux store
   const user = useSelector(
     (state: {
       user: {
@@ -33,31 +28,26 @@ export default function Addresses() {
       };
     }) => state.user
   );
-
-  // const address = useSelector(
-  //   (state: {
-  //     address: {
-  //       value: [];
-  //       loading: boolean;
-  //     };
-  //   }) => state.address
-  // );
-
+  // getting addresses from redux store
   const addressesState = useSelector(
     (state: { address: { value: Array<addressType>; loading: boolean } }) =>
       state.address
   );
   const { value: addresses, loading } = addressesState ?? {};
   useEffect(() => {
+    // dispatching all the addresses from server to the redux store
     dispatch(getAllAddresses());
   }, []);
 
   return (
+    //this section contains add section card and cards for each address
     <div className="p-5">
+      {/* title of the page */}
       <h1 className=" text-5xl font-semibold max-md:text-4xl max-vs:text-3xl">
         Manage Addresses
       </h1>
 
+      {/* card for adding addresses  */}
       <section className="flex  flex-wrap justify-center gap-5  py-10 ">
         <div
           className=" w-80 cursor-pointer rounded-md border-[3px] border-dashed border-gray-500 bg-white p-5 shadow-lg"
@@ -76,7 +66,7 @@ export default function Addresses() {
             </span>
           </span>
         </div>
-
+        {/* if the user address is in the address list then that address will be added to the card  */}
         {addresses.map(
           (item, i) =>
             item._id === user.address && (
@@ -84,6 +74,7 @@ export default function Addresses() {
                 key={i}
                 className=" w-80 rounded-md  border-2 border-gray-500 bg-white p-5 pb-2 shadow-lg max-vxs:p-2"
               >
+                {/* fetched info for address */}
                 <div className=" grid h-full  grid-rows-[1fr,0.1fr] gap-5 ">
                   <span className="flex flex-col gap-2">
                     <h1 className="border-b border-black pb-2">
@@ -98,7 +89,9 @@ export default function Addresses() {
                     <h2>{item.country}</h2>
                     <h2>Phone Number:{item.mobileNumber}</h2>
                   </span>
+                  {/* actions button  */}
                   <span className="flex gap-2 ">
+                    {/* edit address button */}
                     <button
                       className="text-sky-700"
                       onClick={() =>
@@ -108,6 +101,7 @@ export default function Addresses() {
                       Edit
                     </button>
                     <span>|</span>
+                    {/* delete address button  */}
                     <button
                       className="text-sky-700"
                       onClick={() => deleteAddress(item._id)}
@@ -119,10 +113,12 @@ export default function Addresses() {
               </div>
             )
         )}
-
+        {/* populating all the addresses expect default one */}
         {addresses.map(
           (item, i) =>
             item._id !== user.address && (
+              // fetched info for address
+
               <div
                 key={i}
                 className=" w-80 rounded-md border-2  border-gray-500 bg-white p-3 pb-2 shadow-lg max-vxs:p-2"
@@ -138,7 +134,9 @@ export default function Addresses() {
                     <h2>{item.country}</h2>
                     <h2>Phone Number:{item.mobileNumber}</h2>
                   </span>
+                  {/* action buttons  */}
                   <span className=" flex items-center gap-2 ">
+                    {/* edit button  */}
                     <button
                       className="text-sky-700"
                       onClick={() =>
@@ -148,6 +146,7 @@ export default function Addresses() {
                       Edit
                     </button>
                     <span>|</span>
+                    {/* remove address  */}
                     <button
                       className="text-sky-700"
                       onClick={() => deleteAddress(item._id)}
@@ -155,6 +154,7 @@ export default function Addresses() {
                       Remove
                     </button>
                     <span>|</span>
+                    {/* set as default address  */}
                     <button
                       className="text-sky-700"
                       onClick={() => setAddressDefault(item._id)}

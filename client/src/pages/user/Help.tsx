@@ -7,15 +7,20 @@ import { TailSpin } from "react-loader-spinner";
 import { submitHelpQuery } from "../../utils/help.functions";
 
 export default function Help() {
+  //loading state
   const [isLoading, setIsLoading] = React.useState(false);
+  //form state
   const [question, setQuestion] = React.useState("");
+  //response state
   const [showResponse, setShowResponse] = React.useState(false);
   const [response, setResponse] = React.useState<dialogBoxPropsType>({
     type: "info",
     message: "",
   });
   return (
+    // This section contains help related stuff and one form to submit query
     <article>
+      {/* header for the help section containing heading and description of the page */}
       <header className="flex flex-col gap-5 border-b border-gray-600 p-10">
         <span>
           <h5 className="text-sky-800">The FAQs</h5>
@@ -25,6 +30,7 @@ export default function Help() {
           Everything you need to know about the product and billing.
         </h3>
       </header>
+      {/* main section of the help section containing information about the help section  */}
       <main className=" grid grid-cols-[1.5fr,2fr] gap-5 bg-gray-50 px-5 py-14 max-sm:grid-cols-1 max-sm:grid-rows-2 max-sm:gap-0 max-xs:py-10 ">
         <div className="flex flex-col gap-2 p-5 max-sm:pb-0">
           <h6 className="text-sm text-sky-800">Support</h6>
@@ -35,6 +41,7 @@ export default function Help() {
             problem below.
           </p>
         </div>
+        this div containing common question with answers
         <div className="flex flex-col gap-5 p-5 max-sm:pt-0">
           <details>
             <summary className="cursor-pointer font-medium">
@@ -104,14 +111,17 @@ export default function Help() {
           </details>
         </div>
       </main>
+      {/* footer section of the help section containing form to submit query   */}
       <footer className="flex flex-col gap-5 border-t border-black p-10 text-center ">
+        {/* heading  */}
         <h3 className="text-4xl font-semibold">Help Box</h3>
-
+        {/* response from api */}
         {showResponse && (
           <span className="m-auto">
             <DialogBox type={response.type} message={response.message} />
           </span>
         )}
+        {/* input field for query  */}
         <input
           type="text"
           name="help_box"
@@ -121,6 +131,7 @@ export default function Help() {
           required
           onChange={(e) => setQuestion(e.target.value)}
         />
+        {/* submit button and loading while api is calling */}
         <button
           className="m-auto flex w-44 justify-center rounded bg-sky-800 p-2 text-base text-white"
           onClick={() =>
