@@ -63,6 +63,15 @@ export const verifyUpdatedEmail = async (req: Request, res: Response) => {
     // getting user from middleware
     const user = Object(req)["user"];
 
+    if (email === user.email) {
+      return res.status(403).send("You cannot use the same email");
+    }
+
+    const isExist = await User.findOne({ email: email });
+    if (isExist) {
+      return res.status(403).send("User already exists");
+    }
+
     //creating otp
     const otp = speakeasy.totp({
       secret: process.env.OTP_SECRET!,

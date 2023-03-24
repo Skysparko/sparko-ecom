@@ -73,22 +73,15 @@ export default function EditEmail() {
           className="m-auto flex w-[30rem] flex-col gap-5  max-sm:w-[95%]"
           onSubmit={(e) => {
             e.preventDefault();
-            if (email === user.email) {
-              setShowResponse(true);
-              setResponse({
-                type: "error",
-                message:
-                  "You cannot use the email address you have entered, because it is the same as your current email address.",
-              });
-            } else {
-              verifyEmailAddress(
-                email,
-                setLoading,
-                setShowOtp,
-                setResponse,
-                setShowOtpResponse
-              );
-            }
+            verifyEmailAddress(
+              email,
+              showOtp,
+              setLoading,
+              setShowOtp,
+              setResponse,
+              setShowResponse,
+              setShowOtpResponse
+            );
           }}
         >
           {/* title and info  */}
@@ -97,7 +90,7 @@ export default function EditEmail() {
           </h1>
           <span>
             <p>Current email address:</p>
-            <p>shubhamrakhecha5@gmail.com</p>
+            <p>{user.email}</p>
           </span>
           <p>
             Enter the new email address you would like to associate with your
@@ -170,9 +163,11 @@ export default function EditEmail() {
               onResendClick={() => {
                 verifyEmailAddress(
                   email,
+                  showOtp,
                   setLoading,
                   setShowOtp,
                   setResponse,
+                  setShowResponse,
                   setShowOtpResponse
                 );
               }}

@@ -41,7 +41,7 @@ export default function Help() {
             problem below.
           </p>
         </div>
-        this div containing common question with answers
+        {/* this div containing common question with answers */}
         <div className="flex flex-col gap-5 p-5 max-sm:pt-0">
           <details>
             <summary className="cursor-pointer font-medium">

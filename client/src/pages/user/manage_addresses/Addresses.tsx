@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addressType, getAllAddresses } from "../../../redux/address.slice";
 import { AppDispatch } from "../../../redux/store";
-import Products from "../../dashboard/Products";
+import Products from "../../dashboard/products/Products";
 import {
   deleteAddress,
   setAddressDefault,

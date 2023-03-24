@@ -39,9 +39,11 @@ export const updatePersonalInformation = (
 //verification of the email address for email update
 export const verifyEmailAddress = (
   email: string,
+  showOtp: boolean,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setNavigateSignal: React.Dispatch<React.SetStateAction<boolean>>,
   setResponse: React.Dispatch<React.SetStateAction<dialogBoxPropsType>>,
+  setShowResponse: React.Dispatch<React.SetStateAction<boolean>>,
   setShowOtpResponse: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   setLoading(true);
@@ -55,7 +57,11 @@ export const verifyEmailAddress = (
     })
     .catch((error) => {
       setLoading(false);
-      setShowOtpResponse(true);
+      if (showOtp) {
+        setShowOtpResponse(true);
+      } else {
+        setShowResponse(true);
+      }
       setResponse({ type: "error", message: error.response.data });
       console.log(error);
     });

@@ -24,7 +24,7 @@ import Help from "./pages/user/Help";
 import { BallTriangle } from "react-loader-spinner";
 import Overview from "./pages/dashboard/Overview";
 import Dashboard from "./components/dashboard/Dashboard";
-import Products from "./pages/dashboard/Products";
+import Products from "./pages/dashboard/products/Products";
 import Transactions from "./pages/dashboard/Transactions";
 import Shipments from "./pages/dashboard/Shipments";
 import Reports from "./pages/dashboard/Reports";
@@ -39,6 +39,7 @@ import EditPassword from "./pages/user/user_profile/EditPassword";
 import AddAddress from "./pages/user/manage_addresses/AddAddress";
 import EditAddress from "./pages/user/manage_addresses/EditAddress";
 import { authenticateUser } from "./utils/auth.functions";
+import AddProduct from "./pages/dashboard/products/AddProduct";
 
 function App() {
   const dispatch = useDispatch();
@@ -76,7 +77,10 @@ function App() {
                 <Route path="dashboard" element={<Dashboard />}>
                   <Route index element={<Overview />} />
                   <Route path="orders" element={<Orders_Dashboard />} />
-                  <Route path="products" element={<Products />} />
+                  <Route path="products">
+                    <Route index element={<Products />} />
+                    <Route path="add-product" element={<AddProduct />} />
+                  </Route>
                   <Route path="transactions" element={<Transactions />} />
                   <Route path="shipments" element={<Shipments />} />
                   <Route path="reports" element={<Reports />} />

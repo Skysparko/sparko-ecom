@@ -41,3 +41,13 @@ export const getTimeInDays = (days: number) => {
   resultDate.setDate(today.getDate() + days);
   return resultDate;
 };
+
+//function for getting the current day's Date in dd-mm-yyyy format
+export const getCurrentDate = () => {
+  const date = new Date();
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
+  let fullDate = `${day}-${month}-${year}`;
+  return fullDate;
+};
