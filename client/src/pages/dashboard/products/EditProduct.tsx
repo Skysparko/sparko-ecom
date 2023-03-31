@@ -6,15 +6,19 @@ import { RiDeleteBin2Line, RiEdit2Line } from "react-icons/ri";
 import DialogBox, {
   dialogBoxPropsType,
 } from "../../../components/utils/DialogBox";
-import { submitNewProduct } from "../../../utils/product.functions";
+import {
+  submitNewProduct,
+  updateProduct,
+} from "../../../utils/product.functions";
 import { TailSpin } from "react-loader-spinner";
+import { instance } from "../../../utils/functions";
 import { useSelector } from "react-redux";
 import { categoryType } from "../../../redux/category.slice";
-import { instance } from "../../../utils/functions";
 
 export default function AddProduct() {
   const [tags, setTags] = useState<Array<string>>([]);
   const [images, setImages] = React.useState([]);
+  // const [userImages, setUserImages] = React.useState([]);
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [price, setPrice] = React.useState(-1);
@@ -22,6 +26,7 @@ export default function AddProduct() {
   const [stock, setStock] = React.useState(-1);
   const [category, setCategory] = React.useState("");
   const [subCategory, setSubCategory] = React.useState("");
+  const [productId, setProductId] = React.useState("");
   const [status, setStatus] = React.useState("Public");
 
   const maxNumber = 7;
@@ -30,12 +35,49 @@ export default function AddProduct() {
     message: "",
   });
   const [showResponse, setShowResponse] = useState(false);
+  const [showImages, setShowImages] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   const onChange = (imageList: ImageListType) => {
     // data for submit
+    setShowImages(true);
     setImages(imageList as never[]);
   };
+
+  console.log(images);
+  useEffect(() => {
+    const productId = new URLSearchParams(window.location.search).get(
+      "product"
+    )!;
+    if (productId) {
+      setProductId(productId);
+
+      instance
+        .get(`product/${productId}`)
+        .then((res) => {
+          setTags(res.data.tags);
+          setTitle(res.data.title);
+          setDescription(res.data.description);
+          setPrice(res.data.price);
+          setOffer(res.data.offer);
+          setStock(res.data.stock);
+          setCategory(res.data.category);
+          setSubCategory(res.data.subCategory);
+          setStatus(res.data.status);
+          let userImages = res.data.images;
+          let i = 0;
+          res.data.images.forEach((item: string) => {
+            userImages[i] = { dataURL: item };
+            i++;
+          });
+          setCategory(res.data.category);
+          setSubCategory(res.data.subCategory);
+          setImages(userImages);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, []);
 
   const [subCategoryList, setSubCategoryList] = useState<
     Array<{
@@ -57,6 +99,17 @@ export default function AddProduct() {
       });
   }
 
+  useEffect(() => {
+    instance
+      .get(`/product/sub-categories/${category}`)
+      .then((res) => {
+        setSubCategoryList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   // getting addresses from redux store
   const categoriesState = useSelector(
     (state: { category: { value: Array<categoryType>; loading: boolean } }) =>
@@ -66,11 +119,9 @@ export default function AddProduct() {
 
   return (
     <article className="border border-black">
-      <h1 className="py-5 text-center text-3xl font-semibold">
-        Create a new Product
-      </h1>
+      <h1 className="py-5 text-center text-3xl font-semibold">Edit Product</h1>
       <div className="grid grid-cols-[300px,1fr]  max-md:grid-cols-1 max-md:grid-rows-[240px,1fr]">
-        <section className="flex flex-col   ">
+        <section className="flex flex-col">
           <ReactImageUploading
             multiple
             value={images}
@@ -93,7 +144,7 @@ export default function AddProduct() {
                   onClick={onImageUpload}
                   {...dragProps}
                 >
-                  <span className="flex h-60 w-60 cursor-pointer  flex-col items-center justify-center gap-2 rounded-sm border border-sky-600 text-2xl text-sky-600 shadow max-md:mr-3 max-vxs:w-full">
+                  <span className=" flex h-60 w-60  cursor-pointer flex-col items-center justify-center gap-2 rounded-sm border border-sky-600 text-2xl text-sky-600 shadow max-md:mr-3 max-vxs:w-full">
                     <BsFillCameraFill />
                     <h2 className="text-base">
                       Click or Drop <br />
@@ -120,6 +171,7 @@ export default function AddProduct() {
                         <RiDeleteBin2Line />
                       </button>
                     </div>
+
                     <img
                       src={image.dataURL}
                       alt="Product Image"
@@ -145,7 +197,7 @@ export default function AddProduct() {
           className="flex flex-col gap-5 p-5"
           onSubmit={(e) => {
             e.preventDefault();
-            submitNewProduct(
+            updateProduct(
               tags,
               images,
               title,
@@ -158,7 +210,8 @@ export default function AddProduct() {
               setShowResponse,
               setIsLoading,
               stock,
-              offer
+              offer,
+              productId
             );
           }}
         >
@@ -175,6 +228,7 @@ export default function AddProduct() {
               className="rounded border border-gray-400 p-2 shadow-inner"
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter Product Title "
+              value={title}
               required
             />
           </span>
@@ -186,6 +240,7 @@ export default function AddProduct() {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Enter Product Description"
               required
+              value={description}
             />
           </span>
           <div className="grid grid-cols-2 gap-5 max-vs:grid-cols-1 max-vs:grid-rows-2">
@@ -198,6 +253,7 @@ export default function AddProduct() {
                 onChange={(e) => setPrice(Number(e.target.value))}
                 placeholder="Enter Product Price"
                 required
+                value={price}
               />
             </span>
             <span className="flex flex-col gap-1">
@@ -239,7 +295,7 @@ export default function AddProduct() {
                 name=""
                 id="product_category"
                 className="rounded border border-gray-500 p-2"
-                defaultValue={""}
+                value={category}
                 onChange={(e) => {
                   const data = categories.find(
                     (category) => category.name == e.target.value
@@ -253,9 +309,27 @@ export default function AddProduct() {
                 <option value="" disabled>
                   --Select Category--
                 </option>
-                {categories.map((category, i) => (
-                  <option key={i}>{category.name}</option>
-                ))}
+
+                {/* {categories.find((category) => (
+                  
+
+                    <option >{category.name}</option>
+                  ))} */}
+
+                {categories.map(
+                  (item, i) =>
+                    item._id === category && (
+                      <option key={i} value={item._id}>
+                        {item.name}
+                      </option>
+                    )
+                )}
+                {categories.map(
+                  (item, i) =>
+                    item._id !== category && (
+                      <option key={i}>{item.name}</option>
+                    )
+                )}
               </select>
             </span>
             <span className="flex flex-col gap-1">
@@ -264,7 +338,7 @@ export default function AddProduct() {
                 name="product_sub_category"
                 id="product_sub_category"
                 className="rounded border border-gray-500 p-2"
-                defaultValue={""}
+                value={subCategory}
                 onChange={(e) => {
                   const data = subCategoryList.find(
                     (category) => category.name == e.target.value
@@ -277,9 +351,20 @@ export default function AddProduct() {
                 <option value="" disabled>
                   --Select sub category--
                 </option>
-                {subCategoryList.map((subCategory, i) => (
-                  <option key={i}>{subCategory.name}</option>
-                ))}
+                {subCategoryList.map(
+                  (item, i) =>
+                    item._id === subCategory && (
+                      <option key={i} value={item._id}>
+                        {item.name}
+                      </option>
+                    )
+                )}
+                {subCategoryList.map(
+                  (item, i) =>
+                    item._id !== subCategory && (
+                      <option key={i}>{item.name}</option>
+                    )
+                )}
               </select>
             </span>
           </div>
@@ -301,6 +386,7 @@ export default function AddProduct() {
               <input
                 type="number"
                 id="product_stock"
+                value={stock}
                 className="rounded border border-gray-400 p-2 shadow-inner"
                 onChange={(e) => setStock(Number(e.target.value))}
                 placeholder="Enter no. of products in stock"
@@ -314,7 +400,7 @@ export default function AddProduct() {
                 id="product_status"
                 className="rounded border border-gray-500 p-2"
                 onChange={(e) => setStatus(e.target.value)}
-                defaultValue={status}
+                value={status}
                 required
               >
                 <option value="public">Public</option>

@@ -24,8 +24,10 @@
     "react-otp-input": "^2.4.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.0",
+    "react-simple-image-slider": "^2.4.1",
     "react-tag-input-component": "^2.0.2",
-    "reactjs-popup": "^2.0.5"
+    "reactjs-popup": "^2.0.5",
+    "swiper": "^9.1.1"
   },
   "devDependencies": {
     "@types/node": "^18.15.3",

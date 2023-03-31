@@ -9,6 +9,7 @@ export const getAllProducts = createAsyncThunk(
 );
 
 export interface productType {
+  _id: string;
   title: string;
   description: string;
   price: Number;

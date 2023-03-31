@@ -1,12 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../../redux/store";
 import { productType, getAllProducts } from "../../../redux/product.slice";
+import { MdDeleteOutline, MdOutlineModeEditOutline } from "react-icons/md";
+import { instance } from "../../../utils/functions";
+import { BsThreeDotsVertical } from "react-icons/bs";
+
+// function hover(id: string, i: number) {
+//   document.querySelectorAll(`.${id} span section`)[
+//     i
+//   ].innerHTML = `<MdOutlineModeEditOutline />`;
+// }
+
+// function leave(id: string, i: number, item: productType) {
+//   document.querySelectorAll(`.${id} span section`)[
+//     i
+//   ].innerHTML = `<p>${item.description}</p>`;
+// }
 
 export default function Products() {
   const navigate = useNavigate();
+
   const dispatch = useDispatch<AppDispatch>();
   //getting user from redux store
   const user = useSelector(
@@ -29,6 +45,7 @@ export default function Products() {
       state.product
   );
   const { value: products, loading } = productsState ?? {};
+  const [showActionButtons, setShowActionButtons] = useState(-1);
   useEffect(() => {
     // dispatching all the addresses from server to the redux store
     dispatch(getAllProducts());
@@ -54,11 +71,12 @@ export default function Products() {
             className="rounded border border-gray-500 p-2 shadow-md"
             placeholder="Search products here"
           />
-          <span className="flex gap-5 text-center">
+
+          <span className="flex gap-5 text-center max-sm:hidden">
             <select
               name="status"
               id="status"
-              className="rounded border border-gray-400 bg-white p-2 text-center shadow-md"
+              className="rounded border border-gray-400 bg-white p-2 text-center shadow-md "
             >
               <option value="All">All</option>
               <option value="Active">Public</option>
@@ -69,7 +87,7 @@ export default function Products() {
             <select
               name="show"
               id="show"
-              className="rounded border border-gray-400 bg-white p-2 text-center shadow-md"
+              className="rounded  border border-gray-400 bg-white p-2 text-center shadow-md "
             >
               <option value="10">10</option>
               <option value="20">20</option>
@@ -88,8 +106,11 @@ export default function Products() {
               <option value="year">year</option>
             </select>
           </span>
+          <span className="hidden self-center text-2xl max-sm:flex">
+            <BsThreeDotsVertical />
+          </span>
         </div>
-        <table className="w-full text-center">
+        <table className="w-full text-center max-sm:hidden">
           <thead>
             <tr>
               <th>S.No.</th>
@@ -106,17 +127,45 @@ export default function Products() {
             {products.map((item, i) => (
               <tr key={i} className="hover:bg-slate-200 ">
                 <td>{i + 1}</td>
-                <td className="flex  gap-5 p-2">
+                <td
+                  className="product_col flex gap-5 p-2"
+                  onMouseEnter={() => setShowActionButtons(i)}
+                  onMouseLeave={() => setShowActionButtons(-1)}
+                >
                   <img
                     src={item.images[0]}
                     alt={item.title}
                     className="  h-20 w-20 rounded object-contain shadow"
                   />
                   <span className="flex flex-col gap-2 text-left">
-                    <h1 className="line-clamp-1">{item.title}</h1>
-                    <p className="text-xs text-gray-700 line-clamp-2">
-                      {item.description}
-                    </p>
+                    <h1 className="font-medium line-clamp-1">{item.title}</h1>
+                    <section className="text-xs text-gray-700 line-clamp-2">
+                      {showActionButtons === i ? (
+                        <span className="flex gap-3 text-xl ">
+                          <MdOutlineModeEditOutline
+                            className="cursor-pointer hover:text-blue-700"
+                            onClick={(e) =>
+                              navigate(`edit-product?product=${item._id}`)
+                            }
+                          />
+                          <MdDeleteOutline
+                            className="cursor-pointer hover:text-red-700"
+                            onClick={(e) => {
+                              instance
+                                .get(`/product/delete/${item._id}`)
+                                .then(() => {
+                                  location.reload();
+                                })
+                                .catch((error) => {
+                                  console.log(error);
+                                });
+                            }}
+                          />
+                        </span>
+                      ) : (
+                        <p>{item.description}</p>
+                      )}
+                    </section>
                   </span>
                 </td>
                 {/* <td className="p-2">{item.title}</td> */}
@@ -131,6 +180,25 @@ export default function Products() {
             ))}
           </tbody>
         </table>
+        <div className="m-5 hidden grid-cols-[repeat(2,minmax(200px,200px))] gap-5 max-sm:grid">
+          {products.map((item, i) => (
+            <section
+              key={i}
+              className="flex flex-col gap-3 border border-black p-5 text-center"
+            >
+              <img
+                src={item.images[0]}
+                className="m-auto h-40 w-40 rounded border border-gray-400 object-contain shadow"
+              />
+              <span className="flex flex-col gap-1">
+                <h1 className="font-medium line-clamp-1">{item.title}</h1>
+                <p className="text-xs text-gray-600 line-clamp-2">
+                  {item.description}
+                </p>
+              </span>
+            </section>
+          ))}
+        </div>
       </main>
     </article>
   );

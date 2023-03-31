@@ -14,12 +14,14 @@ const productSchema = new mongoose.Schema({
     required: true,
   },
   category: {
-    type: String,
+    type: mongoose.Types.ObjectId,
+    ref: "Category",
     required: true,
   },
   subCategory: {
-    type: String,
-    required: true,
+    type: mongoose.Types.ObjectId,
+    ref: "SubCategory",
+    required: false,
   },
   images: {
     type: [String],
@@ -31,7 +33,9 @@ const productSchema = new mongoose.Schema({
   },
   status: {
     type: String,
+    default: "Public",
     required: true,
+    enum: ["Public", "Private"],
   },
   offer: {
     type: Number,

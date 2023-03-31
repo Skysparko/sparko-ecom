@@ -16,10 +16,14 @@ import { BiEdit, BiLogOut } from "react-icons/bi";
 import { MdOutlineShoppingBag } from "react-icons/md";
 import { logout } from "../utils/auth.functions";
 import { RxDashboard } from "react-icons/rx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { categoryType, getAllCategories } from "../redux/category.slice";
+import { AppDispatch } from "../redux/store";
 
 export default function Header() {
   const navigate = useNavigate();
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const user = useSelector(
     (state: {
@@ -41,13 +45,18 @@ export default function Header() {
 
   const [profileMenu, setProfileMenu] = useState(false);
 
+  // getting addresses from redux store
+  const categoriesState = useSelector(
+    (state: { category: { value: Array<categoryType>; loading: boolean } }) =>
+      state.category
+  );
+  const { value: categories } = categoriesState ?? {};
+
   useEffect(() => {
-    window.addEventListener("resize", () => {
-      setWidth(window.innerWidth > 0 ? window.innerWidth : screen.width);
-    });
     // Elements
     const header: HTMLElement | null = document.getElementById("header");
 
+    dispatch(getAllCategories());
     //logic for responsive design
     if (width < 850) {
       header?.classList.add("grid-cols-[1fr,1fr]");
@@ -65,7 +74,7 @@ export default function Header() {
         setProfileMenu(false);
       }
     });
-  });
+  }, []);
 
   return (
     <>
@@ -105,9 +114,9 @@ export default function Header() {
                   className="cursor-pointer rounded-l-md border border-black bg-white text-center outline-none"
                 >
                   <option value="All">All</option>
-                  <option value="Clothing">Clothing</option>
-                  <option value="Electronics">Electronics</option>
-                  <option value="Furniture">Furniture</option>
+                  {categories.map((category, i) => (
+                    <option key={i}>{category.name}</option>
+                  ))}
                 </select>
                 {/* search bar */}
                 <input
@@ -147,7 +156,7 @@ export default function Header() {
               {profileMenu && (
                 <div
                   id="user_profile_menu"
-                  className="absolute right-14 mt-3 w-60 rounded-lg bg-white p-2 text-base text-black shadow-lg max-lg:right-8 max-lg:w-56 max-lg:text-[0.9rem] max-sm:hidden"
+                  className="absolute right-14 z-10 mt-3 w-60 rounded-lg bg-white p-2 text-base text-black shadow-lg max-lg:right-8 max-lg:w-56 max-lg:text-[0.9rem] max-sm:hidden"
                 >
                   <span className="absolute right-14 -top-2 float-right h-5 w-5 rotate-45  bg-white"></span>
                   <ul>

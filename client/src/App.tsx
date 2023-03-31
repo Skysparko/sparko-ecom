@@ -40,6 +40,7 @@ import AddAddress from "./pages/user/manage_addresses/AddAddress";
 import EditAddress from "./pages/user/manage_addresses/EditAddress";
 import { authenticateUser } from "./utils/auth.functions";
 import AddProduct from "./pages/dashboard/products/AddProduct";
+import EditProduct from "./pages/dashboard/products/EditProduct";
 
 function App() {
   const dispatch = useDispatch();
@@ -80,6 +81,7 @@ function App() {
                   <Route path="products">
                     <Route index element={<Products />} />
                     <Route path="add-product" element={<AddProduct />} />
+                    <Route path="edit-product" element={<EditProduct />} />
                   </Route>
                   <Route path="transactions" element={<Transactions />} />
                   <Route path="shipments" element={<Shipments />} />
