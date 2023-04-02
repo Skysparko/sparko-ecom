@@ -41,35 +41,6 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     }
   } */
 
-.swiper-slide {
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 50%;
-    height: 50vh;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-
-@media screen and (max-width:1000px){
-  .swiper-slide {
-   
-    height: 40vh;
-   
-}
-  
-}
-
-@media screen and (max-width:500px){
-  .swiper-slide {
-   
-    height: 30vh;
-   
-}
-  
-}
 
 
 

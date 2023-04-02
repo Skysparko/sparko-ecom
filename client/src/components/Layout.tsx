@@ -8,7 +8,7 @@ export default function Layout() {
   return (
     <div>
       {/* header */}
-      <header>
+      <header className="mb-14 max-lg:mb-20">
         <Header />
       </header>
       {/* main */}

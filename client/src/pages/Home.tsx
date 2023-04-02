@@ -59,10 +59,12 @@ export default function Home() {
 
   // getting addresses from redux store
   const categoriesState = useSelector(
-    (state: { product: { value: Array<categoryType>; loading: boolean } }) =>
-      state.product
+    (state: { category: { value: Array<categoryType>; loading: boolean } }) =>
+      state.category
   );
   const { value: categories } = categoriesState ?? {};
+
+  // console.log(categories);
 
   const images = [
     {
@@ -94,7 +96,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="h-[2000px] bg-gray-100">
+    <div className=" bg-gray-100">
       <Swiper
         modules={[Navigation, Pagination, A11y, Autoplay]}
         slidesPerView={1}
@@ -106,8 +108,8 @@ export default function Home() {
         }}
         pagination={{ clickable: true, dynamicBullets: true }}
         // scrollbar={{ draggable: true }}
-        onSwiper={(swiper) => console.log(swiper)}
-        onSlideChange={() => console.log("slide change")}
+        // onSwiper={(swiper) => console.log(swiper)}
+        // onSlideChange={() => console.log("slide change")}
         // spaceBetween={50}
         // slidesPerView={1}
         // onSlideChange={() => console.log("slide change")}
@@ -116,15 +118,150 @@ export default function Home() {
         <SwiperSlide>
           <img src={bg1} alt="" />
         </SwiperSlide>
-        <SwiperSlide>
+        {/* <SwiperSlide>
           <img src={bg2} alt="" />
-        </SwiperSlide>
+        </SwiperSlide> */}
         <SwiperSlide>
           <img src={bg3} alt="" />
         </SwiperSlide>
         {/* <SwiperSlide>Slide 4</SwiperSlide> */}
       </Swiper>
-      <Swiper
+
+      {categories.map(
+        (category, index) =>
+          category.name !== "Other" &&
+          index < 4 && (
+            <div
+              key={index}
+              className="my-5 border border-gray-400 bg-white py-5"
+            >
+              <span className="mb-5 ml-5 flex flex-col gap-2">
+                <h1 className="text-3xl font-semibold ">{category.name}</h1>
+                <p className="text-sm text-gray-600 line-clamp-1">
+                  {category.description}
+                </p>
+              </span>
+              <Swiper
+                modules={[Navigation, Pagination, A11y, Autoplay]}
+                slidesPerView={1}
+                navigation
+                breakpoints={{
+                  680: {
+                    slidesPerView: 2,
+                  },
+                  970: {
+                    slidesPerView: 3,
+                  },
+                  1270: {
+                    slidesPerView: 4,
+                  },
+                  1600: {
+                    slidesPerView: 5,
+                  },
+                }}
+                // onSwiper={(swiper) => console.log(swiper)}
+                // onSlideChange={() => console.log("slide change")}
+                spaceBetween={20}
+                className=" px-10"
+              >
+                {products.map(
+                  (item, i) =>
+                    item.category === category._id && (
+                      <SwiperSlide
+                        key={i}
+                        className=" flex flex-col gap-5 rounded border border-gray-400 bg-white p-5 text-center shadow-sm shadow-gray-400"
+                      >
+                        <img
+                          src={item.images[0]}
+                          alt=""
+                          className="m-auto h-32 w-32  object-contain"
+                        />
+                        <span className="flex flex-col gap-2">
+                          <h1 className="font-medium line-clamp-1">
+                            {item.title}
+                          </h1>
+                          <p className="text-xs text-gray-700 line-clamp-2">
+                            {item.description}
+                          </p>
+                        </span>
+                        <span>Price:${`${item.price}`}</span>
+                        <span className="m-auto flex gap-2">
+                          <button className="rounded border border-gray-400 px-5 py-2 shadow">
+                            Buy Now
+                          </button>
+                          <button className="rounded border border-gray-400 bg-sky-700 px-5 py-2 text-white shadow">
+                            Add to Cart
+                          </button>
+                        </span>
+                      </SwiperSlide>
+                    )
+                )}
+              </Swiper>
+            </div>
+          )
+      )}
+      {/* {categories.map(
+        (category, index) =>
+          category.name === "Other" && (
+            <>
+              <h1>{category.name}</h1>
+              <Swiper
+                key={index}
+                modules={[Navigation, Pagination, A11y, Autoplay]}
+                slidesPerView={1}
+                navigation
+                breakpoints={{
+                  640: {
+                    slidesPerView: 2,
+                  },
+                  768: {
+                    slidesPerView: 4,
+                  },
+                  1024: {
+                    slidesPerView: 5,
+                  },
+                }}
+                pagination={{ clickable: true, dynamicBullets: true }}
+                onSwiper={(swiper) => console.log(swiper)}
+                onSlideChange={() => console.log("slide change")}
+              >
+                {products.map(
+                  (item, i) =>
+                    item.category === category._id && (
+                      <SwiperSlide
+                        key={i}
+                        className="rounded border border-black bg-white p-5 text-center shadow-lg"
+                      >
+                        <img
+                          src={item.images[0]}
+                          alt=""
+                          className="h-32 w-32 object-contain"
+                        />
+                        <span>
+                          <h1 className="font-medium line-clamp-1">
+                            {item.title}
+                          </h1>
+                          <p className="text-xs text-gray-700 line-clamp-2">
+                            {item.description}
+                          </p>
+                        </span>
+                        <span>Price:${`${item.price}`}</span>
+                        <span className="flex gap-2">
+                          <button className="rounded border border-black px-5 py-2">
+                            Buy Now
+                          </button>
+                          <button className="rounded border border-black px-5 py-2">
+                            Add to Cart
+                          </button>
+                        </span>
+                      </SwiperSlide>
+                    )
+                )}
+              </Swiper>
+            </>
+          )
+      )} */}
+      {/* <Swiper
         modules={[Navigation, Pagination, A11y, Autoplay]}
         slidesPerView={1}
         navigation
@@ -148,7 +285,7 @@ export default function Home() {
             item.category !== categories[0]._id && (
               <SwiperSlide
                 key={i}
-                className="m-5 gap-5 rounded border border-black p-5 text-center shadow-lg"
+                className=" rounded border border-black p-5 text-center shadow-lg"
               >
                 <img
                   src={item.images[0]}
@@ -173,29 +310,31 @@ export default function Home() {
               </SwiperSlide>
             )
         )}
-      </Swiper>
+      </Swiper> */}
       {/* <section className="flex gap-5 border border-black p-5 ">
-        {products.map((item, i) => (
-          <div key={i} className="border border-black">
-            <img
-              src={item.images[0]}
-              alt=""
-              className="h-32 w-32 object-contain"
-            />
-            <span>
-              <h1 className="font-medium line-clamp-1">{item.title}</h1>
-              <p className="text-xs text-gray-700 line-clamp-2">
-                {item.description}
-              </p>
-            </span>
-            <span>Price:${`${item.price}`}</span>
-            <span className="flex gap-2">
-              <button className="border border-black">Buy Now</button>
-              <button className="border border-black">Add to Cart</button>
-            </span>
-          </div>
-        ))}
-      </section> */}
+        {products.map(
+          (item, i) =>
+            
+              <div key={i} className="border border-black">
+                <img
+                  src={item.images[0]}
+                  alt=""
+                  className="h-32 w-32 object-contain"
+                />
+                <span>
+                  <h1 className="font-medium line-clamp-1">{item.title}</h1>
+                  <p className="text-xs text-gray-700 line-clamp-2">
+                    {item.description}
+                  </p>
+                </span>
+                <span>Price:${`${item.price}`}</span>
+                <span className="flex gap-2">
+                  <button className="border border-black">Buy Now</button>
+                  <button className="border border-black">Add to Cart</button>
+                </span>
+              </div>
+            ) */}
+      {/* ?section> */}
     </div>
   );
 }

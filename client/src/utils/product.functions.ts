@@ -119,7 +119,7 @@ export const updateProduct = (
 export const fetchAllProducts = async () => {
   try {
     const res = await instance.get("/product/all");
-    console.log(res.data);
+
     return res.data;
   } catch (error) {
     console.log(error);
@@ -131,7 +131,6 @@ export const fetchAllProducts = async () => {
 export const fetchAllCategories = async () => {
   try {
     const res = await instance.get("/product/categories");
-    console.log(res.data);
     return res.data;
   } catch (error) {
     console.log(error);

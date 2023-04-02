@@ -70,6 +70,14 @@ export default function AddProduct() {
             i++;
           });
           setCategory(res.data.category);
+          instance
+            .get(`/product/sub-categories/${res.data.category}`)
+            .then((res) => {
+              setSubCategoryList(res.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
           setSubCategory(res.data.subCategory);
           setImages(userImages);
         })

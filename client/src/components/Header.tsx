@@ -77,7 +77,7 @@ export default function Header() {
   }, []);
 
   return (
-    <>
+    <div className="fixed top-0 z-10  w-full">
       {/* Side bar */}
       <aside>
         <SideBar />
@@ -269,6 +269,6 @@ export default function Header() {
           </form>
         </div>
       )}
-    </>
+    </div>
   );
 }
