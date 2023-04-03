@@ -19,6 +19,8 @@ import { RxDashboard } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import { categoryType, getAllCategories } from "../redux/category.slice";
 import { AppDispatch } from "../redux/store";
+import { cartType } from "../redux/cart.slice";
+import { fetchAllCartItems } from "../utils/cart.functions";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -45,18 +47,18 @@ export default function Header() {
 
   const [profileMenu, setProfileMenu] = useState(false);
 
-  // getting addresses from redux store
+  // getting categories from redux store
   const categoriesState = useSelector(
     (state: { category: { value: Array<categoryType>; loading: boolean } }) =>
       state.category
   );
   const { value: categories } = categoriesState ?? {};
+  const [showEmpty, setShowEmpty] = useState(true);
 
   useEffect(() => {
     // Elements
     const header: HTMLElement | null = document.getElementById("header");
 
-    dispatch(getAllCategories());
     //logic for responsive design
     if (width < 850) {
       header?.classList.add("grid-cols-[1fr,1fr]");

@@ -8,7 +8,7 @@ import {
 import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import Authentication from "./components/auth/Authentication";
-import Cart from "./pages/Cart";
+import EmptyCart from "./pages/cart/EmptyCart";
 import { createContext, useEffect, useState } from "react";
 import { instance } from "./utils/functions";
 import Signing from "./pages/auth/Signing";
@@ -41,9 +41,15 @@ import EditAddress from "./pages/user/manage_addresses/EditAddress";
 import { authenticateUser } from "./utils/auth.functions";
 import AddProduct from "./pages/dashboard/products/AddProduct";
 import EditProduct from "./pages/dashboard/products/EditProduct";
+import { getAllProducts } from "./redux/product.slice";
+import { getAllCategories } from "./redux/category.slice";
+import { cartType, getAllCartItems } from "./redux/cart.slice";
+import { AppDispatch } from "./redux/store";
+import Cart from "./components/Cart";
+import CartWithItems from "./pages/cart/CartWithItems";
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   //loading state
   const [isLoading, setIsLoading] = useState(true);
   //getting user's info using redux store
@@ -60,10 +66,22 @@ function App() {
       };
     }) => state.user
   );
+
+  // getting cartItems from redux store
+  const cartState = useSelector(
+    (state: { cart: { value: Array<cartType>; loading: boolean } }) =>
+      state.cart
+  );
+  const { value: cartItems } = cartState ?? {};
+
   useEffect(() => {
     //authenticating user on every component mounting
     authenticateUser(setIsLoading, dispatch);
-  }, [dispatch]);
+
+    dispatch(getAllProducts());
+    dispatch(getAllCategories());
+    dispatch(getAllCartItems());
+  }, []);
 
   return (
     <>
@@ -117,7 +135,10 @@ function App() {
              access: anyone 
               */}
               <Route index element={<Home />} />
-              <Route path="cart" element={<Cart />} />
+              <Route path="cart" element={<Cart />}>
+                <Route index element={<CartWithItems />} />
+                <Route path="empty" element={<EmptyCart />} />
+              </Route>
             </Route>
 
             {/* authentication 

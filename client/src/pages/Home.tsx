@@ -17,6 +17,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import "swiper/css/parallax";
 import { categoryType, getAllCategories } from "../redux/category.slice";
+import { addItemToCart } from "../utils/cart.functions";
 import {
   A11y,
   Navigation,
@@ -30,6 +31,7 @@ import {
   EffectFade,
   Autoplay,
 } from "swiper";
+import { getAllCartItems } from "../redux/cart.slice";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -57,7 +59,7 @@ export default function Home() {
   );
   const { value: products, loading } = productsState ?? {};
 
-  // getting addresses from redux store
+  // getting categories from redux store
   const categoriesState = useSelector(
     (state: { category: { value: Array<categoryType>; loading: boolean } }) =>
       state.category
@@ -88,9 +90,6 @@ export default function Home() {
   );
 
   useEffect(() => {
-    // dispatching all the addresses from server to the redux store
-    dispatch(getAllProducts());
-    dispatch(getAllCategories());
     setWidth(window.innerWidth > 0 ? window.innerWidth : screen.width);
     // return clearInterval(interval);
   }, []);
@@ -107,13 +106,6 @@ export default function Home() {
           disableOnInteraction: false,
         }}
         pagination={{ clickable: true, dynamicBullets: true }}
-        // scrollbar={{ draggable: true }}
-        // onSwiper={(swiper) => console.log(swiper)}
-        // onSlideChange={() => console.log("slide change")}
-        // spaceBetween={50}
-        // slidesPerView={1}
-        // onSlideChange={() => console.log("slide change")}
-        // onSwiper={(swiper) => console.log(swiper)}
       >
         <SwiperSlide>
           <img src={bg1} alt="" />
@@ -159,8 +151,6 @@ export default function Home() {
                     slidesPerView: 5,
                   },
                 }}
-                // onSwiper={(swiper) => console.log(swiper)}
-                // onSlideChange={() => console.log("slide change")}
                 spaceBetween={20}
                 className=" px-10"
               >
@@ -184,12 +174,26 @@ export default function Home() {
                             {item.description}
                           </p>
                         </span>
-                        <span>Price:${`${item.price}`}</span>
+                        <span className="flex gap-1">
+                          <h4>Price: ₹</h4>
+
+                          {item.offer > 0 ? (
+                            <>
+                              <h4 className="text-red-700 line-through">{`${item.price}`}</h4>
+                              <h4 className="">{`${item.price}`}</h4>
+                            </>
+                          ) : (
+                            <h4 className="">{`${item.price}`}</h4>
+                          )}
+                        </span>
                         <span className="m-auto flex gap-2">
                           <button className="rounded border border-gray-400 px-5 py-2 shadow">
                             Buy Now
                           </button>
-                          <button className="rounded border border-gray-400 bg-sky-700 px-5 py-2 text-white shadow">
+                          <button
+                            className="rounded border border-gray-400 bg-sky-700 px-5 py-2 text-white shadow"
+                            onClick={() => addItemToCart(item._id)}
+                          >
                             Add to Cart
                           </button>
                         </span>

@@ -6,6 +6,7 @@ import userRoutes from "./routes/user.routes.js";
 import helpRoutes from "./routes/help.routes.js";
 import productRoutes from "./routes/product.routes.js";
 import addressRoutes from "./routes/address.routes.js";
+import cartRoutes from "./routes/cart.routes.js";
 import logger from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -36,6 +37,7 @@ app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/help", helpRoutes);
 app.use("/api/v1/address", addressRoutes);
 app.use("/api/v1/product", productRoutes);
+app.use("/api/v1/cart", cartRoutes);
 
 //listening on port 8080
 app.listen(process.env.PORT || 8080, () => {

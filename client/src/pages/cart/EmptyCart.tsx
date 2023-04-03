@@ -1,10 +1,14 @@
-import React from "react";
-import emptyShoppingCart from "../assets/video/emptyShoppingCart.gif";
+import React, { useState } from "react";
+import emptyShoppingCart from "../../assets/video/emptyShoppingCart.gif";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { cartType, getAllCartItems } from "../../redux/cart.slice";
+import { useEffect } from "react";
+import { AppDispatch } from "../../redux/store";
 
-export default function Cart() {
+export default function EmptyCart() {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const user = useSelector(
     (state: {
       user: {
@@ -18,6 +22,17 @@ export default function Cart() {
       };
     }) => state.user
   );
+
+  // getting cartItems from redux store
+  const cartState = useSelector(
+    (state: { cart: { value: Array<cartType>; loading: boolean } }) =>
+      state.cart
+  );
+  const { value: cartItems } = cartState ?? {};
+  useEffect(() => {
+    console.log(cartItems);
+  }, []);
+
   return (
     <section className=" border border-black bg-slate-100 p-10 max-lg:p-5 max-vxs:p-0">
       <div className="flex items-center justify-evenly bg-white p-10 shadow-lg max-md:flex-col max-md:gap-10 max-vxs:p-5 ">
