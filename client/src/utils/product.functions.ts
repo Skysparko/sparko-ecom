@@ -118,7 +118,7 @@ export const updateProduct = (
 // function to fetch all the address using UserId
 export const fetchAllProducts = async () => {
   try {
-    const res = await instance.get("/product/all");
+    const res = await instance.get("/product/");
 
     return res.data;
   } catch (error) {

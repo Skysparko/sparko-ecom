@@ -29,7 +29,7 @@ router.post("/create", isAuthorized, createProduct);
 //@route GET api/v1/product/all
 //@desc get all products
 //@access Authorized user
-router.get("/all", isAuthorized, getProducts);
+router.get("/", getProducts);
 
 //@route GET api/v1/product/categories
 //@desc get all categories
@@ -49,7 +49,7 @@ router.get("/:id", isAuthorized, getProductUsingId);
 //@route GET api/v1/product/delete/:id
 //@desc delete product using id
 //@access Authorized user
-router.get("/delete/:id", isAuthorized, deleteProductUsingId);
+router.delete("/delete/:id", isAuthorized, deleteProductUsingId);
 
 //@route PUT api/v1/product/update
 //@desc update product using id

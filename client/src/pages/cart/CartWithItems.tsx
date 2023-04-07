@@ -29,25 +29,44 @@ export default function CartWithItems() {
   const { value: products, loading } = productsState ?? {};
 
   const [change, setChange] = useState(true);
-  const [showEmpty, setShowEmpty] = useState(true);
+  const [total, setTotal] = useState(0);
+
+  const user = useSelector(
+    (state: {
+      user: {
+        email: string;
+        isAuthenticated: boolean;
+        name: string;
+        gender: string;
+        role: string;
+        id: string;
+        pfp: string;
+      };
+    }) => state.user
+  );
 
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    setChange(false);
-    dispatch(getAllProducts());
+    if (user.isAuthenticated) {
+      setChange(false);
+      dispatch(getAllProducts());
 
-    dispatch(getAllCartItems());
+      dispatch(getAllCartItems());
+    }
   }, [change]);
 
   return (
     <article className="bg-gray-100 px-10 ">
       <h1 className="p-5 pb-0 text-4xl font-semibold">Your Cart</h1>
       <section className="grid grid-cols-[3fr,1fr] ">
-        <div className="m-5 flex flex-col gap-5 rounded border border-gray-400 bg-white p-5 shadow">
+        <div
+          id="cart_items"
+          className="m-5 flex flex-col gap-5 rounded border border-gray-400 bg-white p-5 shadow"
+        >
           <h1 className="p-5 pb-0 text-2xl font-medium">Cart Items</h1>
           {cartItems.map((item, index) =>
             products.map(
-              (product, index) =>
+              (product, i) =>
                 product._id === item.productID && (
                   <div key={index} className="flex gap-5 border-b  p-5 ">
                     <input type="checkbox" name="select" id="selectItem" />
@@ -99,6 +118,10 @@ export default function CartWithItems() {
                 )
             )
           )}
+          <div className="-mt-5 flex items-center justify-end gap-2 border-t-2 border-black ">
+            <h3 className=" pb-0 text-2xl font-medium">Total:-</h3>
+            <h3 className="text-xl">₹{total}</h3>
+          </div>
         </div>
         <div>
           <section className="m-5 rounded border border-gray-400 bg-white shadow">

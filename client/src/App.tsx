@@ -80,7 +80,7 @@ function App() {
 
     dispatch(getAllProducts());
     dispatch(getAllCategories());
-    dispatch(getAllCartItems());
+    user.isAuthenticated && dispatch(getAllCartItems());
   }, []);
 
   return (
