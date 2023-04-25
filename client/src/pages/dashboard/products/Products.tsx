@@ -7,6 +7,7 @@ import { productType, getAllProducts } from "../../../redux/product.slice";
 import { MdDeleteOutline, MdOutlineModeEditOutline } from "react-icons/md";
 import { instance } from "../../../utils/functions";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { deleteProduct } from "../../../utils/product.functions";
 
 // function hover(id: string, i: number) {
 //   document.querySelectorAll(`.${id} span section`)[
@@ -150,16 +151,7 @@ export default function Products() {
                           />
                           <MdDeleteOutline
                             className="cursor-pointer hover:text-red-700"
-                            onClick={(e) => {
-                              instance
-                                .get(`/product/delete/${item._id}`)
-                                .then(() => {
-                                  location.reload();
-                                })
-                                .catch((error) => {
-                                  console.log(error);
-                                });
-                            }}
+                            onClick={() => deleteProduct(item._id)}
                           />
                         </span>
                       ) : (

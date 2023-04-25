@@ -43,6 +43,7 @@ export const submitNewProduct = (
       offer,
     })
     .then((response) => {
+      console.log(response);
       location.href = "/dashboard/products";
       setIsLoading(false);
     })
@@ -131,6 +132,18 @@ export const fetchAllProducts = async () => {
 export const fetchAllCategories = async () => {
   try {
     const res = await instance.get("/product/categories");
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+//delete a product from the database
+export const deleteProduct = async (id: string) => {
+  try {
+    const res = await instance.delete(`product/delete/${id}`);
+    location.reload();
     return res.data;
   } catch (error) {
     console.log(error);

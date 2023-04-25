@@ -39,7 +39,7 @@ app.use("/api/v1/address", addressRoutes);
 app.use("/api/v1/product", productRoutes);
 app.use("/api/v1/cart", cartRoutes);
 
-//listening on port 8080
+//listening on port 8081
 app.listen(process.env.PORT || 8080, () => {
   console.log("server is running");
   connectDB();

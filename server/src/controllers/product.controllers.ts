@@ -47,13 +47,14 @@ export const createProduct = async (req: Request, res: Response) => {
     let imagesUrlList = [];
     for (let i = 0; i < images.length; i++) {
       const image = await cloudinary.uploader.upload(images[i].dataURL);
+
       imagesUrlList.push(image.secure_url);
     }
 
     const data = new Product({
       date: getCurrentDate(),
       tags,
-      images: imagesUrlList,
+      images: ["yo"],
       title,
       description,
       price,
