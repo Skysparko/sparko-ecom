@@ -47,6 +47,7 @@ import { cartType, getAllCartItems } from "./redux/cart.slice";
 import { AppDispatch } from "./redux/store";
 import Cart from "./components/Cart";
 import CartWithItems from "./pages/cart/CartWithItems";
+import ProductInfo from "./pages/ProductInfo";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -135,6 +136,7 @@ function App() {
              access: anyone 
               */}
               <Route index element={<Home />} />
+              <Route path="product" element={<ProductInfo />} />
               <Route path="cart" element={<Cart />}>
                 <Route index element={<CartWithItems />} />
                 <Route path="empty" element={<EmptyCart />} />

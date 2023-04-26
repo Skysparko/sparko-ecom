@@ -10,7 +10,6 @@ import {
   removeItemFromCart,
 } from "../../utils/cart.functions";
 import { useState } from "react";
-import { instance } from "../../utils/functions";
 import EmptyCart from "./EmptyCart";
 
 export default function CartWithItems() {

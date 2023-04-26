@@ -12,7 +12,7 @@ export interface productType {
   _id: string;
   title: string;
   description: string;
-  price: Number;
+  price: number;
   category: string;
   subCategory: string;
   images: Array<string>;

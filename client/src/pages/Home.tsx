@@ -152,14 +152,15 @@ export default function Home() {
                   },
                 }}
                 spaceBetween={20}
-                className=" px-10"
+                className=" px-10 py-5"
               >
                 {products.map(
                   (item, i) =>
                     item.category === category._id && (
                       <SwiperSlide
                         key={i}
-                        className=" flex flex-col gap-5 rounded border border-gray-400 bg-white p-5 text-center shadow-sm shadow-gray-400"
+                        className=" flex cursor-pointer flex-col gap-5 rounded border border-gray-400 bg-white p-5 text-center shadow-sm shadow-gray-400 transition-transform hover:scale-105"
+                        onClick={() => navigate(`product?p=${item._id}`)}
                       >
                         <img
                           src={item.images[0]}
@@ -180,7 +181,9 @@ export default function Home() {
                           {item.offer > 0 ? (
                             <>
                               <h4 className="text-red-700 line-through">{`${item.price}`}</h4>
-                              <h4 className="">{`${item.price}`}</h4>
+                              <h4 className="">{`${Math.round(
+                                item.price / item.offer
+                              )}`}</h4>
                             </>
                           ) : (
                             <h4 className="">{`${item.price}`}</h4>
