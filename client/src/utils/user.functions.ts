@@ -13,7 +13,7 @@ export const updatePersonalInformation = (
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   e.preventDefault();
-
+  console.log(username, profileImage, gender, x, y, width, height);
   setLoading(true);
   instance
     .put("/user/update-user", {
@@ -28,7 +28,7 @@ export const updatePersonalInformation = (
     .then((response) => {
       if (response.status === 200) {
         setLoading(false);
-        location.reload();
+        // location.reload();
       }
     })
     .catch((error) => {

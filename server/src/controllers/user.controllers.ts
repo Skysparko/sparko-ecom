@@ -32,17 +32,26 @@ export const userUpdate = async (req: Request, res: Response) => {
     if (x === 0 && y === 0 && height === 0 && width === 0) {
       user.username = username;
       user.gender = gender;
+      await user.save();
     } else {
-      const result = await cloudinary.uploader.upload(profileImage, {
-        crop: "crop",
-        height,
-        width,
-        x,
-        y,
-      });
-      user.profileImage = result.secure_url;
+      console.log("yo");
+      const result = cloudinary.uploader
+        .upload(profileImage, {
+          crop: "crop",
+          height,
+          width,
+          x,
+          y,
+          timeout: 6000000,
+        })
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-    await user.save();
+
     return res.status(200).send("User successfully updated");
   } catch (error) {
     console.log(error);
