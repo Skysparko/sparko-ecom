@@ -12,6 +12,7 @@ import sendEmail from "../services/email";
 import { emailUpdateOtpMail } from "../utils/emailTemplates";
 import speakeasy from "speakeasy";
 import dotenv from "dotenv";
+import axios from "axios";
 dotenv.config();
 
 //updating user information
@@ -35,23 +36,31 @@ export const userUpdate = async (req: Request, res: Response) => {
       await user.save();
     } else {
       console.log("yo");
-      const result = cloudinary.uploader
-        .upload(profileImage, {
+      const result = await axios.post(
+        `https://api.cloudinary.com/v1_1/${process.env.CLOUD_NAME}/image/upload`,
+        {
+          file: profileImage,
+          api_key: process.env.CLOUD_API_KEY,
+          width: width,
+          height: height,
           crop: "crop",
-          height,
-          width,
           x,
           y,
-          timeout: 6000000,
-        })
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          signature: process.env.CLOUD_API_SECRET,
+          timeout: 600000,
+        }
+      );
+      // const result = await cloudinary.uploader.upload(profileImage, {
+      //   crop: "crop",
+      //   height,
+      //   width,
+      //   x,
+      //   y,
+      //   public_id: "olympic_flag",
+      // });
+      console.log(result);
+      // await user.save();
     }
-
     return res.status(200).send("User successfully updated");
   } catch (error) {
     console.log(error);
