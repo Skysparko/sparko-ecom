@@ -50,11 +50,11 @@ export const createProduct = async (req: Request, res: Response) => {
 
       imagesUrlList.push(image.secure_url);
     }
-
+    //new data will be added here
     const data = new Product({
       date: getCurrentDate(),
       tags,
-      images: ["yo"],
+      images: imagesUrlList,
       title,
       description,
       price,

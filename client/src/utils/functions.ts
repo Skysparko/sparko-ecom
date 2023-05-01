@@ -11,7 +11,7 @@ export const getCookie = (cookieName: string) => {
 
 //axios instance method for api requests
 export const instance = axios.create({
-  baseURL: `http://localhost:8080/api/v1/`,
+  baseURL: `https://sparko-ecom.shubhamrakhecha.repl.co/api/v1/`,
   headers: {
     authorization: `Bearer ${getCookie("bearerToken")}`,
   },
