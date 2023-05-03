@@ -1,3 +1,4 @@
+import { EditorState } from "draft-js";
 import { dialogBoxPropsType } from "../components/utils/DialogBox";
 import { instance } from "./functions";
 
@@ -14,20 +15,12 @@ export const submitNewProduct = (
   setShowResponse: React.Dispatch<React.SetStateAction<boolean>>,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
   stock: number,
-  offer: number
+  offer: number,
+  freeDelivery: boolean,
+  cashOnDelivery: boolean,
+  returnPolicy: boolean,
+  returnDuration: number
 ) => {
-  // console.log(
-  //   tags,
-  //   images,
-  //   title,
-  //   description,
-  //   price,
-  //   category,
-  //   subCategory,
-  //   status,
-  //   stock,
-  //   offer
-  // );
   setIsLoading(true);
   instance
     .post("product/create", {
@@ -41,6 +34,9 @@ export const submitNewProduct = (
       status,
       stock,
       offer,
+      freeDelivery,
+      cashOnDelivery,
+      returnPolicy,
     })
     .then((response) => {
       console.log(response);
@@ -72,20 +68,13 @@ export const updateProduct = (
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
   stock: number,
   offer: number,
-  id: string
+  id: string,
+  freeDelivery: boolean,
+  cashOnDelivery: boolean,
+  returnPolicy: boolean
 ) => {
-  // console.log(
-  //   tags,
-  //   images,
-  //   title,
-  //   description,
-  //   price,
-  //   category,
-  //   subCategory,
-  //   status,
-  //   stock,
-  //   offer
-  // );
+  console.log(description);
+
   setIsLoading(true);
   instance
     .put(`product/update/${id}`, {
@@ -99,6 +88,9 @@ export const updateProduct = (
       status,
       stock,
       offer,
+      freeDelivery,
+      cashOnDelivery,
+      returnPolicy,
     })
     .then((response) => {
       console.log(response);
@@ -120,6 +112,10 @@ export const updateProduct = (
 export const fetchAllProducts = async () => {
   try {
     const res = await instance.get("/product/");
+
+    res.data[1].description = `${
+      JSON.parse(res.data[1].description).blocks[0].text
+    }`;
 
     return res.data;
   } catch (error) {

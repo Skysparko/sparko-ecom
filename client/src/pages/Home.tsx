@@ -182,7 +182,7 @@ export default function Home() {
                             <>
                               <h4 className="text-red-700 line-through">{`${item.price}`}</h4>
                               <h4 className="">{`${Math.round(
-                                item.price / item.offer
+                                item.price - (item.offer / 100) * item.price
                               )}`}</h4>
                             </>
                           ) : (

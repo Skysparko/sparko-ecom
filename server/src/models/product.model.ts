@@ -45,6 +45,25 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  freeDelivery: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
+  cashOnDelivery: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
+  returnPolicy: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
+  returnDuration: {
+    type: Number,
+    required: true,
+  },
   date: {
     type: String,
     required: true,

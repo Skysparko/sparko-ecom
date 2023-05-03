@@ -14,6 +14,8 @@ import { TailSpin } from "react-loader-spinner";
 import { instance } from "../../../utils/functions";
 import { useSelector } from "react-redux";
 import { categoryType } from "../../../redux/category.slice";
+import { Editor } from "react-draft-wysiwyg";
+import { EditorState, convertFromRaw, convertToRaw } from "draft-js";
 
 export default function AddProduct() {
   const [tags, setTags] = useState<Array<string>>([]);
@@ -29,6 +31,12 @@ export default function AddProduct() {
   const [productId, setProductId] = React.useState("");
   const [status, setStatus] = React.useState("Public");
 
+  const [editor, setEditor] = useState(() => EditorState.createEmpty());
+
+  const [returnPolicy, setReturnPolicy] = useState(false);
+  const [freeDelivery, setFreeDelivery] = useState(false);
+  const [cashOnDelivery, setCashOnDelivery] = useState(false);
+
   const maxNumber = 7;
   const [response, setResponse] = useState<dialogBoxPropsType>({
     type: "info",
@@ -43,7 +51,6 @@ export default function AddProduct() {
     setImages(imageList as never[]);
   };
 
-  console.log(images);
   useEffect(() => {
     const productId = new URLSearchParams(window.location.search).get(
       "product"
@@ -57,6 +64,9 @@ export default function AddProduct() {
           setTags(res.data.tags);
           setTitle(res.data.title);
           setDescription(res.data.description);
+          const yo = convertFromRaw(JSON.parse(res.data.description));
+
+          setEditor(EditorState.createWithContent(yo));
           setPrice(res.data.price);
           setOffer(res.data.offer);
           setStock(res.data.stock);
@@ -205,6 +215,7 @@ export default function AddProduct() {
           className="flex flex-col gap-5 p-5"
           onSubmit={(e) => {
             e.preventDefault();
+
             updateProduct(
               tags,
               images,
@@ -219,7 +230,10 @@ export default function AddProduct() {
               setIsLoading,
               stock,
               offer,
-              productId
+              productId,
+              freeDelivery,
+              cashOnDelivery,
+              returnPolicy
             );
           }}
         >
@@ -242,14 +256,22 @@ export default function AddProduct() {
           </span>
           <span className="flex flex-col gap-1">
             <label htmlFor="product_description">Description:</label>
-            <textarea
+            <span
+              className="rounded border border-gray-400 shadow"
               id="product_description"
-              className="rounded border border-gray-400 p-2 shadow-inner"
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Enter Product Description"
-              required
-              value={description}
-            />
+            >
+              <Editor
+                editorState={editor}
+                toolbarClassName="toolbarClassName"
+                wrapperClassName="wrapperClassName"
+                editorClassName="editorClassName"
+                onEditorStateChange={setEditor}
+                onChange={() => {
+                  const data = editor.getCurrentContent();
+                  setDescription(JSON.stringify(convertToRaw(data)));
+                }}
+              />
+            </span>
           </span>
           <div className="grid grid-cols-2 gap-5 max-vs:grid-cols-1 max-vs:grid-rows-2">
             <span className="flex flex-col gap-1">

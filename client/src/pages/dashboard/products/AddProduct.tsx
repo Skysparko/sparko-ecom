@@ -11,6 +11,9 @@ import { TailSpin } from "react-loader-spinner";
 import { useSelector } from "react-redux";
 import { categoryType } from "../../../redux/category.slice";
 import { instance } from "../../../utils/functions";
+import { EditorState, convertToRaw } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 export default function AddProduct() {
   const [tags, setTags] = useState<Array<string>>([]);
@@ -23,6 +26,13 @@ export default function AddProduct() {
   const [category, setCategory] = React.useState("");
   const [subCategory, setSubCategory] = React.useState("");
   const [status, setStatus] = React.useState("Public");
+  const [editor, setEditor] = useState(() => EditorState.createEmpty());
+
+  const [returnPolicy, setReturnPolicy] = useState(false);
+  const [freeDelivery, setFreeDelivery] = useState(false);
+  const [cashOnDelivery, setCashOnDelivery] = useState(false);
+
+  const [returnDuration, setReturnDuration] = useState(0);
 
   const maxNumber = 7;
   const [response, setResponse] = useState<dialogBoxPropsType>({
@@ -158,7 +168,11 @@ export default function AddProduct() {
               setShowResponse,
               setIsLoading,
               stock,
-              offer
+              offer,
+              freeDelivery,
+              cashOnDelivery,
+              returnPolicy,
+              returnDuration
             );
           }}
         >
@@ -180,13 +194,30 @@ export default function AddProduct() {
           </span>
           <span className="flex flex-col gap-1">
             <label htmlFor="product_description">Description:</label>
-            <textarea
+            <span
+              className="rounded border border-gray-400 shadow"
+              id="product_description"
+            >
+              <Editor
+                editorState={editor}
+                toolbarClassName="toolbarClassName"
+                wrapperClassName="wrapperClassName"
+                editorClassName="editorClassName"
+                onEditorStateChange={setEditor}
+                onChange={() => {
+                  const data = editor.getCurrentContent();
+                  setDescription(JSON.stringify(convertToRaw(data)));
+                }}
+              />
+            </span>
+
+            {/* <textarea
               id="product_description"
               className="rounded border border-gray-400 p-2 shadow-inner"
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Enter Product Description"
               required
-            />
+            /> */}
           </span>
           <div className="grid grid-cols-2 gap-5 max-vs:grid-cols-1 max-vs:grid-rows-2">
             <span className="flex flex-col gap-1">
@@ -320,6 +351,67 @@ export default function AddProduct() {
                 <option value="public">Public</option>
                 <option value="private">Private</option>
               </select>
+            </span>
+          </div>
+          <div className="flex flex-col gap-1">
+            <h2>Services:</h2>
+            <span className="flex gap-1">
+              <input
+                type="checkbox"
+                name=""
+                id="free_delivery"
+                onChange={(e) => {
+                  if ((e.target as HTMLInputElement).checked) {
+                    setFreeDelivery(true);
+                  } else {
+                    setFreeDelivery(false);
+                  }
+                }}
+              />
+              <label htmlFor="free_delivery">Free Delivery</label>
+            </span>
+            <span className="flex gap-1">
+              <input
+                type="checkbox"
+                name=""
+                id="pay_on_delivery"
+                onChange={(e) => {
+                  if ((e.target as HTMLInputElement).checked) {
+                    setCashOnDelivery(true);
+                  } else {
+                    setCashOnDelivery(false);
+                  }
+                }}
+              />
+              <label htmlFor="pay_on_delivery">Pay on Delivery</label>
+            </span>
+            <span className="flex items-center gap-1">
+              <input
+                type="checkbox"
+                name=""
+                id="return_policy"
+                onChange={(e) => {
+                  if ((e.target as HTMLInputElement).checked) {
+                    setReturnPolicy(true);
+                  } else {
+                    setReturnPolicy(false);
+                  }
+                }}
+              />
+
+              <label htmlFor="return_policy ">Return Policy</label>
+              {returnPolicy && (
+                <span className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    name=""
+                    id="return_policy"
+                    className="w-12 rounded  border border-gray-500 p-1 shadow-inner"
+                    onChange={(e) => setReturnDuration(Number(e.target.value))}
+                  />
+                  <p>days</p>
+                </span>
+              )}
             </span>
           </div>
           <button className="m-auto w-24 rounded border bg-blue-500 py-2 px-6 text-white shadow-md">

@@ -10,6 +10,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../redux/store";
 import { instance } from "../utils/functions";
+import Rating from "react-rating";
+import { Editor } from "react-draft-wysiwyg";
+import { EditorState, convertFromRaw } from "draft-js";
+import { BsStar, BsStarFill } from "react-icons/bs";
 //this function change style of the selected div
 const highlightSelected = (i: number) => {
   const image = document.querySelectorAll("#images img");
@@ -62,6 +66,7 @@ export default function ProductInfo() {
   const [mainImage, setMainImage] = useState("");
 
   const [productChange, setProductChange] = useState(false);
+  const [editor, setEditor] = useState(() => EditorState.createEmpty());
 
   useEffect(() => {
     const productId = new URLSearchParams(window.location.search).get("p")!;
@@ -75,6 +80,9 @@ export default function ProductInfo() {
           setTags(res.data.tags);
           setTitle(res.data.title);
           setDescription(res.data.description);
+          const yo = convertFromRaw(JSON.parse(res.data.description));
+
+          setEditor(EditorState.createWithContent(yo));
           setPrice(res.data.price);
           setOffer(res.data.offer);
           setStock(res.data.stock);
@@ -109,7 +117,8 @@ export default function ProductInfo() {
   return (
     <article>
       <div className="grid grid-cols-[1.5fr,2fr,1fr]">
-        <section className="flex flex-col items-center justify-center gap-10">
+        {/* image section */}
+        <section className="flex flex-col items-center gap-10 py-32">
           <span className="">
             <img
               src={mainImage}
@@ -140,20 +149,47 @@ export default function ProductInfo() {
             ))}
           </span>
         </section>
-        <section className="flex flex-col  items-center  justify-evenly gap-2 p-5 text-center ">
-          <h1 className="text-3xl font-semibold">{title}</h1>
-          <span className=" flex gap-1 text-xl">
-            <h4>₹</h4>
+
+        {/* text section */}
+        <section className="flex flex-col  p-5">
+          <h1 className="border-b border-gray-300  p-3 text-3xl font-semibold">
+            {title}
+          </h1>
+          <span className="border-b border-gray-300 p-3  text-xl ">
+            <Rating
+              initialRating={3.5}
+              emptySymbol={<BsStar color="orange" />}
+              fullSymbol={<BsStarFill color="orange" />}
+              readonly
+            />
+          </span>
+
+          <span className="flex flex-col  gap-1 border-b border-gray-300 p-3 text-xl">
             {offer! > 0 ? (
-              <span className="flex gap-1">
-                <h4 className="text-red-700 line-through">{`${price}`}</h4>
-                <h4 className="">{`${Math.round(price / offer)}`}</h4>
+              <span className="">
+                <span className="flex gap-3 text-2xl">
+                  <h4 className="text-red-700">-{offer}%</h4>
+                  <h4 className="">
+                    ₹{Math.round(price - (offer / 100) * price)}
+                  </h4>
+                </span>
+                <span className="flex gap-2 text-sm text-gray-600">
+                  <h4>M.R.P.:</h4>
+                  <h4 className=" line-through">₹{price}</h4>
+                </span>
               </span>
             ) : (
-              <h4 className="">{`${price}`}</h4>
+              <h4 className="">₹{price}</h4>
             )}
+            <p className="text-sm text-gray-700">Inclusive of all taxes</p>
           </span>
-          <p>{description}</p>
+          <div>
+            <Editor
+              editorState={editor}
+              toolbarStyle={{ display: "none" }}
+              readOnly={true}
+            />
+          </div>
 
           <span className=" flex w-96 flex-col  gap-2 ">
             <button className=" rounded border border-gray-400 px-5 py-2 shadow">
@@ -167,6 +203,8 @@ export default function ProductInfo() {
             </button>
           </span>
         </section>
+        {/* Similar Products section */}
+
         <section className="flex h-screen flex-col gap-5 overflow-auto p-5">
           <h1 className="text-center text-3xl font-semibold">
             Similar Products
@@ -201,7 +239,7 @@ export default function ProductInfo() {
                       <>
                         <h4 className="text-red-700 line-through">{`${item.price}`}</h4>
                         <h4 className="">{`${Math.round(
-                          item.price / item.offer
+                          item.price - (item.offer / 100) * item.price
                         )}`}</h4>
                       </>
                     ) : (

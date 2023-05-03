@@ -20,6 +20,10 @@ export const createProduct = async (req: Request, res: Response) => {
       status,
       stock,
       offer,
+      freeDelivery,
+      cashOnDelivery,
+      returnPolicy,
+      returnDuration,
     } = req.body;
     if (
       !title ||
@@ -31,7 +35,11 @@ export const createProduct = async (req: Request, res: Response) => {
       !status ||
       !tags ||
       !offer ||
-      !stock
+      !stock ||
+      !freeDelivery ||
+      !cashOnDelivery ||
+      !returnPolicy ||
+      !returnDuration
     ) {
       return res.status(400).send("Fill all the required fields");
     }
@@ -63,6 +71,10 @@ export const createProduct = async (req: Request, res: Response) => {
       status,
       stock,
       offer,
+      freeDelivery,
+      cashOnDelivery,
+      returnPolicy,
+      returnDuration,
     });
     await data.save();
     console.log(data);
