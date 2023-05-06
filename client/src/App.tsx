@@ -48,6 +48,7 @@ import { AppDispatch } from "./redux/store";
 import Cart from "./components/Cart";
 import CartWithItems from "./pages/cart/CartWithItems";
 import ProductInfo from "./pages/ProductInfo";
+import Checkout from "./pages/Checkout";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -138,9 +139,16 @@ function App() {
               <Route index element={<Home />} />
               <Route path="product" element={<ProductInfo />} />
               <Route path="cart" element={<Cart />}>
-                <Route index element={<CartWithItems />} />
-                <Route path="empty" element={<EmptyCart />} />
+                <Route
+                  index
+                  element={
+                    user.isAuthenticated ? <CartWithItems /> : <EmptyCart />
+                  }
+                />
               </Route>
+              {user.isAuthenticated && (
+                <Route path="checkout" element={<Checkout />} />
+              )}
             </Route>
 
             {/* authentication 

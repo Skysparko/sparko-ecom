@@ -160,7 +160,10 @@ export default function Home() {
                       <SwiperSlide
                         key={i}
                         className=" flex cursor-pointer flex-col gap-5 rounded border border-gray-400 bg-white p-5 text-center shadow-sm shadow-gray-400 transition-transform hover:scale-105"
-                        onClick={() => navigate(`product?p=${item._id}`)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`product?p=${item._id}`);
+                        }}
                       >
                         <img
                           src={item.images[0]}
@@ -190,12 +193,25 @@ export default function Home() {
                           )}
                         </span>
                         <span className="m-auto flex gap-2">
-                          <button className="rounded border border-gray-400 px-5 py-2 shadow">
+                          <button
+                            className="rounded border border-gray-400 px-5 py-2 shadow"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              user.isAuthenticated
+                                ? navigate("/checkout")
+                                : navigate("/authentication");
+                            }}
+                          >
                             Buy Now
                           </button>
                           <button
                             className="rounded border border-gray-400 bg-sky-700 px-5 py-2 text-white shadow"
-                            onClick={() => addItemToCart(item._id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              user.isAuthenticated
+                                ? addItemToCart(item._id)
+                                : navigate("/authentication");
+                            }}
                           >
                             Add to Cart
                           </button>

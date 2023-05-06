@@ -44,7 +44,7 @@ router.get("/sub-categories", getSubCategories);
 //@route GET api/v1/product/:id
 //@desc get product using id
 //@access Authorized user
-router.get("/:id", isAuthorized, getProductUsingId);
+router.get("/:id", getProductUsingId);
 
 //@route GET api/v1/product/delete/:id
 //@desc delete product using id

@@ -17,6 +17,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 export default function AddProduct() {
   const [tags, setTags] = useState<Array<string>>([]);
+  const [sizeList, setSizeList] = useState<Array<string>>([]);
   const [images, setImages] = React.useState([]);
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
@@ -31,8 +32,11 @@ export default function AddProduct() {
   const [returnPolicy, setReturnPolicy] = useState(false);
   const [freeDelivery, setFreeDelivery] = useState(false);
   const [cashOnDelivery, setCashOnDelivery] = useState(false);
+  const [warranty, setWarranty] = useState(false);
+  const [showSize, setShowSize] = useState(false);
 
   const [returnDuration, setReturnDuration] = useState(0);
+  const [warrantyDuration, setWarrantyDuration] = useState(0);
 
   const maxNumber = 7;
   const [response, setResponse] = useState<dialogBoxPropsType>({
@@ -172,7 +176,10 @@ export default function AddProduct() {
               freeDelivery,
               cashOnDelivery,
               returnPolicy,
-              returnDuration
+              returnDuration,
+              warranty,
+              warrantyDuration,
+              sizeList
             );
           }}
         >
@@ -210,14 +217,6 @@ export default function AddProduct() {
                 }}
               />
             </span>
-
-            {/* <textarea
-              id="product_description"
-              className="rounded border border-gray-400 p-2 shadow-inner"
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Enter Product Description"
-              required
-            /> */}
           </span>
           <div className="grid grid-cols-2 gap-5 max-vs:grid-cols-1 max-vs:grid-rows-2">
             <span className="flex flex-col gap-1">
@@ -275,8 +274,10 @@ export default function AddProduct() {
                   const data = categories.find(
                     (category) => category.name == e.target.value
                   );
+                  data?.name === "Clothing"
+                    ? setShowSize(true)
+                    : setShowSize(false);
                   setCategory(`${data?._id}`);
-                  // console.log(data?._id);
                   getSubCategoriesUsingCategory(`${data?._id}`);
                 }}
                 required
@@ -353,67 +354,193 @@ export default function AddProduct() {
               </select>
             </span>
           </div>
-          <div className="flex flex-col gap-1">
-            <h2>Services:</h2>
-            <span className="flex gap-1">
-              <input
-                type="checkbox"
-                name=""
-                id="free_delivery"
-                onChange={(e) => {
-                  if ((e.target as HTMLInputElement).checked) {
-                    setFreeDelivery(true);
-                  } else {
-                    setFreeDelivery(false);
-                  }
-                }}
-              />
-              <label htmlFor="free_delivery">Free Delivery</label>
-            </span>
-            <span className="flex gap-1">
-              <input
-                type="checkbox"
-                name=""
-                id="pay_on_delivery"
-                onChange={(e) => {
-                  if ((e.target as HTMLInputElement).checked) {
-                    setCashOnDelivery(true);
-                  } else {
-                    setCashOnDelivery(false);
-                  }
-                }}
-              />
-              <label htmlFor="pay_on_delivery">Pay on Delivery</label>
-            </span>
-            <span className="flex items-center gap-1">
-              <input
-                type="checkbox"
-                name=""
-                id="return_policy"
-                onChange={(e) => {
-                  if ((e.target as HTMLInputElement).checked) {
-                    setReturnPolicy(true);
-                  } else {
-                    setReturnPolicy(false);
-                  }
-                }}
-              />
-
-              <label htmlFor="return_policy ">Return Policy</label>
-              {returnPolicy && (
-                <span className="flex items-center gap-2">
+          <section className="grid grid-cols-2 gap-5 max-vs:grid-cols-1 max-vs:grid-rows-2 ">
+            {showSize && (
+              <div className="flex  flex-col gap-1 px-5">
+                <h2>Available Sizes:</h2>
+                <div className="flex flex-col gap-1 px-2">
+                  <span className="flex gap-1">
+                    <input
+                      type="checkbox"
+                      name=""
+                      id="Small"
+                      onChange={(e) => {
+                        if ((e.target as HTMLInputElement).checked) {
+                          setSizeList([...sizeList, "Small"]);
+                        } else {
+                          setSizeList(
+                            sizeList.filter((item) => item !== "Small")
+                          );
+                        }
+                      }}
+                    />
+                    <label htmlFor="Small">Small</label>
+                  </span>
+                  <span className="flex gap-1">
+                    <input
+                      type="checkbox"
+                      name=""
+                      id="Medium"
+                      onChange={(e) => {
+                        if ((e.target as HTMLInputElement).checked) {
+                          setSizeList([...sizeList, "Medium"]);
+                        } else {
+                          setSizeList(
+                            sizeList.filter((item) => item !== "Medium")
+                          );
+                        }
+                      }}
+                    />
+                    <label htmlFor="Medium">Medium</label>
+                  </span>
+                  <span className="flex gap-1">
+                    <input
+                      type="checkbox"
+                      name=""
+                      id="Large"
+                      onChange={(e) => {
+                        if ((e.target as HTMLInputElement).checked) {
+                          setSizeList([...sizeList, "Large"]);
+                        } else {
+                          setSizeList(
+                            sizeList.filter((item) => item !== "Large")
+                          );
+                        }
+                      }}
+                    />
+                    <label htmlFor="Large">Large</label>
+                  </span>
+                  <span className="flex gap-1">
+                    <input
+                      type="checkbox"
+                      name=""
+                      id="extraLarge"
+                      onChange={(e) => {
+                        if ((e.target as HTMLInputElement).checked) {
+                          setSizeList([...sizeList, "extraLarge"]);
+                        } else {
+                          setSizeList(
+                            sizeList.filter((item) => item !== "extraLarge")
+                          );
+                        }
+                      }}
+                    />
+                    <label htmlFor="extraLarge">Extra Large</label>
+                  </span>
+                  <span className="flex gap-1">
+                    <input
+                      type="checkbox"
+                      name=""
+                      id="2xl"
+                      onChange={(e) => {
+                        if ((e.target as HTMLInputElement).checked) {
+                          setSizeList([...sizeList, "2xLarge"]);
+                        } else {
+                          setSizeList(
+                            sizeList.filter((item) => item !== "2xLarge")
+                          );
+                        }
+                      }}
+                    />
+                    <label htmlFor="2xl">2xLarge</label>
+                  </span>
+                </div>
+              </div>
+            )}
+            <div className="flex flex-col gap-1 px-5">
+              <h2>Available Services:</h2>
+              <div className="flex flex-col gap-1 px-2">
+                <span className="flex gap-1">
                   <input
-                    type="number"
+                    type="checkbox"
+                    name=""
+                    id="free_delivery"
+                    onChange={(e) => {
+                      if ((e.target as HTMLInputElement).checked) {
+                        setFreeDelivery(true);
+                      } else {
+                        setFreeDelivery(false);
+                      }
+                    }}
+                  />
+                  <label htmlFor="free_delivery">Free Delivery</label>
+                </span>
+                <span className="flex gap-1">
+                  <input
+                    type="checkbox"
+                    name=""
+                    id="pay_on_delivery"
+                    onChange={(e) => {
+                      if ((e.target as HTMLInputElement).checked) {
+                        setCashOnDelivery(true);
+                      } else {
+                        setCashOnDelivery(false);
+                      }
+                    }}
+                  />
+                  <label htmlFor="pay_on_delivery">Pay on Delivery</label>
+                </span>
+                <span className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
                     name=""
                     id="return_policy"
-                    className="w-12 rounded  border border-gray-500 p-1 shadow-inner"
-                    onChange={(e) => setReturnDuration(Number(e.target.value))}
+                    onChange={(e) => {
+                      if ((e.target as HTMLInputElement).checked) {
+                        setReturnPolicy(true);
+                      } else {
+                        setReturnPolicy(false);
+                      }
+                    }}
                   />
-                  <p>days</p>
+
+                  <label htmlFor="return_policy">Return Policy</label>
+                  {returnPolicy && (
+                    <span className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        name=""
+                        className="w-12 rounded  border border-gray-500 p-1 shadow-inner"
+                        onChange={(e) =>
+                          setReturnDuration(Number(e.target.value))
+                        }
+                      />
+                      <p>days</p>
+                    </span>
+                  )}
                 </span>
-              )}
-            </span>
-          </div>
+                <span className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
+                    name=""
+                    id="warranty"
+                    onChange={(e) => {
+                      if ((e.target as HTMLInputElement).checked) {
+                        setWarranty(true);
+                      } else {
+                        setWarranty(false);
+                      }
+                    }}
+                  />
+
+                  <label htmlFor="warranty">Warranty</label>
+                  {warranty && (
+                    <span className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        name=""
+                        className="w-12 rounded  border border-gray-500 p-1 shadow-inner"
+                        onChange={(e) =>
+                          setWarrantyDuration(Number(e.target.value))
+                        }
+                      />
+                      <p>Year</p>
+                    </span>
+                  )}
+                </span>
+              </div>
+            </div>
+          </section>
           <button className="m-auto w-24 rounded border bg-blue-500 py-2 px-6 text-white shadow-md">
             {isLoading ? (
               <h1 className=" flex justify-center">

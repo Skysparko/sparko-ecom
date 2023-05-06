@@ -21,6 +21,13 @@ export interface productType {
   stock: number;
   offer: number;
   date: string;
+  freeDelivery: boolean;
+  cashOnDelivery: boolean;
+  returnPolicy: boolean;
+  returnDuration: number;
+  warranty: boolean;
+  warrantyDuration: number;
+  sizeList: Array<string>;
 }
 
 const productSlice = createSlice({

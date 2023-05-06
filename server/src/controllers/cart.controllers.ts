@@ -8,6 +8,7 @@ import {
 import dotenv from "dotenv";
 import Help from "../models/help.model";
 import Cart from "../models/cart.model";
+import Product from "../models/product.model";
 dotenv.config();
 
 export const addToCart = async (req: Request, res: Response) => {
@@ -19,9 +20,14 @@ export const addToCart = async (req: Request, res: Response) => {
     }
 
     const isProductFound = await Cart.findOne({ productID: productID });
+    const product = await Product.findById(productID);
+    if (!product) {
+      return res.status(404).send("Product not found");
+    }
     if (isProductFound) {
       isProductFound.quantity += 1;
-      isProductFound.save();
+
+      await isProductFound.save();
       return res.status(200).send(isProductFound);
     }
     const user = Object(req)["user"];

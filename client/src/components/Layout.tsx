@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -8,9 +8,10 @@ export default function Layout() {
   return (
     <div>
       {/* header */}
-      <header className="mb-[3.9rem] max-lg:mb-[5.5rem]">
+      <header>
         <Header />
       </header>
+
       {/* main */}
       <main>
         <Outlet />

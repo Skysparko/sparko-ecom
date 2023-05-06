@@ -24,6 +24,9 @@ export const createProduct = async (req: Request, res: Response) => {
       cashOnDelivery,
       returnPolicy,
       returnDuration,
+      warranty,
+      warrantyDuration,
+      sizeList,
     } = req.body;
     if (
       !title ||
@@ -39,11 +42,17 @@ export const createProduct = async (req: Request, res: Response) => {
       !freeDelivery ||
       !cashOnDelivery ||
       !returnPolicy ||
-      !returnDuration
+      !returnDuration ||
+      !warranty ||
+      !warrantyDuration ||
+      !sizeList
     ) {
       return res.status(400).send("Fill all the required fields");
     }
 
+    if (sizeList.length === 0) {
+      return res.status(400).send("Please select at least one size");
+    }
     if (images.length === 0) {
       return res.status(403).send("No images found");
     }
@@ -75,6 +84,9 @@ export const createProduct = async (req: Request, res: Response) => {
       cashOnDelivery,
       returnPolicy,
       returnDuration,
+      warranty,
+      warrantyDuration,
+      sizeList,
     });
     await data.save();
     console.log(data);

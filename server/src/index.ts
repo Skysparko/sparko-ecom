@@ -40,7 +40,7 @@ app.use("/api/v1/product", productRoutes);
 app.use("/api/v1/cart", cartRoutes);
 
 //listening on port 8080
-app.listen(process.env.PORT || 8080, () => {
+app.listen(process.env.PORT || 8124, () => {
   console.log("server is running");
   connectDB();
 });

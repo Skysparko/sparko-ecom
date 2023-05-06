@@ -19,7 +19,10 @@ export const submitNewProduct = (
   freeDelivery: boolean,
   cashOnDelivery: boolean,
   returnPolicy: boolean,
-  returnDuration: number
+  returnDuration: number,
+  warranty: boolean,
+  warrantyDuration: number,
+  sizeList: Array<string>
 ) => {
   setIsLoading(true);
   instance
@@ -37,6 +40,10 @@ export const submitNewProduct = (
       freeDelivery,
       cashOnDelivery,
       returnPolicy,
+      returnDuration,
+      warranty,
+      warrantyDuration,
+      sizeList,
     })
     .then((response) => {
       console.log(response);
