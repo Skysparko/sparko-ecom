@@ -47,6 +47,7 @@
     "otp-generator": "^4.0.1",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
-    "speakeasy": "^2.0.0"
+    "speakeasy": "^2.0.0",
+    "stripe": "^12.4.0"
   }
 }

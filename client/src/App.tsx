@@ -48,7 +48,7 @@ import { AppDispatch } from "./redux/store";
 import Cart from "./components/Cart";
 import CartWithItems from "./pages/cart/CartWithItems";
 import ProductInfo from "./pages/ProductInfo";
-import Checkout from "./pages/Checkout";
+import Checkout from "./components/Checkout";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();

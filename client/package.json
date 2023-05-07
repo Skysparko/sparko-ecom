@@ -19,6 +19,8 @@
     "otp-input-react": "^0.3.0",
     "react": "^18.2.0",
     "react-autocomplete-hint": "^2.0.0",
+    "react-credit-card-input": "^1.1.5",
+    "react-credit-cards": "^0.8.3",
     "react-dom": "^18.2.0",
     "react-draft-wysiwyg": "^1.15.0",
     "react-easy-crop": "^4.7.0",
@@ -35,6 +37,7 @@
     "react-simple-image-slider": "^2.4.1",
     "react-tag-input-component": "^2.0.2",
     "reactjs-popup": "^2.0.5",
+    "styled-components": "^6.0.0-rc.1",
     "swiper": "^9.1.1"
   },
   "resolutions": {
@@ -44,6 +47,7 @@
     "@types/draft-js": "^0.11.10",
     "@types/node": "^18.15.3",
     "@types/react": "^18.2.0",
+    "@types/react-credit-cards": "^0.8.1",
     "@types/react-dom": "^18.2.1",
     "@types/react-draft-wysiwyg": "^1.13.4",
     "@types/react-image-magnify": "^2.7.1",
