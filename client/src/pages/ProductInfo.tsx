@@ -333,12 +333,18 @@ export default function ProductInfo() {
             </div>
 
             <span className=" m-auto flex gap-5 py-5 max-vs:flex-col">
-              <button className="rounded border border-gray-400 px-5 py-2 shadow max-vs:m-auto">
+              <button
+                className="rounded border border-gray-400 px-5 py-2 shadow max-vs:m-auto"
+                onClick={() => navigate("/checkout?p=" + productId)}
+              >
                 Buy Now
               </button>
               <button
                 className="rounded border border-gray-400 bg-sky-700 px-5 py-2 text-white shadow max-vs:m-auto"
-                onClick={() => addItemToCart(`${productId}`)}
+                onClick={() => {
+                  addItemToCart(`${productId}`);
+                  window.location.reload();
+                }}
               >
                 Add to Cart
               </button>

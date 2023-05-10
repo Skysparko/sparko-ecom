@@ -19,8 +19,9 @@ import { RxDashboard } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import { categoryType, getAllCategories } from "../redux/category.slice";
 import { AppDispatch } from "../redux/store";
-import { cartType } from "../redux/cart.slice";
+import { cartType, getAllCartItems } from "../redux/cart.slice";
 import { fetchAllCartItems } from "../utils/cart.functions";
+import { getCartItemCount } from "../utils/functions";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -76,8 +77,16 @@ export default function Header() {
         setProfileMenu(false);
       }
     });
-  }, []);
+    user.isAuthenticated && dispatch(getAllCartItems());
+  }, [dispatch]);
+  // getting cartItems from redux store
+  const cartState = useSelector(
+    (state: { cart: { value: Array<cartType>; loading: boolean } }) =>
+      state.cart
+  );
+  const { value: cartItems } = cartState ?? {};
 
+  const cartItemCount = getCartItemCount(cartItems);
   const header = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -231,9 +240,12 @@ export default function Header() {
               </span>
             )}
             {/* cart section */}
-            <button className="text-2xl max-sm:text-[1.3rem] max-xs:text-[1.25rem]">
+            <button className="relative  text-2xl max-sm:text-[1.3rem] max-xs:text-[1.25rem] ">
               <Link to="/cart">
                 <RiShoppingCartFill />
+                <span className="absolute top-0 right-0 -mr-2 rounded-full border border-green-600 bg-green-500 px-1.5 py-0.5 text-xs">
+                  {cartItemCount}
+                </span>
               </Link>
             </button>
           </div>

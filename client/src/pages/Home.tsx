@@ -78,12 +78,6 @@ export default function Home() {
     {
       url: bg3,
     },
-    // {
-    //   url: bg4,
-    // },
-    // {
-    //   url: bg5,
-    // },
   ];
   const [width, setWidth] = useState(
     window.innerWidth > 0 ? window.innerWidth : screen.width
@@ -198,7 +192,7 @@ export default function Home() {
                             onClick={(e) => {
                               e.stopPropagation();
                               user.isAuthenticated
-                                ? navigate("/checkout")
+                                ? navigate("/checkout?p=" + item._id)
                                 : navigate("/authentication");
                             }}
                           >
@@ -208,9 +202,12 @@ export default function Home() {
                             className="rounded border border-gray-400 bg-sky-700 px-5 py-2 text-white shadow"
                             onClick={(e) => {
                               e.stopPropagation();
-                              user.isAuthenticated
-                                ? addItemToCart(item._id)
-                                : navigate("/authentication");
+                              if (user.isAuthenticated) {
+                                addItemToCart(item._id);
+                                window.location.reload();
+                              } else {
+                                navigate("/authentication");
+                              }
                             }}
                           >
                             Add to Cart
