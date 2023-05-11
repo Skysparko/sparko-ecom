@@ -7,6 +7,7 @@ import helpRoutes from "./routes/help.routes.js";
 import productRoutes from "./routes/product.routes.js";
 import addressRoutes from "./routes/address.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
+import orderRoutes from "./routes/order.routes.js";
 import logger from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -32,6 +33,7 @@ app.use(
 app.use(cookieParser());
 
 //routes
+app.use("/api/v1/order", orderRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/help", helpRoutes);
@@ -40,7 +42,7 @@ app.use("/api/v1/product", productRoutes);
 app.use("/api/v1/cart", cartRoutes);
 
 //listening on port 8080
-app.listen(process.env.PORT || 8124, () => {
+app.listen(process.env.PORT || 8080, () => {
   console.log("server is running");
   connectDB();
 });
