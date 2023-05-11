@@ -3,7 +3,7 @@ import { MultiStepForm, Step } from "react-multi-form";
 import Payment from "../pages/checkout/Payment";
 import Address from "../pages/checkout/Address";
 import Review from "../pages/checkout/Review";
-import { getTotalPriceWithOffer } from "../utils/functions";
+import { getCartItemCount, getTotalPriceWithOffer } from "../utils/functions";
 import { useSelector } from "react-redux";
 import { cartType } from "../redux/cart.slice";
 import { productType } from "../redux/product.slice";
@@ -11,11 +11,15 @@ export default function Checkout() {
   const [activeStep, setActiveStep] = useState(1);
   const [selectedAddress, setSelectedAddress] = React.useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = React.useState("");
-  const [selectedProducts, setSelectedProducts] =
-    React.useState<Array<string>>();
+
+  const [selectedProduct, setSelectedProduct] = React.useState("");
 
   const [itemCount, setItemCount] = React.useState(0);
   const [price, setPrice] = React.useState(0);
+  const [quantity, setQuantity] = React.useState(1);
+  // const [price, setPrice] = React.useState(0);
+
+  const [isCart, setIsCart] = React.useState(false);
 
   const cartState = useSelector(
     (state: { cart: { value: Array<cartType>; loading: boolean } }) =>
@@ -35,17 +39,22 @@ export default function Checkout() {
   );
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("p")!;
-    const items = id.split("X").filter((product) => product !== "");
-    setSelectedProducts(items);
-    setItemCount(items.length);
-    if (items.length > 1) {
-      const price = getTotalPriceWithOffer(cartItems, products);
-      setPrice(price);
-    }
+    const cart = new URLSearchParams(window.location.search).get("cart")!;
 
-    if (items.length === 1) {
-      products.map((product) => {
-        product._id === items[0] && setPrice(product.price);
+    if (cart) {
+      setIsCart(true);
+      setItemCount(getCartItemCount(cartItems));
+      setPrice(getTotalPriceWithOffer(cartItems, products));
+    } else {
+      const items = id;
+      setSelectedProduct(items);
+      setItemCount(1);
+
+      products.find((product) => {
+        product._id === items &&
+          setPrice(
+            Math.round(product.price - (product.offer / 100) * product.price)
+          );
       });
     }
     setWidth(window.innerWidth > 0 ? window.innerWidth : screen.width);
@@ -79,10 +88,13 @@ export default function Checkout() {
             setActiveStep={setActiveStep}
             selectedAddress={selectedAddress}
             selectedPaymentMethod={selectedPaymentMethod}
-            selectedProducts={selectedProducts}
             activeStep={activeStep}
             itemCount={itemCount}
             price={price}
+            isCart={isCart}
+            quantity={quantity}
+            setQuantity={setQuantity}
+            selectedProduct={selectedProduct}
           />
         </Step>
       </MultiStepForm>

@@ -200,6 +200,15 @@ export default function Address(props: Props) {
 
           <span className="m-auto flex gap-2 max-xs:flex-col">
             <button
+              className="rounded border border-gray-400 bg-white px-5  py-2 shadow "
+              onClick={(e) => {
+                setShowOtherAddress(true);
+                (e.target as HTMLButtonElement).style.display = "none";
+              }}
+            >
+              Change
+            </button>
+            <button
               className="rounded border border-gray-400 bg-sky-700 px-5  py-2 text-white shadow "
               onClick={() => {
                 props.setActiveStep(2);
@@ -212,15 +221,6 @@ export default function Address(props: Props) {
               }}
             >
               Use This Address
-            </button>
-            <button
-              className="rounded border border-gray-400 bg-white px-5  py-2 shadow "
-              onClick={(e) => {
-                setShowOtherAddress(true);
-                (e.target as HTMLButtonElement).style.display = "none";
-              }}
-            >
-              Change
             </button>
           </span>
         </div>

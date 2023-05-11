@@ -84,12 +84,12 @@ export default function CartWithItems() {
                     key={index}
                     className="flex gap-5 border-b  p-5 max-vs:text-base"
                   >
-                    <input
+                    {/* <input
                       type="checkbox"
                       name="products"
                       id={item._id}
                       defaultChecked
-                    />
+                    /> */}
                     <img
                       src={product.images[0]}
                       alt=""
@@ -187,14 +187,13 @@ export default function CartWithItems() {
             <button
               className=" m-5 mt-0 rounded border  border-gray-400 bg-sky-700 px-5 py-2 text-white shadow"
               onClick={() => {
-                const products = document.querySelectorAll(
-                  "input[name=products]:checked"
-                );
-                let query = "";
-                for (let index = 0; index < products.length; index++)
-                  query += products[index].id + "X";
-
-                navigate(`/checkout?p=${query}`);
+                // const products = document.querySelectorAll(
+                //   "input[name=products]:checked"
+                // );
+                // let query = "";
+                // for (let index = 0; index < products.length; index++)
+                //   query += products[index].id + "X";
+                navigate(`/checkout?cart=true`);
               }}
             >
               Proceed to Buy

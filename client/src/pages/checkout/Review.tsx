@@ -4,15 +4,21 @@ import { addressType } from "../../redux/address.slice";
 import { addItemToCart, removeItemFromCart } from "../../utils/cart.functions";
 import { productType } from "../../redux/product.slice";
 import { cartType } from "../../redux/cart.slice";
+import { newOrder } from "../../utils/order.functions";
+import { TailSpin } from "react-loader-spinner";
 
 type Props = {
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
   selectedAddress: string;
   selectedPaymentMethod: string;
-  selectedProducts: string[] | undefined;
+
   activeStep: number;
   itemCount: number;
   price: number;
+  isCart: boolean;
+  quantity: number;
+  setQuantity: React.Dispatch<React.SetStateAction<number>>;
+  selectedProduct: string;
 };
 
 export default function Review(props: Props) {
@@ -31,6 +37,7 @@ export default function Review(props: Props) {
     }) => state.user
   );
   const [orderEmail, setOrderEmail] = useState(user.email);
+  const [isLoading, setIsLoading] = useState(false);
   // getting addresses from redux store
   const addressesState = useSelector(
     (state: { address: { value: Array<addressType>; loading: boolean } }) =>
@@ -129,13 +136,51 @@ export default function Review(props: Props) {
           <section className="flex flex-col gap-2 border-b border-gray-500 pb-5">
             <h2 className="text-lg font-semibold text-gray-600">Products</h2>
             <span>
-              {props.selectedProducts?.length! > 1 &&
-                cartItems.map((item, index) =>
-                  products.map(
+              {props.isCart === true
+                ? cartItems.map((item, index) =>
+                    products.map(
+                      (product, i) =>
+                        product._id === item.productID && (
+                          <div
+                            key={index}
+                            className="flex gap-5 border-b p-5 max-vs:text-base  max-xs:flex-col max-vxs:px-0"
+                          >
+                            <img
+                              src={product.images[0]}
+                              alt=""
+                              className="h-28 w-28 rounded border border-gray-200 object-contain shadow max-vs:m-auto"
+                            />
+                            <section className="flex flex-col gap-2 max-vs:m-auto">
+                              <h1 className="font-medium line-clamp-1">
+                                {product.title}
+                              </h1>
+                              <span className="flex gap-1">
+                                <h4>Price: ₹</h4>
+
+                                {product.offer > 0 ? (
+                                  <>
+                                    <h4 className="text-red-700 line-through">{`${product.price}`}</h4>
+                                    <h4 className="">{`${Math.round(
+                                      product.price -
+                                        (product.offer / 100) * product.price
+                                    )}`}</h4>
+                                  </>
+                                ) : (
+                                  <h4 className="">{`${product.price}`}</h4>
+                                )}
+                              </span>
+
+                              <h3>Quantity: {item.quantity}</h3>
+                            </section>
+                          </div>
+                        )
+                    )
+                  )
+                : products.map(
                     (product, i) =>
-                      product._id === item.productID && (
+                      product._id === props.selectedProduct && (
                         <div
-                          key={index}
+                          key={i}
                           className="flex gap-5 border-b p-5 max-vs:flex-col  max-vs:px-0 max-vs:text-base"
                         >
                           <img
@@ -163,21 +208,46 @@ export default function Review(props: Props) {
                               )}
                             </span>
 
-                            <h5>Quantity: {item.quantity}</h5>
+                            <h5>Quantity: 1</h5>
                           </section>
                         </div>
                       )
-                  )
-                )}
+                  )}
             </span>
           </section>
           <section className="flex items-center justify-between max-vs:flex-col-reverse max-vs:gap-3">
-            <button
-              className="mx-5 rounded border border-gray-400 bg-sky-700 px-5 py-2 text-white shadow  max-md:m-0  "
-              onClick={() => {}}
-            >
-              Place Your Order
-            </button>
+            {isLoading ? (
+              <button className=" mx-5 flex w-[10.3rem] justify-center rounded border border-gray-400 bg-sky-700 px-5  py-2 text-sky-700 shadow  max-md:m-0">
+                <TailSpin
+                  height="24"
+                  width="24"
+                  color="#ffffff"
+                  ariaLabel="tail-spin-loading"
+                  radius="1"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  visible={true}
+                />
+              </button>
+            ) : (
+              <button
+                className="mx-5 rounded border border-gray-400 bg-sky-700 px-5 py-2 text-white shadow  max-md:m-0  "
+                onClick={() =>
+                  newOrder(
+                    props.isCart,
+                    props.selectedProduct,
+                    props.selectedAddress,
+                    orderEmail,
+                    props.selectedPaymentMethod,
+                    setIsLoading,
+                    cartItems
+                  )
+                }
+              >
+                Place Your Order
+              </button>
+            )}
+
             <div className="inline-flex justify-between   text-xl font-semibold text-green-700  max-sm:text-lg">
               <h3>Order Total: ₹ {props.price}</h3>
             </div>
@@ -185,12 +255,37 @@ export default function Review(props: Props) {
         </div>
       </div>
       <div className="flex max-h-80 w-72 flex-col rounded border border-gray-400 bg-white p-5 shadow max-md:hidden ">
-        <button
-          className="rounded border border-gray-400 bg-sky-700 px-5  py-2 text-white shadow "
-          onClick={() => {}}
-        >
-          Place Your Order
-        </button>
+        {isLoading ? (
+          <button className="flex justify-center rounded border border-gray-400 bg-sky-700 px-5  py-2 text-white shadow">
+            <TailSpin
+              height="24"
+              width="24"
+              color="#ffffff"
+              ariaLabel="tail-spin-loading"
+              radius="1"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+            />
+          </button>
+        ) : (
+          <button
+            className="rounded border border-gray-400 bg-sky-700 px-5  py-2 text-white shadow "
+            onClick={() => {
+              newOrder(
+                props.isCart,
+                props.selectedProduct,
+                props.selectedAddress,
+                orderEmail,
+                props.selectedPaymentMethod,
+                setIsLoading,
+                cartItems
+              );
+            }}
+          >
+            Place Your Order
+          </button>
+        )}
         <p className="border-b border-gray-400 p-3 text-xs">
           By placing your order, you agree to Sstore's privacy notice and
           conditions of use.
