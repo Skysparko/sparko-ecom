@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { addressType } from "../../redux/address.slice";
 import { addItemToCart, removeItemFromCart } from "../../utils/cart.functions";
@@ -6,6 +6,11 @@ import { productType } from "../../redux/product.slice";
 import { cartType } from "../../redux/cart.slice";
 import { newOrder } from "../../utils/order.functions";
 import { TailSpin } from "react-loader-spinner";
+
+type productsListType = {
+  productID: string;
+  quantity: number;
+};
 
 type Props = {
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
@@ -19,6 +24,7 @@ type Props = {
   quantity: number;
   setQuantity: React.Dispatch<React.SetStateAction<number>>;
   selectedProduct: string;
+  selectedCartItems: Array<string>;
 };
 
 export default function Review(props: Props) {
@@ -56,6 +62,28 @@ export default function Review(props: Props) {
       state.cart
   );
   const { value: cartItems } = cartState ?? {};
+
+  const [productsList, setProductsList] = useState<Array<productsListType>>([
+    { productID: "", quantity: 0 },
+  ]);
+
+  useEffect(() => {
+    let data: Array<productsListType> = [];
+    if (props.isCart) {
+      cartItems.map((item) => {
+        props.selectedCartItems.includes(item._id) &&
+          data.push({ productID: item.productID, quantity: item.quantity });
+      });
+      setProductsList(data);
+    } else {
+      setProductsList([
+        {
+          productID: props.selectedProduct,
+          quantity: props.quantity,
+        },
+      ]);
+    }
+  }, [cartItems, products]);
 
   return (
     <article className="grid grid-cols-[1fr,0.2fr] gap-10 max-xl:-mx-10 max-lg:-mx-14  max-md:grid-cols-1 max-sm:-mx-8 max-vxs:-mx-4">
@@ -137,48 +165,73 @@ export default function Review(props: Props) {
             <h2 className="text-lg font-semibold text-gray-600">Products</h2>
             <span>
               {props.isCart === true
-                ? cartItems.map((item, index) =>
-                    products.map(
-                      (product, i) =>
-                        product._id === item.productID && (
-                          <div
-                            key={index}
-                            className="flex gap-5 border-b p-5 max-vs:text-base  max-xs:flex-col max-vxs:px-0"
-                          >
-                            <img
-                              src={product.images[0]}
-                              alt=""
-                              className="h-28 w-28 rounded border border-gray-200 object-contain shadow max-vs:m-auto"
-                            />
-                            <section className="flex flex-col gap-2 max-vs:m-auto">
-                              <h1 className="font-medium line-clamp-1">
-                                {product.title}
-                              </h1>
-                              <span className="flex gap-1">
-                                <h4>Price: ₹</h4>
+                ? cartItems.map(
+                    (item, index) =>
+                      props.selectedCartItems.includes(item._id) &&
+                      products.map(
+                        (product, i) =>
+                          product._id === item.productID && (
+                            <div
+                              key={index}
+                              className="flex gap-5 border-b p-5 max-vs:text-base  max-xs:flex-col max-vxs:px-0"
+                            >
+                              <img
+                                src={product.images[0]}
+                                alt=""
+                                className="h-28 w-28 rounded border border-gray-200 object-contain shadow max-vs:m-auto"
+                              />
+                              <section className="flex flex-col gap-2 max-vs:m-auto">
+                                <h1 className="font-medium line-clamp-1">
+                                  {product.title}
+                                </h1>
+                                <span className="flex gap-1">
+                                  <h4>Price: ₹</h4>
 
-                                {product.offer > 0 ? (
-                                  <>
-                                    <h4 className="text-red-700 line-through">{`${product.price}`}</h4>
-                                    <h4 className="">{`${Math.round(
-                                      product.price -
-                                        (product.offer / 100) * product.price
-                                    )}`}</h4>
-                                  </>
-                                ) : (
-                                  <h4 className="">{`${product.price}`}</h4>
-                                )}
-                              </span>
+                                  {product.offer > 0 ? (
+                                    <>
+                                      <h4 className="text-red-700 line-through">{`${product.price}`}</h4>
+                                      <h4 className="">{`${Math.round(
+                                        product.price -
+                                          (product.offer / 100) * product.price
+                                      )}`}</h4>
+                                    </>
+                                  ) : (
+                                    <h4 className="">{`${product.price}`}</h4>
+                                  )}
+                                </span>
 
-                              <h3>Quantity: {item.quantity}</h3>
-                            </section>
-                          </div>
-                        )
-                    )
+                                <span className="flex gap-1 ">
+                                  <label htmlFor="quantity">Quantity:</label>
+                                  <section className="flex gap-2 rounded border border-gray-400">
+                                    <button
+                                      onClick={() => {
+                                        removeItemFromCart(item._id);
+                                        window.location.reload();
+                                      }}
+                                      className="rounded border-r border-gray-400 px-2 shadow"
+                                    >
+                                      -
+                                    </button>
+                                    <h5>{item.quantity}</h5>
+                                    <button
+                                      onClick={() => {
+                                        addItemToCart(product._id);
+                                        window.location.reload();
+                                      }}
+                                      className="rounded border-l border-gray-400 px-2 shadow"
+                                    >
+                                      +
+                                    </button>
+                                  </section>
+                                </span>
+                              </section>
+                            </div>
+                          )
+                      )
                   )
                 : products.map(
                     (product, i) =>
-                      product._id === props.selectedProduct && (
+                      props.selectedProduct === product._id && (
                         <div
                           key={i}
                           className="flex gap-5 border-b p-5 max-vs:flex-col  max-vs:px-0 max-vs:text-base"
@@ -208,7 +261,32 @@ export default function Review(props: Props) {
                               )}
                             </span>
 
-                            <h5>Quantity: 1</h5>
+                            <span className="flex gap-1 ">
+                              <label htmlFor="quantity">Quantity:</label>
+                              <section className="flex gap-2 rounded border border-gray-400">
+                                <button
+                                  onClick={() => {
+                                    if (props.quantity > 1) {
+                                      props.setQuantity(props.quantity - 1);
+                                      // window.location.reload();
+                                    }
+                                  }}
+                                  className="rounded border-r border-gray-400 px-2 shadow"
+                                >
+                                  -
+                                </button>
+                                <h5>{props.quantity}</h5>
+                                <button
+                                  onClick={() => {
+                                    props.setQuantity(props.quantity + 1);
+                                    // window.location.reload();
+                                  }}
+                                  className="rounded border-l border-gray-400 px-2 shadow"
+                                >
+                                  +
+                                </button>
+                              </section>
+                            </span>
                           </section>
                         </div>
                       )
@@ -235,7 +313,7 @@ export default function Review(props: Props) {
                 onClick={() =>
                   newOrder(
                     props.isCart,
-                    props.selectedProduct,
+                    productsList!,
                     props.selectedAddress,
                     orderEmail,
                     props.selectedPaymentMethod,
@@ -274,7 +352,7 @@ export default function Review(props: Props) {
             onClick={() => {
               newOrder(
                 props.isCart,
-                props.selectedProduct,
+                productsList!,
                 props.selectedAddress,
                 orderEmail,
                 props.selectedPaymentMethod,

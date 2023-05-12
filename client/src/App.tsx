@@ -16,7 +16,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import User from "./components/user/User";
 import UserProfile from "./pages/user/user_profile/UserProfile";
-import Orders from "./pages/user/Orders";
+import Orders from "./pages/user/orders/Orders";
 import Addresses from "./pages/user/manage_addresses/Addresses";
 import Payment from "./pages/user/Payment";
 import MyAccount from "./pages/MyAccount";
@@ -49,6 +49,8 @@ import Cart from "./components/Cart";
 import CartWithItems from "./pages/cart/CartWithItems";
 import ProductInfo from "./pages/ProductInfo";
 import Checkout from "./components/Checkout";
+import OrderPlaced from "./pages/OrderPlaced";
+import { getAllOrders } from "./redux/order.slice";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -83,7 +85,8 @@ function App() {
     dispatch(getAllProducts());
     dispatch(getAllCategories());
     user.isAuthenticated && dispatch(getAllCartItems());
-  }, []);
+    user.isAuthenticated && dispatch(getAllOrders());
+  }, [dispatch]);
 
   return (
     <>
@@ -142,12 +145,19 @@ function App() {
                 <Route
                   index
                   element={
-                    user.isAuthenticated ? <CartWithItems /> : <EmptyCart />
+                    user.isAuthenticated && cartItems.length !== 0 ? (
+                      <CartWithItems />
+                    ) : (
+                      <EmptyCart />
+                    )
                   }
                 />
               </Route>
               {user.isAuthenticated && (
-                <Route path="checkout" element={<Checkout />} />
+                <>
+                  <Route path="checkout" element={<Checkout />} />
+                  <Route path="order-placed" element={<OrderPlaced />} />
+                </>
               )}
             </Route>
 

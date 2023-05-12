@@ -1,9 +1,10 @@
 import { cartType } from "../redux/cart.slice";
+import { deleteAllItemsInCart, removeItemFromCart } from "./cart.functions";
 import { instance } from "./functions";
 
 export const newOrder = (
   isCart: boolean,
-  productID: string,
+  products: Array<{ productID: string; quantity: number }>,
   addressID: string,
   contact: string,
   payment: string,
@@ -11,43 +12,71 @@ export const newOrder = (
   cartItems: Array<cartType>
 ) => {
   setIsLoading(true);
-  if (isCart) {
-    for (let i = 0; i < cartItems.length; i++) {
-      instance
-        .post("/order/create", {
-          productID: cartItems[i].productID,
-          addressID,
-          contact,
-          payment,
-          quantity: cartItems[i].quantity,
-        })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((error) => {
-          console.log("error creating order", error.message);
-        });
-    }
-    setIsLoading(false);
-  } else {
-    const quantity = 1;
-    console.log(productID, addressID, contact, payment, quantity);
+  console.log(products, addressID, contact, payment);
+  instance
+    .post("/order/create", {
+      products,
+      addressID,
+      contact,
+      payment,
+    })
+    .then((res) => {
+      setIsLoading(false);
+      location.href = "/order-placed";
+    })
+    .catch((error) => {
+      setIsLoading(false);
+      console.log("error creating order", error);
+    });
+  // if (isCart) {
+  //   for (let i = 0; i < cartItems.length; i++) {
+  //     instance
+  //       .post("/order/create", {
+  //         productID: cartItems[i].productID,
+  //         addressID,
+  //         contact,
+  //         payment,
+  //         quantity: cartItems[i].quantity,
+  //       })
+  //       .then((response) => {
+  //         console.log(response);
+  //       })
+  //       .catch((error) => {
+  //         console.log("error creating order", error.message);
+  //       });
+  //   }
+  //   deleteAllItemsInCart();
+  //   setIsLoading(false);
+  //   location.href = "/order-placed";
+  // } else {
+  //   const quantity = 1;
+  //   console.log(productID, addressID, contact, payment, quantity);
 
-    instance
-      .post("/order/create", {
-        productID,
-        addressID,
-        contact,
-        payment,
-        quantity,
-      })
-      .then((res) => {
-        setIsLoading(false);
-        console.log(res);
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        console.log("error creating order", error.message);
-      });
-  }
+  //   instance
+  //     .post("/order/create", {
+  //       productID,
+  //       addressID,
+  //       contact,
+  //       payment,
+  //       quantity,
+  //     })
+  //     .then((res) => {
+  //       setIsLoading(false);
+  //       location.href = "/order-placed";
+  //     })
+  //     .catch((error) => {
+  //       setIsLoading(false);
+  //       console.log("error creating order", error.message);
+  //     });
+  // }
 };
+
+export async function fetchAllOrders() {
+  try {
+    const res = await instance.get("/order");
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}

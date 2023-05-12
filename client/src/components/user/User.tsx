@@ -9,6 +9,10 @@ import {
 } from "react-icons/md";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { logout } from "../../utils/auth.functions";
+import { fetchAllOrders } from "../../utils/order.functions";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { getAllOrders } from "../../redux/order.slice";
 
 //this function change style of the selected div
 const highlightSelected = (id: string) => {
@@ -27,6 +31,8 @@ const highlightSelected = (id: string) => {
 };
 
 export default function User() {
+  const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
     // this checks which page is selected
     const id = location.href.split("/")[4];
@@ -46,7 +52,8 @@ export default function User() {
       page?.classList.remove("text-gray-500");
       page?.classList.add("border-r-4", "border-r-sky-700", "text-black");
     }
-  }, []);
+    dispatch(getAllOrders());
+  }, [dispatch]);
   const navigate = useNavigate();
   return (
     <section className="grid  grid-cols-[1fr,4fr] max-lg:grid-cols-1">

@@ -120,10 +120,6 @@ export const fetchAllProducts = async () => {
   try {
     const res = await instance.get("/product/");
 
-    res.data[1].description = `${
-      JSON.parse(res.data[1].description).blocks[0].text
-    }`;
-
     return res.data;
   } catch (error) {
     console.log(error);

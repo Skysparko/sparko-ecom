@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import emptyOrders from "../../assets/video/orders.gif";
+import emptyOrders from "../../../assets/video/orders.gif";
 
 export default function Orders() {
   const navigate = useNavigate();

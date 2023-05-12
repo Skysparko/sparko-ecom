@@ -7,12 +7,16 @@ import { getCartItemCount, getTotalPriceWithOffer } from "../utils/functions";
 import { useSelector } from "react-redux";
 import { cartType } from "../redux/cart.slice";
 import { productType } from "../redux/product.slice";
+import { getSelectedItemsTotalAndCount } from "../utils/cart.functions";
 export default function Checkout() {
   const [activeStep, setActiveStep] = useState(1);
   const [selectedAddress, setSelectedAddress] = React.useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = React.useState("");
 
   const [selectedProduct, setSelectedProduct] = React.useState("");
+  const [selectedCartItems, setSelectedCartItems] = React.useState<
+    Array<string>
+  >([""]);
 
   const [itemCount, setItemCount] = React.useState(0);
   const [price, setPrice] = React.useState(0);
@@ -40,11 +44,20 @@ export default function Checkout() {
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("p")!;
     const cart = new URLSearchParams(window.location.search).get("cart")!;
-
+    const cartIds = id.split("X").filter((i) => i !== "");
+    console.log(cartIds);
     if (cart) {
+      let { count, total } = getSelectedItemsTotalAndCount(
+        cartItems,
+        products,
+        cartIds
+      );
+
+      setSelectedCartItems(cartIds);
+
       setIsCart(true);
-      setItemCount(getCartItemCount(cartItems));
-      setPrice(getTotalPriceWithOffer(cartItems, products));
+      setItemCount(count);
+      setPrice(total);
     } else {
       const items = id;
       setSelectedProduct(items);
@@ -95,6 +108,7 @@ export default function Checkout() {
             quantity={quantity}
             setQuantity={setQuantity}
             selectedProduct={selectedProduct}
+            selectedCartItems={selectedCartItems}
           />
         </Step>
       </MultiStepForm>

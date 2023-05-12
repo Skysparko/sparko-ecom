@@ -79,3 +79,15 @@ export const removeFromCart = async (req: Request, res: Response) => {
     return res.status(500).send((error as Error).message);
   }
 };
+
+export const emptyMyCart = async (req: Request, res: Response) => {
+  try {
+    const user = Object(req)["user"];
+
+    await Cart.deleteMany({ userID: user._id });
+
+    return res.status(200).json("Items deleted successfully");
+  } catch (error) {
+    return res.status(500).send((error as Error).message);
+  }
+};

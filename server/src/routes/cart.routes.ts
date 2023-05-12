@@ -14,6 +14,7 @@ import { userUpdate } from "../controllers/user.controllers";
 import { createOwner } from "../controllers/roles.controllers";
 import {
   addToCart,
+  emptyMyCart,
   getCartItems,
   removeFromCart,
 } from "../controllers/cart.controllers";
@@ -29,6 +30,11 @@ router.post("/add", isAuthorized, addToCart);
 //@desc get cart items
 //@access Authorized only
 router.get("/", isAuthorized, getCartItems);
+
+//@route DELETE ALL /api/v1/cart/
+//@desc empty the  cart
+//@access Authorized only
+router.delete("/empty", isAuthorized, emptyMyCart);
 
 //@route DELETE /api/v1/cart/:id
 //@desc delete cart item using id

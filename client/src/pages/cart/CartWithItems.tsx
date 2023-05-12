@@ -7,6 +7,7 @@ import { AppDispatch } from "../../redux/store";
 import {
   addItemToCart,
   fetchAllCartItems,
+  getSelectedItemsTotalAndCount,
   removeItemFromCart,
 } from "../../utils/cart.functions";
 import { useState } from "react";
@@ -36,8 +37,15 @@ export default function CartWithItems() {
   const navigate = useNavigate();
 
   const [change, setChange] = useState(true);
-  const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState(
+    getTotalPriceWithoutOffer(cartItems, products)
+  );
+  const [subTotal, setSubTotal] = useState(
+    getTotalPriceWithOffer(cartItems, products)
+  );
+  const [itemCount, setItemCount] = useState(getCartItemCount(cartItems));
 
+  const [selectedItems, setSelectedItems] = useState<Array<string>>([""]);
   const [isLoading, setIsLoading] = useState(false);
   const user = useSelector(
     (state: {
@@ -53,15 +61,24 @@ export default function CartWithItems() {
     }) => state.user
   );
 
-  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    setIsLoading(true);
-    user.isAuthenticated && dispatch(getAllCartItems());
-    setIsLoading(false);
-  }, [dispatch]);
-  const subTotal = getTotalPriceWithOffer(cartItems, products);
-  const Total = getTotalPriceWithoutOffer(cartItems, products);
-  const ItemCount = getCartItemCount(cartItems);
+    const data = document.querySelectorAll("input[name=products]:checked");
+
+    const items: Array<string> = [];
+    for (let index = 0; index < data.length; index++) {
+      items.push(data[index].id);
+    }
+    setSelectedItems(items);
+    console.log(items);
+    const { total, count, subTotal } = getSelectedItemsTotalAndCount(
+      cartItems,
+      products,
+      selectedItems
+    );
+    setSubTotal(subTotal);
+    setTotal(total);
+    setItemCount(count);
+  }, [cartItems, products, change]);
 
   return (
     <article className="bg-gray-100 px-10 max-md:px-5 max-sm:px-2 max-vs:px-0 ">
@@ -84,12 +101,26 @@ export default function CartWithItems() {
                     key={index}
                     className="flex gap-5 border-b  p-5 max-vs:text-base"
                   >
-                    {/* <input
+                    <input
                       type="checkbox"
                       name="products"
                       id={item._id}
                       defaultChecked
-                    /> */}
+                      onChange={() => {
+                        const data = document.querySelectorAll(
+                          "input[name=products]:checked"
+                        );
+                        setChange(!change);
+
+                        const items: Array<string> = [];
+                        for (let index = 0; index < data.length; index++) {
+                          items.push(data[index].id);
+                        }
+                        setSelectedItems(items);
+                        console.log(items);
+                        // window.location.reload();
+                      }}
+                    />
                     <img
                       src={product.images[0]}
                       alt=""
@@ -145,7 +176,7 @@ export default function CartWithItems() {
           )}
           <div className="-mt-5 flex items-center justify-end gap-2 border-t-2 border-black pt-3 max-vs:border-t max-vs:pr-3">
             <h3 className=" pb-0 text-xl font-medium max-vs:text-lg ">
-              SubTotal ({ItemCount} items) :-
+              SubTotal ({itemCount} items) :-
             </h3>
             <h3 className="text-xl max-vs:text-lg">₹ {subTotal}</h3>
           </div>
@@ -156,13 +187,13 @@ export default function CartWithItems() {
               PRICE DETAILS
             </h1>
             <span className="flex justify-between px-5 text-lg max-xl:text-base ">
-              <h2 className="">Price ({ItemCount} items)</h2>
-              <h2 className=" ">₹ {Total}</h2>
+              <h2 className="">Price ({itemCount} items)</h2>
+              <h2 className=" ">₹ {total}</h2>
             </span>
 
             <span className="flex justify-between px-5 text-lg max-xl:text-base">
               <h2 className="">Discount</h2>
-              <h2 className=" text-green-600">- ₹ {Total - subTotal}</h2>
+              <h2 className=" text-green-600">- ₹ {total - subTotal}</h2>
             </span>
 
             <span className="flex justify-between px-5 text-lg max-xl:text-base">
@@ -180,20 +211,20 @@ export default function CartWithItems() {
             </span>
 
             <p className="text-center text-green-700">
-              You will save ₹ {Total - subTotal} on this order
+              You will save ₹ {total - subTotal} on this order
             </p>
 
             {/* proceed to pay button */}
             <button
               className=" m-5 mt-0 rounded border  border-gray-400 bg-sky-700 px-5 py-2 text-white shadow"
               onClick={() => {
-                // const products = document.querySelectorAll(
-                //   "input[name=products]:checked"
-                // );
-                // let query = "";
-                // for (let index = 0; index < products.length; index++)
-                //   query += products[index].id + "X";
-                navigate(`/checkout?cart=true`);
+                const products = document.querySelectorAll(
+                  "input[name=products]:checked"
+                );
+                let query = "";
+                for (let index = 0; index < products.length; index++)
+                  query += products[index].id + "X";
+                navigate(`/checkout?cart=true&p=${query}`);
               }}
             >
               Proceed to Buy

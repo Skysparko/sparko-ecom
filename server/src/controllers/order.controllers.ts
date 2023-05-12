@@ -11,18 +11,23 @@ import Product from "../models/product.model";
 import Address from "../models/address.model";
 dotenv.config();
 
-// function for saving the user's questions
+// function for creating a new order
 export const createOrder = async (req: Request, res: Response) => {
   try {
-    const { productID, payment, addressID, quantity, contact } = req.body;
-    if (!productID || !payment || !addressID || !quantity || !contact) {
+    const { products, payment, addressID, contact } = req.body;
+    if (!products || !payment || !addressID || !contact) {
       return res.status(400).send("Data is missing.");
     }
 
-    const productExist = await Product.findById(productID);
-
-    if (!productExist) {
-      return res.status(404).send("Product not found.");
+    if (!validateEmail(contact)) {
+      return res.status(400).send("Email is invalid.");
+    }
+    for (let i = 0; i < products.length; i++) {
+      console.log(products[i].productID);
+      const productExist = await Product.findById(products[i].productID);
+      if (!productExist) {
+        return res.status(404).send("Product not found.");
+      }
     }
 
     const addressExist = await Address.findById(addressID);
@@ -33,21 +38,37 @@ export const createOrder = async (req: Request, res: Response) => {
 
     // getting user from middleware
     const user = Object(req)["user"];
+
+    //saving the order to the database
     const data = new Order({
       userID: user._id,
-      productID,
+      products,
       addressID,
-      quantity,
       payment,
       contact,
+      date: new Date(),
     });
 
-    //saving the user to the database
     await data.save();
 
     return res.status(201).send("Order successfully created.");
   } catch (error) {
     console.log(error);
+    return res.status(500).send((error as Error).message);
+  }
+};
+
+//getting all the orders
+
+export const getOrders = async (req: Request, res: Response) => {
+  try {
+    const user = Object(req)["user"];
+    const orders = await Order.find({ userID: user._id });
+
+    return res.status(200).send(orders);
+  } catch (error) {
+    console.log(error);
+
     return res.status(500).send((error as Error).message);
   }
 };

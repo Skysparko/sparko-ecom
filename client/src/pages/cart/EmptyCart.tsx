@@ -31,7 +31,7 @@ export default function EmptyCart() {
   const { value: cartItems } = cartState ?? {};
   useEffect(() => {
     console.log(cartItems);
-  }, []);
+  }, [cartItems]);
 
   return (
     <section className=" border border-black bg-slate-100 p-10 max-lg:p-5 max-vxs:p-0">
