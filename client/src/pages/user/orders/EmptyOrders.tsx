@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import emptyOrders from "../../../assets/video/orders.gif";
 
-export default function Orders() {
+export default function EmptyOrders() {
   const navigate = useNavigate();
   return (
     <section className=" border border-black bg-slate-100 p-10 max-lg:p-5 max-vxs:p-0">

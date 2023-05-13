@@ -56,7 +56,7 @@ export default function User() {
   }, [dispatch]);
   const navigate = useNavigate();
   return (
-    <section className="grid  grid-cols-[1fr,4fr] max-lg:grid-cols-1">
+    <section className="grid  grid-cols-[1fr,4fr] bg-white max-lg:grid-cols-1">
       {/* side menu bar for selecting the page that we want to open  */}
       <aside className="flex flex-col border-2 border-black max-lg:hidden">
         {/* title for the side bar  */}

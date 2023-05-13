@@ -16,7 +16,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import User from "./components/user/User";
 import UserProfile from "./pages/user/user_profile/UserProfile";
-import Orders from "./pages/user/orders/Orders";
+import Orders from "./components/user/Orders";
 import Addresses from "./pages/user/manage_addresses/Addresses";
 import Payment from "./pages/user/Payment";
 import MyAccount from "./pages/MyAccount";
@@ -50,7 +50,12 @@ import CartWithItems from "./pages/cart/CartWithItems";
 import ProductInfo from "./pages/ProductInfo";
 import Checkout from "./components/Checkout";
 import OrderPlaced from "./pages/OrderPlaced";
-import { getAllOrders } from "./redux/order.slice";
+import { getAllOrders, orderType } from "./redux/order.slice";
+import EditOrder from "./pages/user/orders/EditOrder";
+import TrackOrder from "./pages/user/orders/TrackOrder";
+import EmptyOrders from "./pages/user/orders/EmptyOrders";
+import OrdersWithItems from "./pages/user/orders/OrdersWithItems";
+import { getAllAddresses } from "./redux/address.slice";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -78,6 +83,12 @@ function App() {
   );
   const { value: cartItems } = cartState ?? {};
 
+  const ordersState = useSelector(
+    (state: { order: { value: Array<orderType>; loading: boolean } }) =>
+      state.order
+  );
+  const { value: orders, loading } = ordersState ?? {};
+
   useEffect(() => {
     //authenticating user on every component mounting
     authenticateUser(setIsLoading, dispatch);
@@ -86,6 +97,7 @@ function App() {
     dispatch(getAllCategories());
     user.isAuthenticated && dispatch(getAllCartItems());
     user.isAuthenticated && dispatch(getAllOrders());
+    user.isAuthenticated && dispatch(getAllAddresses());
   }, [dispatch]);
 
   return (
@@ -125,7 +137,16 @@ function App() {
                       <Route path="edit-password" element={<EditPassword />} />
                     </Route>
 
-                    <Route path="orders" element={<Orders />} />
+                    <Route
+                      path="orders"
+                      element={
+                        orders.length !== 0 ? <Orders /> : <EmptyOrders />
+                      }
+                    >
+                      <Route index element={<OrdersWithItems />} />
+                      <Route path="edit" element={<EditOrder />} />
+                      <Route path="track" element={<TrackOrder />} />
+                    </Route>
                     <Route path="payment" element={<Payment />} />
                     <Route path="addresses">
                       <Route index element={<Addresses />} />

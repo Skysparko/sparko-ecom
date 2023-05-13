@@ -31,47 +31,6 @@ export const newOrder = (
       setIsLoading(false);
       console.log("error creating order", error);
     });
-  // if (isCart) {
-  //   for (let i = 0; i < cartItems.length; i++) {
-  //     instance
-  //       .post("/order/create", {
-  //         productID: cartItems[i].productID,
-  //         addressID,
-  //         contact,
-  //         payment,
-  //         quantity: cartItems[i].quantity,
-  //       })
-  //       .then((response) => {
-  //         console.log(response);
-  //       })
-  //       .catch((error) => {
-  //         console.log("error creating order", error.message);
-  //       });
-  //   }
-  //   deleteAllItemsInCart();
-  //   setIsLoading(false);
-  //   location.href = "/order-placed";
-  // } else {
-  //   const quantity = 1;
-  //   console.log(productID, addressID, contact, payment, quantity);
-
-  //   instance
-  //     .post("/order/create", {
-  //       productID,
-  //       addressID,
-  //       contact,
-  //       payment,
-  //       quantity,
-  //     })
-  //     .then((res) => {
-  //       setIsLoading(false);
-  //       location.href = "/order-placed";
-  //     })
-  //     .catch((error) => {
-  //       setIsLoading(false);
-  //       console.log("error creating order", error.message);
-  //     });
-  // }
 };
 
 export async function fetchAllOrders() {

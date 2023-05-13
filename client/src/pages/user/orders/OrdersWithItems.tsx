@@ -6,8 +6,10 @@ import { fetchAllOrders } from "../../../utils/order.functions";
 import { addressType, getAllAddresses } from "../../../redux/address.slice";
 import { AiOutlineDown } from "react-icons/ai";
 import { productType } from "../../../redux/product.slice";
+import { useNavigate } from "react-router-dom";
 
-export default function Orders() {
+export default function OrdersWithItems() {
+  const navigate = useNavigate();
   const ordersState = useSelector(
     (state: { order: { value: Array<orderType>; loading: boolean } }) =>
       state.order
@@ -32,12 +34,12 @@ export default function Orders() {
   }, [dispatch, ordersState]);
 
   return (
-    <div className="flex flex-col gap-5 bg-gray-200 p-5 max-vs:px-2 max-xs:px-0">
+    <div className="flex flex-col gap-5 bg-gray-100 p-5 max-vs:px-2 max-xs:px-0">
       <h1 className="text-3xl font-semibold drop-shadow">Your Orders</h1>
       {orders.map((item, i) => (
         <article key={i} className="rounded border border-black shadow">
-          <header className="flex justify-between gap-5 rounded-t border border-gray-400 bg-gray-100 p-5 max-md:flex-col max-vs:px-0">
-            <div className="flex gap-14 max-md:justify-evenly max-md:gap-0 ">
+          <header className="flex justify-between gap-5 rounded-t border border-gray-400 bg-sky-50 p-5 max-md:flex-col max-vs:px-0">
+            <div className="flex gap-14 max-md:justify-evenly max-md:gap-3 max-xs:flex-col max-xs:text-center">
               <span className="flex flex-col gap-1 text-sm">
                 <h3>ORDER PLACED</h3>
                 <h3>{`${item.date.toString().split("T")[0]}`}</h3>
@@ -76,9 +78,12 @@ export default function Orders() {
             <span className="flex flex-col gap-1 text-sm max-md:text-center ">
               <h3>ORDER # {item._id}</h3>
               <span className=" flex justify-between px-5 text-center text-blue-700">
-                <p className="w-full cursor-pointer border-r border-gray-400 max-md:w-1/2">
+                <button
+                  className="w-full cursor-pointer border-r border-gray-400 max-md:w-1/2"
+                  onClick={() => navigate("edit?order=" + item._id)}
+                >
                   View order details
-                </p>
+                </button>
                 <p className="w-1/2 cursor-pointer ">Invoice</p>
               </span>
             </span>
@@ -113,10 +118,16 @@ export default function Orders() {
               </span>
             </div>
             <div className=" flex flex-col justify-center gap-3 pr-10 text-sm  max-md:p-0">
-              <button className="rounded border border-gray-400 px-5 py-2 shadow">
+              <button
+                className="rounded border border-gray-400 px-5 py-2 shadow"
+                onClick={() => navigate("track?order=" + item._id)}
+              >
                 Track Package
               </button>
-              <button className="rounded border border-gray-400 bg-sky-700 px-5 py-2 text-white shadow">
+              <button
+                className="rounded border border-gray-400 bg-sky-700 px-5 py-2 text-white shadow"
+                onClick={() => navigate("edit?order=" + item._id)}
+              >
                 View or edit order
               </button>
             </div>

@@ -773,3 +773,146 @@ export const emailUpdateOtpMail = (otp: string) => {
   
   </html>`;
 };
+
+type orderConfirmation = {
+  name: string;
+  id: string;
+  address: string;
+  price: number;
+  link: string;
+  date: string;
+  payment: string;
+};
+
+export const orderConfirmationEmail = ({
+  name,
+  id,
+  address,
+  price,
+  date,
+  payment,
+  link,
+}: orderConfirmation) => {
+  return `<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation Email</title>
+    <style>
+      body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        color: #444444;
+      }
+      .container {
+        margin: 20px auto;
+        max-width: 600px;
+        padding: 20px;
+        background-color: #ffffff;
+        border: 1px solid #e6e6e6;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+      }
+      
+      
+      h1 {
+        text-align: center;
+      }
+      p {
+        margin-bottom: 10px;
+        color: #444444;
+        line-height: 1.6;
+        font-size: 16px;
+      }
+      .order-details {
+        background-color: #f4f4f4;
+        margin-top: 30px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+      }
+      .order-details h2 {
+        color: #444444;
+        font-size: 24px;
+        
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 1px solid #e6e6e6;
+        padding-bottom: 10px;
+      }
+      .order-details p {
+        margin-bottom: 10px;
+        color: #666666;
+        font-size: 16px;
+        line-height: 1.6;
+        font-weight: 400;
+      }
+      .order-total {
+        margin-top: 30px;
+        text-align: right;
+      }
+      .order-total p {
+        margin-bottom: 10px;
+        color: #444444;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .button {
+        display: inline-block;
+        background-color: #43A047;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-top: 30px;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 15px rgba(67, 160, 71, 0.4);
+        border: none;
+        cursor: pointer;
+      }
+      .button:hover {
+        background-color: #3C803C;
+        box-shadow: 0 5px 15px rgba(67, 160, 71, 0.6);
+  }
+  </style>
+  
+  </head>
+  <body>
+    <div class="container">
+      <div>
+            <h1 style="color:#146C94; font-weight:600;">Sstore</h1>
+      </div>
+      <h2 style="text-align:center;">Thank you for your order!</h2>
+      <p>Hi ${name},</p>
+      <p>We just wanted to let you know that your order has been received and is being processed. You will receive another email once your order has been shipped.</p>
+      <div class="order-details" style="background-color:#D4FAFC;">
+        <h2>Order Details</h2>
+        <p>Order ID: <strong>${id}</strong></p>
+        <p>Order Date: <strong>${date}</strong></p>
+        <p>Shipping Address: <strong>${address}</strong></p>
+        <p>Payment Method: <strong>${payment}</strong></p>
+        
+      </div>
+      <div class="order-total">
+        <p>Total Amount:₹ ${price}</p>
+      </div>
+      <p>As soon as your order has been shipped, we'll send you another email with tracking information and an estimated delivery date.</p>
+      <p>If you have any questions or concerns about your order, please feel free to contact us at support@sstore.com.</p>
+      <a href=${link} class="button" style="color:white;">View Order</a>
+      <p>Thanks,</p>
+      <p>The Sstore Team</p>
+    </div>
+  </body>
+  </html>`;
+};
