@@ -42,3 +42,15 @@ export async function fetchAllOrders() {
     return error;
   }
 }
+
+export function deleteOrder(orderId: string) {
+  instance
+    .delete("/order/" + orderId)
+    .then((res) => {
+      console.log(res);
+      window.location.href = "/user/orders";
+    })
+    .catch((error) => {
+      console.log("error deleting order", error);
+    });
+}

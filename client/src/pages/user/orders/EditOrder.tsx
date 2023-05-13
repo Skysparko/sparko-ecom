@@ -6,6 +6,7 @@ import { orderType } from "../../../redux/order.slice";
 import { AppDispatch } from "../../../redux/store";
 import { productType } from "../../../redux/product.slice";
 import { useNavigate } from "react-router-dom";
+import { deleteOrder } from "../../../utils/order.functions";
 
 export default function EditOrder() {
   const [isLoading, setIsLoading] = useState(false);
@@ -178,14 +179,9 @@ export default function EditOrder() {
                 <div className=" flex flex-col justify-center gap-3 pr-10 text-sm  max-md:p-0">
                   <button
                     className="rounded border border-gray-400 bg-sky-700 px-5 py-2 text-white shadow"
-                    onClick={() =>
-                      navigate("/user/orders/track?order=" + order._id)
-                    }
+                    onClick={() => deleteOrder(orderId)}
                   >
-                    Track Package
-                  </button>
-                  <button className="rounded border border-gray-400 px-5 py-2 shadow">
-                    cancel items
+                    Cancel order
                   </button>
                 </div>
               </main>

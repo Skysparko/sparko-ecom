@@ -105,7 +105,17 @@ export const getOrders = async (req: Request, res: Response) => {
     return res.status(200).send(orders);
   } catch (error) {
     console.log(error);
+    return res.status(500).send((error as Error).message);
+  }
+};
 
+export const removeOrderById = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    await Order.findByIdAndDelete(id);
+    return res.status(200).send("Order successfully removed");
+  } catch (error) {
+    console.log(error);
     return res.status(500).send((error as Error).message);
   }
 };

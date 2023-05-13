@@ -59,7 +59,7 @@ export default function OrdersWithItems() {
                           {address.fullName}
                           {/* <AiOutlineDown /> */}
                         </summary>
-                        <span className="absolute  flex-col flex-wrap  gap-1 rounded border border-black bg-white p-2 shadow  ">
+                        <span className="absolute  flex-col flex-wrap  gap-1 rounded border border-gray-300 bg-white p-2 shadow  ">
                           {/* fetched info for address */}
 
                           <h2>{address.address1}</h2>
@@ -118,12 +118,6 @@ export default function OrdersWithItems() {
               </span>
             </div>
             <div className=" flex flex-col justify-center gap-3 pr-10 text-sm  max-md:p-0">
-              <button
-                className="rounded border border-gray-400 px-5 py-2 shadow"
-                onClick={() => navigate("track?order=" + item._id)}
-              >
-                Track Package
-              </button>
               <button
                 className="rounded border border-gray-400 bg-sky-700 px-5 py-2 text-white shadow"
                 onClick={() => navigate("edit?order=" + item._id)}

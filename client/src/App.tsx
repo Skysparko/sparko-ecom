@@ -145,7 +145,6 @@ function App() {
                     >
                       <Route index element={<OrdersWithItems />} />
                       <Route path="edit" element={<EditOrder />} />
-                      <Route path="track" element={<TrackOrder />} />
                     </Route>
                     <Route path="payment" element={<Payment />} />
                     <Route path="addresses">
