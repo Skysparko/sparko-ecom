@@ -59,14 +59,23 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 }
 
 
-details > summary {
-  list-style: none;
-}
-details > summary::-webkit-details-marker {
+/* details > summary {
+  list-style: "⌄";
+} */
+/* details > summary::-webkit-details-marker {
   display: none;
+} */
+
+details > summary {
+  list-style-type: none;
+} 
+
+summary::after {
+  content: " ▼";
 }
-
-
+details[open] summary:after {
+  content: " ▼";
+}
 
 
 

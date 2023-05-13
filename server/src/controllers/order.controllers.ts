@@ -9,19 +9,30 @@ import dotenv from "dotenv";
 import Order from "../models/order.model";
 import Product from "../models/product.model";
 import Address from "../models/address.model";
+import Cart from "../models/cart.model";
+import { string } from "joi";
 dotenv.config();
 
 // function for creating a new order
 export const createOrder = async (req: Request, res: Response) => {
   try {
-    const { products, payment, addressID, contact } = req.body;
-    if (!products || !payment || !addressID || !contact) {
+    const { products, payment, addressID, contact, cartItems, price } =
+      req.body;
+    if (
+      !products ||
+      !payment ||
+      !addressID ||
+      !contact ||
+      !cartItems ||
+      !price
+    ) {
       return res.status(400).send("Data is missing.");
     }
 
     if (!validateEmail(contact)) {
       return res.status(400).send("Email is invalid.");
     }
+    console.log(products);
     for (let i = 0; i < products.length; i++) {
       console.log(products[i].productID);
       const productExist = await Product.findById(products[i].productID);
@@ -29,12 +40,18 @@ export const createOrder = async (req: Request, res: Response) => {
         return res.status(404).send("Product not found.");
       }
     }
+    console.log(cartItems);
+    let items = cartItems.filter((item: String) => item !== "");
+    console.log(items);
 
     const addressExist = await Address.findById(addressID);
 
     if (!addressExist) {
       return res.status(404).send("Address not found.");
     }
+
+    for (let i = 0; i < items.length; i++)
+      await Cart.findByIdAndDelete(items[i]);
 
     // getting user from middleware
     const user = Object(req)["user"];
@@ -47,6 +64,7 @@ export const createOrder = async (req: Request, res: Response) => {
       payment,
       contact,
       date: new Date(),
+      price,
     });
 
     await data.save();

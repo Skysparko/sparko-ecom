@@ -6,11 +6,12 @@ import { productType } from "../../redux/product.slice";
 import { cartType } from "../../redux/cart.slice";
 import { newOrder } from "../../utils/order.functions";
 import { TailSpin } from "react-loader-spinner";
+import { productsListType } from "../../components/Checkout";
 
-type productsListType = {
-  productID: string;
-  quantity: number;
-};
+// type productsListType = {
+//   productID: string;
+//   quantity: number;
+// };
 
 type Props = {
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
@@ -25,6 +26,7 @@ type Props = {
   setQuantity: React.Dispatch<React.SetStateAction<number>>;
   selectedProduct: string;
   selectedCartItems: Array<string>;
+  productsList: Array<productsListType>;
 };
 
 export default function Review(props: Props) {
@@ -63,27 +65,29 @@ export default function Review(props: Props) {
   );
   const { value: cartItems } = cartState ?? {};
 
-  const [productsList, setProductsList] = useState<Array<productsListType>>([
-    { productID: "", quantity: 0 },
-  ]);
+  // const [productsList, setProductsList] = useState<Array<productsListType>>([
+  //   { productID: "", quantity: 0 },
+  // ]);
 
   useEffect(() => {
-    let data: Array<productsListType> = [];
-    if (props.isCart) {
-      cartItems.map((item) => {
-        props.selectedCartItems.includes(item._id) &&
-          data.push({ productID: item.productID, quantity: item.quantity });
-      });
-      setProductsList(data);
-    } else {
-      setProductsList([
-        {
-          productID: props.selectedProduct,
-          quantity: props.quantity,
-        },
-      ]);
-    }
-  }, [cartItems, products]);
+    // let data: Array<productsListType> = [];
+    // if (props.isCart) {
+    //   cartItems.map((item) => {
+    //     props.selectedCartItems.includes(item._id) &&
+    //       data.push({ productID: item.productID, quantity: item.quantity });
+    //   });
+    //   setProductsList(data);
+    //   console.log(data);
+    // } else {
+    //   setProductsList([
+    //     {
+    //       productID: props.selectedProduct,
+    //       quantity: props.quantity,
+    //     },
+    //   ]);
+    // }
+    console.log(props.productsList);
+  }, []);
 
   return (
     <article className="grid grid-cols-[1fr,0.2fr] gap-10 max-xl:-mx-10 max-lg:-mx-14  max-md:grid-cols-1 max-sm:-mx-8 max-vxs:-mx-4">
@@ -313,12 +317,13 @@ export default function Review(props: Props) {
                 onClick={() =>
                   newOrder(
                     props.isCart,
-                    productsList!,
+                    props.productsList,
                     props.selectedAddress,
                     orderEmail,
                     props.selectedPaymentMethod,
                     setIsLoading,
-                    cartItems
+                    props.selectedCartItems,
+                    props.price
                   )
                 }
               >
@@ -352,12 +357,13 @@ export default function Review(props: Props) {
             onClick={() => {
               newOrder(
                 props.isCart,
-                productsList!,
+                props.productsList!,
                 props.selectedAddress,
                 orderEmail,
                 props.selectedPaymentMethod,
                 setIsLoading,
-                cartItems
+                props.selectedCartItems,
+                props.price
               );
             }}
           >

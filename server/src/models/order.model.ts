@@ -28,16 +28,17 @@ const orderSchema = new mongoose.Schema({
     ref: "Address",
     required: true,
   },
-  // quantity: {
-  //   type: Number,
-  //   required: true,
-  // },
+
   contact: {
     type: String,
     required: true,
   },
   date: {
     type: Date,
+    required: true,
+  },
+  price: {
+    type: Number,
     required: true,
   },
 });

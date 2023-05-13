@@ -8,6 +8,12 @@ import { useSelector } from "react-redux";
 import { cartType } from "../redux/cart.slice";
 import { productType } from "../redux/product.slice";
 import { getSelectedItemsTotalAndCount } from "../utils/cart.functions";
+
+export type productsListType = {
+  productID: string;
+  quantity: number;
+};
+
 export default function Checkout() {
   const [activeStep, setActiveStep] = useState(1);
   const [selectedAddress, setSelectedAddress] = React.useState("");
@@ -41,37 +47,52 @@ export default function Checkout() {
   const [width, setWidth] = useState(
     window.innerWidth > 0 ? window.innerWidth : screen.width
   );
+  const [productsList, setProductsList] = useState<Array<productsListType>>([
+    { productID: "", quantity: 0 },
+  ]);
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("p")!;
     const cart = new URLSearchParams(window.location.search).get("cart")!;
     const cartIds = id.split("X").filter((i) => i !== "");
     console.log(cartIds);
     if (cart) {
-      let { count, total } = getSelectedItemsTotalAndCount(
+      let { count, subTotal } = getSelectedItemsTotalAndCount(
         cartItems,
         products,
         cartIds
       );
-
+      let data: Array<productsListType> = [];
       setSelectedCartItems(cartIds);
-
+      cartItems.map((item) => {
+        cartIds.includes(item._id) &&
+          data.push({ productID: item.productID, quantity: item.quantity });
+      });
+      console.log(data);
+      setProductsList(data);
       setIsCart(true);
       setItemCount(count);
-      setPrice(total);
+      setPrice(subTotal);
     } else {
       const items = id;
+      setProductsList([
+        {
+          productID: items,
+          quantity: quantity,
+        },
+      ]);
       setSelectedProduct(items);
       setItemCount(1);
 
       products.find((product) => {
         product._id === items &&
           setPrice(
-            Math.round(product.price - (product.offer / 100) * product.price)
+            Math.round(product.price - (product.offer / 100) * product.price) *
+              quantity
           );
       });
     }
     setWidth(window.innerWidth > 0 ? window.innerWidth : screen.width);
-  }, [products, cartItems]);
+  }, [products, cartItems, quantity]);
 
   return (
     <div className="max-md: bg-gray-100 py-10 px-20 max-sm:px-12 max-vxs:px-6 ">
@@ -109,6 +130,7 @@ export default function Checkout() {
             setQuantity={setQuantity}
             selectedProduct={selectedProduct}
             selectedCartItems={selectedCartItems}
+            productsList={productsList}
           />
         </Step>
       </MultiStepForm>

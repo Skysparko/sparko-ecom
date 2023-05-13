@@ -9,11 +9,15 @@ export const getAllOrders = createAsyncThunk("order/getAll", fetchAllOrders);
 export interface orderType {
   _id: string;
   userID: string;
-  productID: string;
-  quantity: number;
   payment: string;
   addressID: string;
   contact: string;
+  products: Array<{
+    productID: string;
+    quantity: number;
+  }>;
+  date: Date;
+  price: number;
 }
 
 const orderSlice = createSlice({

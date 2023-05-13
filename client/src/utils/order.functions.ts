@@ -9,16 +9,19 @@ export const newOrder = (
   contact: string,
   payment: string,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  cartItems: Array<cartType>
+  cartItems: Array<string>,
+  price: number
 ) => {
   setIsLoading(true);
-  console.log(products, addressID, contact, payment);
+  console.log(products, addressID, contact, payment, cartItems);
   instance
     .post("/order/create", {
       products,
       addressID,
       contact,
       payment,
+      cartItems,
+      price,
     })
     .then((res) => {
       setIsLoading(false);

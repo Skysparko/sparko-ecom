@@ -106,6 +106,7 @@ export default function CartWithItems() {
                       name="products"
                       id={item._id}
                       defaultChecked
+                      className="cursor-pointer"
                       onChange={() => {
                         const data = document.querySelectorAll(
                           "input[name=products]:checked"
