@@ -52,10 +52,11 @@ import Checkout from "./components/Checkout";
 import OrderPlaced from "./pages/OrderPlaced";
 import { getAllOrders, orderType } from "./redux/order.slice";
 import EditOrder from "./pages/user/orders/EditOrder";
-import TrackOrder from "./pages/user/orders/TrackOrder";
 import EmptyOrders from "./pages/user/orders/EmptyOrders";
 import OrdersWithItems from "./pages/user/orders/OrdersWithItems";
 import { getAllAddresses } from "./redux/address.slice";
+import SearchResult from "./pages/SearchResult";
+import { getAllSubCategories } from "./redux/subCategory.slice";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -95,6 +96,7 @@ function App() {
 
     dispatch(getAllProducts());
     dispatch(getAllCategories());
+    dispatch(getAllSubCategories());
     user.isAuthenticated && dispatch(getAllCartItems());
     user.isAuthenticated && dispatch(getAllOrders());
     user.isAuthenticated && dispatch(getAllAddresses());
@@ -161,6 +163,7 @@ function App() {
               */}
               <Route index element={<Home />} />
               <Route path="product" element={<ProductInfo />} />
+              <Route path="search" element={<SearchResult />} />
               <Route path="cart" element={<Cart />}>
                 <Route
                   index

@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { isAuthorized } from "../middlewares/auth.middleware";
-import { getSubCategoryUsingId } from "../controllers/product.controllers";
+import {
+  getSubCategoryUsingId,
+  searchProduct,
+} from "../controllers/product.controllers";
 import {
   getCategories,
   getSubCategories,
@@ -40,6 +43,11 @@ router.get("/categories", getCategories);
 //@desc get all sub-categories
 //@access everyone
 router.get("/sub-categories", getSubCategories);
+
+//@route GET api/v1/product/search
+//@desc search product using query
+//@access everyone
+router.get("/search", searchProduct);
 
 //@route GET api/v1/product/:id
 //@desc get product using id

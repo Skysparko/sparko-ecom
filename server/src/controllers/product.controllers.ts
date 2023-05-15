@@ -38,14 +38,7 @@ export const createProduct = async (req: Request, res: Response) => {
       !status ||
       !tags ||
       !offer ||
-      !stock ||
-      !freeDelivery ||
-      !cashOnDelivery ||
-      !returnPolicy ||
-      !returnDuration ||
-      !warranty ||
-      !warrantyDuration ||
-      !sizeList
+      !stock
     ) {
       return res.status(400).send("Fill all the required fields");
     }
@@ -290,5 +283,61 @@ export const getSubCategoryUsingId = async (req: Request, res: Response) => {
     //returning the error message
     console.log(error);
     return res.status(500).send((error as Error).message);
+  }
+};
+
+export const searchProduct = async (req: Request, res: Response) => {
+  try {
+    // Search for products by query from MongoDB
+    if (req.query.subCategory === "" && req.query.category === "All") {
+      const products = await Product.find({
+        $or: [
+          { title: { $regex: `${req.query.term}`, $options: "i" } },
+
+          { tags: { $regex: `${req.query.term}`, $options: "i" } },
+        ],
+      });
+      return res.status(200).json({ products });
+    }
+
+    if (req.query.category === "All") {
+      const products = await Product.find({
+        $and: [{ subCategory: req.query.subCategory }],
+        $or: [
+          { title: { $regex: `${req.query.term}`, $options: "i" } },
+
+          { tags: { $regex: `${req.query.term}`, $options: "i" } },
+        ],
+      });
+      return res.status(200).json({ products });
+    }
+
+    if (req.query.subCategory === "") {
+      const products = await Product.find({
+        $and: [{ category: req.query.category }],
+        $or: [
+          { title: { $regex: `${req.query.term}`, $options: "i" } },
+
+          { tags: { $regex: `${req.query.term}`, $options: "i" } },
+        ],
+      });
+      return res.status(200).json({ products });
+    }
+
+    const products = await Product.find({
+      $and: [
+        { category: req.query.category },
+        { subCategory: req.query.subCategory },
+      ],
+      $or: [
+        { title: { $regex: `${req.query.term}`, $options: "i" } },
+
+        { tags: { $regex: `${req.query.term}`, $options: "i" } },
+      ],
+    });
+    return res.status(200).json({ products });
+  } catch (error) {
+    console.log("<<<<<<<<<", error);
+    return res.status(500).json({ error });
   }
 };

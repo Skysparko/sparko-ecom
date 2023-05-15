@@ -22,6 +22,11 @@ import { AppDispatch } from "../redux/store";
 import { cartType, getAllCartItems } from "../redux/cart.slice";
 import { fetchAllCartItems } from "../utils/cart.functions";
 import { getCartItemCount } from "../utils/functions";
+import { productType } from "../redux/product.slice";
+import {
+  getSearchResults,
+  getSearchSuggestions,
+} from "../utils/search.functions";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -88,11 +93,24 @@ export default function Header() {
 
   const cartItemCount = getCartItemCount(cartItems);
   const header = useRef<HTMLDivElement>(null);
-
+  const ref = useRef<HTMLUListElement>(null);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   useLayoutEffect(() => {
     const space: HTMLDivElement = document.querySelector("#extra")!;
     space.style.marginBottom = `${header.current?.offsetHeight}px`;
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
   }, []);
+  const handleClickOutside = (e: MouseEvent) => {
+    if (ref.current && !ref.current.contains(e.target as Node)) {
+      setShowSuggestions(false);
+    }
+  };
+  const [category, setCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [data, setData] = useState<Array<string>>([""]);
 
   return (
     <>
@@ -125,29 +143,75 @@ export default function Header() {
                 <form
                   id="search_desktop_form"
                   method="get"
-                  className="flex justify-center rounded-md border  border-black text-base focus-within:outline focus-within:outline-2 focus-within:outline-blue-300 "
+                  className=" flex justify-center rounded-md border  border-black text-base focus-within:outline focus-within:outline-2 focus-within:outline-blue-300 "
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    navigate(
+                      "/search?category=" + category + "&term=" + searchQuery
+                    );
+                  }}
                 >
                   {/* categories */}
                   <select
                     name="categories"
                     id="categories_desktop"
                     className="cursor-pointer rounded-l-md border border-black bg-white text-center outline-none"
+                    onChange={(e) => setCategory(e.target.value)}
                   >
                     <option value="All">All</option>
                     {categories.map((category, i) => (
-                      <option key={i}>{category.name}</option>
+                      <option key={i} value={category._id}>
+                        {category.name}
+                      </option>
                     ))}
                   </select>
                   {/* search bar */}
-                  <input
-                    type="search"
-                    name="search"
-                    id="search"
-                    className="w-full border border-black px-2  outline-none"
-                    placeholder="Search"
-                    aria-label="Search"
-                    aria-describedby="search"
-                  />
+                  <span className="relative w-full">
+                    <input
+                      type="search"
+                      name="search"
+                      id="search_desktop"
+                      onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                        getSearchSuggestions(category, e.target.value, setData);
+                      }}
+                      onClick={() => {
+                        setShowSuggestions(true);
+                      }}
+                      className="group w-full border border-black  p-2 outline-none"
+                      placeholder="Search"
+                      aria-label="Search"
+                      aria-describedby="search"
+                      autoComplete="Off"
+                    />
+                    {searchQuery !== "" && showSuggestions && (
+                      <ul
+                        ref={ref}
+                        className="absolute flex w-full flex-col rounded-b bg-white px-5 shadow "
+                        id="searchSuggestions_desktop"
+                      >
+                        {data!.map(
+                          (item, key) =>
+                            key < 5 && (
+                              <li
+                                key={key}
+                                className="cursor-pointer border-b py-3"
+                                onClick={(e) =>
+                                  navigate(
+                                    "/search?category=" +
+                                      category +
+                                      "&term=" +
+                                      e.currentTarget.textContent
+                                  )
+                                }
+                              >
+                                {item}
+                              </li>
+                            )
+                        )}
+                      </ul>
+                    )}
+                  </span>
                   {/* search button */}
                   <button
                     type="submit"

@@ -169,7 +169,7 @@ export default function Home() {
                             {item.title}
                           </h1>
                           <p className="text-xs text-gray-700 line-clamp-2">
-                            {item.description}
+                            {JSON.parse(item.description).blocks[0].text}
                           </p>
                         </span>
                         <span className="flex gap-1">

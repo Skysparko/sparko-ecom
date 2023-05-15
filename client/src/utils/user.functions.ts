@@ -28,7 +28,7 @@ export const updatePersonalInformation = (
     .then((response) => {
       if (response.status === 200) {
         setLoading(false);
-        // location.reload();
+        location.reload();
       }
     })
     .catch((error) => {

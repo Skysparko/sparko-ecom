@@ -381,7 +381,7 @@ export default function ProductInfo() {
                           {item.title}
                         </h1>
                         <p className="text-xs text-gray-700 line-clamp-2">
-                          {item.description}
+                          {JSON.parse(item.description).blocks[0].text}
                         </p>
                       </span>
                       <span className="flex justify-center gap-1">
@@ -448,7 +448,7 @@ export default function ProductInfo() {
                     <span className="flex flex-col gap-2">
                       <h1 className="font-medium line-clamp-1">{item.title}</h1>
                       <p className="text-xs text-gray-700 line-clamp-2">
-                        {item.description}
+                        {JSON.parse(item.description).blocks[0].text}
                       </p>
                     </span>
                     <span className="flex justify-center gap-1">

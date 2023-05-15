@@ -47,7 +47,7 @@ export const submitNewProduct = (
     })
     .then((response) => {
       console.log(response);
-      location.href = "/dashboard/products";
+      // location.href = "/dashboard/products";
       setIsLoading(false);
     })
     .catch((error) => {
@@ -101,7 +101,7 @@ export const updateProduct = (
     })
     .then((response) => {
       console.log(response);
-      location.href = "/dashboard/products";
+      // location.href = "/dashboard/products";
       setIsLoading(false);
     })
     .catch((error) => {
@@ -120,17 +120,6 @@ export const fetchAllProducts = async () => {
   try {
     const res = await instance.get("/product/");
 
-    return res.data;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-};
-
-// function to fetch all the address using UserId
-export const fetchAllCategories = async () => {
-  try {
-    const res = await instance.get("/product/categories");
     return res.data;
   } catch (error) {
     console.log(error);
